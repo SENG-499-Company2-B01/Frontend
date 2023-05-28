@@ -1,0 +1,60 @@
+lo {
+    position: relative;
+    font-family: sans-serif;
+    width: 100%;
+    height: 100vh;
+}
+
+.container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.text {
+    color: #172efb;
+    display: inline-block;
+    margin-left: 5px;
+    font-size: 40px;
+}
+
+.ball {
+    position: relative;
+    display: inline-block;
+    height: 90px;
+    width: 15px;
+    margin-right: 35px;
+}
+
+.ball::before {
+    position: absolute;
+    content: '';
+    display: block;
+    top: 0;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #1238e0;
+    transform-origin: 50%;
+    animation: bounce 650ms alternate infinite ease;
+}
+
+@keyframes bounce {
+    0% {
+        top: 80px;
+        height: 5px;
+        border-radius: 60px 60px 20px 20px;
+        transform: scaleX(2);
+    }
+
+    35% {
+        height: 15px;
+        border-radius: 50%;
+        transform: scaleX(1);
+    }
+
+    100% {
+        top: 0;
+    }
+}
