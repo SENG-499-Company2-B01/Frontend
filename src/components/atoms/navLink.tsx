@@ -33,16 +33,17 @@ import { NavLink } from 'react-router-dom'
 export const NavUnlisted = styled(NavLink)`
     color: black;
     text-decoration: none;
+    padding-top: 2px;
     &:hover {
-        text-decoration: underline;
-        color: blue;
+        border-bottom: 2px solid #6885ce;
+        color: #6885ce;
     }
     &:active {
-        text-decoration: underline;
+        border-bottom: 2px solid #6885ce;
         color: red;
     }
     &.active {
-        text-decoration: underline;
-        color: blue;
+        border-bottom: 2px solid #6885ce;
+        color: #6885ce;
     }
 `
