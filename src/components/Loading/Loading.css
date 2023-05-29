@@ -13,7 +13,7 @@ lo {
 }
 
 .text {
-    color: #172efb;
+    color: #6885ce;
     display: inline-block;
     margin-left: 5px;
     font-size: 40px;
@@ -35,7 +35,7 @@ lo {
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    background-color: #1238e0;
+    background-color: #6885ce;
     transform-origin: 50%;
     animation: bounce 650ms alternate infinite ease;
 }
