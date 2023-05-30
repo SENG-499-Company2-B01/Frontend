@@ -1,6 +1,7 @@
 import { MediumBlackButton, MediumBlueButton, MediumRedButton } from '../components/atoms/button'
 import { H1 } from '../components/atoms/typography'
 import { HomeBackground } from '../components/home/background'
+import { InputField } from '../components/atoms/input_field'
 
 // Page to display created components
 
@@ -18,6 +19,7 @@ export const Practice = () => {
                 <MediumBlueButton>
                     <H1>Blue Button</H1>
                 </MediumBlueButton>
+                <InputField />
             </HomeBackground>
         </div>
     )
