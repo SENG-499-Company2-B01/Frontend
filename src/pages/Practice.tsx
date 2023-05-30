@@ -2,6 +2,7 @@ import { MediumBlackButton, MediumBlueButton, MediumRedButton } from '../compone
 import { H1 } from '../components/atoms/typography'
 import { HomeBackground } from '../components/home/background'
 import { InputField } from '../components/atoms/input_field'
+import { NavUnlisted } from '../components/atoms/navLink'
 
 // Page to display created components
 
@@ -20,6 +21,8 @@ export const Practice = () => {
                     <H1>Blue Button</H1>
                 </MediumBlueButton>
                 <InputField placeholder='jsmith'></InputField>
+                <NavUnlisted to='/Home'>Home</NavUnlisted>
+                <NavUnlisted to='/'>About</NavUnlisted>
             </HomeBackground>
         </div>
     )
