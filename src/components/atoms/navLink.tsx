@@ -38,10 +38,6 @@ export const NavUnlisted = styled(NavLink)`
         border-bottom: 2px solid #6885ce;
         color: #6885ce;
     }
-    &:active {
-        border-bottom: 2px solid #6885ce;
-        color: red;
-    }
     &.active {
         border-bottom: 2px solid #6885ce;
         color: #6885ce;
