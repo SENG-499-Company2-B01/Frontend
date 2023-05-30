@@ -19,7 +19,7 @@ export const Practice = () => {
                 <MediumBlueButton>
                     <H1>Blue Button</H1>
                 </MediumBlueButton>
-                <InputField />
+                <InputField placeholder='jsmith'></InputField>
             </HomeBackground>
         </div>
     )
