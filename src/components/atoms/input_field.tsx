@@ -2,7 +2,7 @@ import styled from '@emotion/styled'
 
 export const InputField = styled.input`
     height: 45px;
-    width: 394px;
+    width: 100%;
     border-radius: 8px;
     padding: 8px 16px 8px 16px;
     border: 2px solid #dfdfdf;

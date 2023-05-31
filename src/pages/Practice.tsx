@@ -12,7 +12,7 @@ export const Practice = () => {
             <HomeBackground>
                 <H1>Welcome to the practice page</H1>
                 <MediumWhiteButton>
-                    <H2>White Button</H2>
+                    <H1>White Button</H1>
                 </MediumWhiteButton>
                 <MediumBlackButton>
                     <H1>Black Button</H1>

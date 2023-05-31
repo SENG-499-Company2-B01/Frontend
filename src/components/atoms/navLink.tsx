@@ -30,15 +30,15 @@ import { NavLink } from 'react-router-dom'
 //   }
 // `
 
+export const SimpleLink = styled(Link)`
+    text-decoration: none;
+`
+
 export const NavUnlisted = styled(NavLink)`
     color: black;
     text-decoration: none;
-    padding-top: 2px;
+    border-bottom: 2px solid transparent;
     &:hover {
-        border-bottom: 2px solid #6885ce;
-        color: #6885ce;
-    }
-    &.active {
         border-bottom: 2px solid #6885ce;
         color: #6885ce;
     }
