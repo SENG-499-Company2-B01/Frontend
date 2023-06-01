@@ -14,3 +14,9 @@ export const H2 = styled.div`
     font-size: 56px;
     letter-spacing: 0.015em;
 `
+
+export const H7 = styled.div`
+    font-family: Montserrat-Medium;
+    font-size: 16px;
+    letter-spacing: 0.015em;
+`

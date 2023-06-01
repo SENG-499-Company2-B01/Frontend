@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 export const LoginBackground = styled.div`
     width: 100%;
     height: 100vh;
-    background-color: #f4f5f8;
+    background-color: #fcfcfc;
     display: flex;
     flex-direction: column;
     gap: 64px;
