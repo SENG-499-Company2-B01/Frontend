@@ -6,7 +6,7 @@ import { NavUnlisted } from '../components/atoms/navLink'
 import 'bootstrap/dist/css/bootstrap.css'
 import '../components/Homepage/homepage.css'
 
-export const ProfHomepage = () => {
+export const AdminHomepage = () => {
     return (
         <div>
             <div className='cen'>
@@ -21,7 +21,7 @@ export const ProfHomepage = () => {
                     <div className='col rig'>
                         <p className='para'> We create schedules for UVic Professors based on personal prefences to better their teaching experience.</p>
                         <MediumWhiteButton className='bt2'>
-                            <H1>SET YOUR PREFERENCES</H1>
+                            <H1>GENERATE SCHEDULE</H1>
                         </MediumWhiteButton>
                     </div>
                 </div>
