@@ -9,7 +9,7 @@ export function Loading() {
         setLoading(true)
         setTimeout(() => {
             setLoading(false)
-        }, 4000)
+        }, 3000)
     }, [])
     return <div>{loading ? <Preloader /> : <ProfHomepage />}</div>
 }
