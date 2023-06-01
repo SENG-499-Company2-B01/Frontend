@@ -5,6 +5,7 @@ import menuIcon from '../assets/icons/menu_default.png'
 import closeIcon from '../assets/icons/closed_default.png'
 import companyLogo from '../assets/icons/company_logo_dark.png'
 import userProfile from '../assets/icons/user_profile_light.png'
+import { NavUnlisted } from './atoms/navLink'
 
 const LinkWrapper = styled.div`
     display: flex;
@@ -54,6 +55,13 @@ const MenuWrapper = styled.div`
     gap: 16px;
 `
 
+const LinkDiv = styled.div`
+    border-radius: 0px;
+    gap: 32px;
+    align-items: center;
+    display: flex;
+`
+
 const Circle = styled.div`
     width: 52px;
     height: 52px;
@@ -62,6 +70,27 @@ const Circle = styled.div`
     background-color: 2c2a2a;
     opacity: 20%;
 `
+
+export const NavBarProf = () => {
+    return (
+        <StickyContainer>
+            <NavWrapper>
+                <LogoWrapper src={companyLogo} />
+                <LinkDiv>
+                    <NavUnlisted to={'/'}>
+                        <H7>SCHEDULING PREFERENCES</H7>
+                    </NavUnlisted>
+                    <UserWrapper>
+                        <NavUnlisted to={'/user'}>
+                            <H7>ACCOUNT</H7>
+                        </NavUnlisted>
+                        <ProfileWrapper src={userProfile} />
+                    </UserWrapper>
+                </LinkDiv>
+            </NavWrapper>
+        </StickyContainer>
+    )
+}
 
 export const NavBarAdmin = () => {
     let menu
