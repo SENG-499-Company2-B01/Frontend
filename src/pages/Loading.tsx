@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Home } from './Home'
 import Preloader from '../components/Loading/PreLoader'
 import { ProfHomepage } from './ProfHomepage'
+import { AdminHomepage } from './AdminHomepage'
 
 export function Loading() {
     const [loading, setLoading] = useState(false)
