@@ -56,3 +56,21 @@ export const MediumBlueButton = styled(MediumBlackButton)`
         border: 2px solid #364da8;
     }
 `
+
+export const BlackButton = styled.button`
+    background-color: #2c2a2a;
+    color: #ffffff;
+    padding: 16px 40px;
+    display: flex;
+    font-family: Monsterrat-Medium;
+    border-radius: 32px;
+    align-items: center;
+    border: 2px solid #2c2a2a;
+    justify-content: center;
+    &:hover {
+        background-color: #585757;
+    }
+    &:active {
+        border: 2px solid #2c2a2a;
+    }
+`
