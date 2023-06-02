@@ -65,7 +65,7 @@ export const BlackButton = styled.button`
     font-family: Monsterrat-Medium;
     border-radius: 32px;
     align-items: center;
-    border: 2px solid #2c2a2a;
+    border: 2px solid transparent;
     justify-content: center;
     &:hover {
         background-color: #585757;
