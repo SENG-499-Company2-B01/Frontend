@@ -103,7 +103,10 @@ export const NavBarAdmin = () => {
                     <LogoWrapper src={companyLogo} />
                 </MenuWrapper>
                 <UserWrapper>
-                    <H7>ADMIN</H7>
+                    <NavUnlisted to='/'>
+                        <H7>ADMIN</H7>
+                    </NavUnlisted>
+
                     <ProfileWrapper src={userProfile} />
                 </UserWrapper>
             </NavWrapper>

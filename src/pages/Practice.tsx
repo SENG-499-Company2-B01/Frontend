@@ -3,12 +3,14 @@ import { H1, H2 } from '../components/atoms/typography'
 import { HomeBackground } from '../components/home/background'
 import { InputField } from '../components/atoms/input_field'
 import { NavUnlisted } from '../components/atoms/navLink'
+import { NavBarAdmin } from '../components/navbar'
 
 // Page to display created components
 
 export const Practice = () => {
     return (
         <div>
+            <NavBarAdmin />
             <HomeBackground>
                 <H1>Welcome to the practice page</H1>
                 <MediumWhiteButton>
