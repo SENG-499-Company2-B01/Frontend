@@ -7,10 +7,6 @@ import companyLogo from '../assets/icons/company_logo_dark.png'
 import userProfile from '../assets/icons/user_profile_light.png'
 import { NavUnlisted } from './atoms/navLink'
 
-const LinkWrapper = styled.div`
-    display: flex;
-`
-
 const StickyContainer = styled.div`
     display: flex;
     flex-direction: column;
@@ -23,7 +19,7 @@ const NavWrapper = styled.div`
     display: flex;
     justify-content: space-between;
     background-color: #fcfcfc;
-    padding: 8px 48px;
+    padding: 16px 64px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
 `
 
@@ -38,21 +34,9 @@ const UserWrapper = styled.div`
     gap: 16px;
 `
 
-const MenuItemWrapper = styled.img`
-    width: 52px;
-    &:hover {
-        cursor: pointer;
-`
-
 const LogoWrapper = styled.img`
     width: 170px;
     height: 50px;
-`
-
-const MenuWrapper = styled.div`
-    display: flex;
-    flex-direction: row;
-    gap: 16px;
 `
 
 const LinkDiv = styled.div`
@@ -60,15 +44,6 @@ const LinkDiv = styled.div`
     gap: 32px;
     align-items: center;
     display: flex;
-`
-
-const Circle = styled.div`
-    width: 52px;
-    height: 52px;
-    border-radius: 50%;
-    position: absolute;
-    background-color: 2c2a2a;
-    opacity: 20%;
 `
 
 export const NavBarProf = () => {
@@ -93,22 +68,27 @@ export const NavBarProf = () => {
 }
 
 export const NavBarAdmin = () => {
-    let menu
-    const [showMenu, setShowMenu] = useState(false)
     return (
         <StickyContainer>
             <NavWrapper>
-                <MenuWrapper>
-                    <MenuItemWrapper src={showMenu ? closeIcon : menuIcon} alt='menu' onClick={() => setShowMenu(!showMenu)} />
-                    <LogoWrapper src={companyLogo} />
-                </MenuWrapper>
-                <UserWrapper>
-                    <NavUnlisted to='/'>
-                        <H7>ADMIN</H7>
+                <LogoWrapper src={companyLogo} />
+                <LinkDiv>
+                    <NavUnlisted to={'/'}>
+                        <H7>GENERATE SCHEDULE</H7>
                     </NavUnlisted>
-
-                    <ProfileWrapper src={userProfile} />
-                </UserWrapper>
+                    <NavUnlisted to={'/'}>
+                        <H7>VIEW PREFERENCES</H7>
+                    </NavUnlisted>
+                    <NavUnlisted to={'/'}>
+                        <H7>CREATE ACCOUNT</H7>
+                    </NavUnlisted>
+                    <UserWrapper>
+                        <NavUnlisted to={'/user'}>
+                            <H7>ADMIN</H7>
+                        </NavUnlisted>
+                        <ProfileWrapper src={userProfile} />
+                    </UserWrapper>
+                </LinkDiv>
             </NavWrapper>
         </StickyContainer>
     )

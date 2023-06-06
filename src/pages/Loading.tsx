@@ -12,5 +12,5 @@ export function Loading() {
             setLoading(false)
         }, 3000)
     }, [])
-    return <div>{loading ? <Preloader /> : <ProfHomepage />}</div>
+    return <div>{loading ? <Preloader /> : <AdminHomepage />}</div>
 }

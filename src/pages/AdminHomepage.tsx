@@ -1,4 +1,4 @@
-import { MediumBlackButton, MediumBlueButton, MediumRedButton, MediumWhiteButton } from '../components/atoms/button'
+import { BlackButton, MediumBlackButton, MediumBlueButton, MediumRedButton, MediumWhiteButton } from '../components/atoms/button'
 import { H1, H2 } from '../components/atoms/typography'
 import { HomeBackground } from '../components/home/background'
 import { InputField } from '../components/atoms/input_field'
@@ -22,9 +22,9 @@ export const AdminHomepage = () => {
                     </div>
                     <div className='col rig'>
                         <p className='para'> We create schedules for UVic Professors based on personal prefences to better their teaching experience.</p>
-                        <MediumWhiteButton className='bt2'>
+                        <BlackButton className='bt2'>
                             <H1>GENERATE SCHEDULE</H1>
-                        </MediumWhiteButton>
+                        </BlackButton>
                     </div>
                 </div>
             </div>

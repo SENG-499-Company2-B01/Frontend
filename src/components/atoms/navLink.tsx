@@ -36,6 +36,7 @@ export const SimpleLink = styled(Link)`
 
 export const NavUnlisted = styled(NavLink)`
     color: black;
+    line-height: 2;
     text-decoration: none;
     border-bottom: 2px solid transparent;
     &:hover {
