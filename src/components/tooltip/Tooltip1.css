@@ -1,0 +1,58 @@
+.tooltip-container {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip-trigger {
+  width: 24px;
+  height: 24px;
+  background-color: #4AB3B3;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.tooltip-trigger.active {
+  background-color: #333333;
+}
+
+.tooltip-icon {
+  color: #333333;
+  font-size: 16px;
+}
+
+.tooltip-content {
+  position: absolute;
+  background-color: #F5F7FA;
+  color: #333333;
+  padding: 8px;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 9999;
+}
+
+.tooltip-top {
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.tooltip-bottom {
+  top: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.tooltip-left {
+  top: 50%;
+  right: 28px;
+  transform: translateY(-50%);
+}
+
+.tooltip-right {
+  top: 50%;
+  left: 28px;
+  transform: translateY(-50%);
+}
