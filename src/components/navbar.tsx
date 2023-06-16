@@ -54,7 +54,7 @@ export const NavBarProf = () => {
             <NavWrapper>
                 <LogoWrapper src={companyLogo} />
                 <LinkDiv>
-                    <NavUnlisted to={'/'}>
+                    <NavUnlisted to={'/ProfPreferencePage'}>
                         <H7>SCHEDULING PREFERENCES</H7>
                     </NavUnlisted>
                     <UserWrapper>

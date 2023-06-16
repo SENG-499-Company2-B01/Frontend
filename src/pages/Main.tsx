@@ -4,6 +4,7 @@ import { Loading } from './Loading'
 import { Login } from './Login'
 import { Practice } from './Practice'
 import { ProfHomepage } from './ProfHomepage'
+import { ProfPreferencePage } from './ProfPreferencePage'
 
 // Routes the web application to different pages
 
@@ -38,6 +39,14 @@ const Main = () => (
             element={
                 <>
                     <ProfHomepage />
+                </>
+            }
+        />
+        <Route
+            path='/ProfPreferencePage'
+            element={
+                <>
+                    <ProfPreferencePage />
                 </>
             }
         />
