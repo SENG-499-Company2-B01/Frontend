@@ -3,12 +3,12 @@
     height: 100vh;
     background-color: #fcfcfc;
     display: flex;
+    padding-top: 256px;
     flex-direction: column;
     gap: 32px;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
 }
-
 
 .tex_sch {
     color: #6885ce;
@@ -24,11 +24,9 @@
     letter-spacing: 0.015em;
     text-align: justify;
     text-justify: inter-word;
-    
 }
 
-.rig
-{
+.rig {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -44,7 +42,6 @@
     margin-top: 48px;
 }
 
-.bt2
-{
+.bt2 {
     margin-top: 30px;
 }

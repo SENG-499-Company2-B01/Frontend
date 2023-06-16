@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import { H7 } from './typography'
+import { SimpleLink } from './navLink'
 
 export const DropdownContainer = styled.div`
     display: inline-block;
@@ -87,7 +88,9 @@ export const ProfileDropdown = () => {
                     <DropdownMenuItem>Profile</DropdownMenuItem>
                     <DropdownMenuItem>Notifications</DropdownMenuItem>
                     <DropdownMenuItem>Account settings</DropdownMenuItem>
-                    <DropdownMenuItem>Sign out</DropdownMenuItem>
+                    <DropdownMenuItem>
+                        <SimpleLink to='/'>Sign out</SimpleLink>
+                    </DropdownMenuItem>
                 </DropdownMenu>
             )}
         </DropdownContainer>
