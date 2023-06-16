@@ -1,23 +1,12 @@
-import { MediumBlackButton, MediumBlueButton, MediumRedButton, MediumWhiteButton, BlackButton } from '../components/atoms/button'
-import { H1, H2 } from '../components/atoms/typography'
-import { HomeBackground } from '../components/home/background'
-import { InputField } from '../components/atoms/input_field'
-import { NavUnlisted } from '../components/atoms/navLink'
+import { H2 } from '../components/atoms/typography'
 import 'bootstrap/dist/css/bootstrap.css'
 import '../components/Homepage/homepage.css'
 import { NavBarProf } from '../components/navbar'
 
-import type { CascaderProps } from 'antd'
-import { AutoComplete, Button, Cascader, Checkbox, Col, Form, Input, InputNumber, Row, Radio, Select } from 'antd'
+import { Button, Checkbox, Col, Form, Input, InputNumber, Row, Radio, Space, TimePicker } from 'antd'
+import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
 import React, { useState } from 'react'
-
-const { Option } = Select
-
-interface DataNodeType {
-    value: string
-    label: string
-    children?: DataNodeType[]
-}
+import type { Dayjs } from 'dayjs'
 
 const formItemLayout = {
     labelCol: {
@@ -43,6 +32,10 @@ const tailFormItemLayout = {
     },
 }
 
+const onChange = (time: Dayjs | null, timeString: string) => {
+    console.log(time, timeString)
+}
+
 export const ProfPreferencePage: React.FC = () => {
     const [form] = Form.useForm()
 
@@ -58,15 +51,15 @@ export const ProfPreferencePage: React.FC = () => {
             <div className='cen'>
                 <H2>Preference</H2>
                 <Form {...formItemLayout} form={form} name='preference' onFinish={onFinish} style={{ maxWidth: 600 }} scrollToFirstError>
-                    <Form.Item name='semester' label='Semester' tooltip='Which semester do you want to teach?' style={{ marginBottom: 20 }} rules={[{ required: true, message: 'Please select the semester!', whitespace: true }]}>
-                        <Radio.Group defaultValue='Fall 2023'>
-                            <Radio.Button value='Fall 2023'>Fall 2023</Radio.Button>
-                            <Radio.Button value='Winter 2024'>Winter 2024</Radio.Button>
-                            <Radio.Button value='Summer 2024'>Summer 2024</Radio.Button>
+                    <Form.Item name='semester' label='Semester' tooltip='Select a semester.' style={{ marginBottom: 20 }}>
+                        <Radio.Group defaultValue='Fall'>
+                            <Radio.Button value='Fall'>Fall</Radio.Button>
+                            <Radio.Button value='Winter'>Winter</Radio.Button>
+                            <Radio.Button value='Summer'>Summer</Radio.Button>
                         </Radio.Group>
                     </Form.Item>
 
-                    <Form.Item name='ableToTeach' label='Able To Teach' tooltip='Are you able to teach this semester?' style={{ marginBottom: 20 }} rules={[{ required: true, message: 'Please select yes or no!', whitespace: true }]}>
+                    <Form.Item name='ableToTeach' label='Able To Teach' tooltip='Are you able to teach this semester?' style={{ marginBottom: 20 }}>
                         <Radio.Group defaultValue='Yes' style={{ marginBottom: 10 }}>
                             <Radio value='Yes' checked={formDisabled} onChange={(e) => setFormDisabled(!e.target.checked)}>
                                 Yes
@@ -80,34 +73,47 @@ export const ProfPreferencePage: React.FC = () => {
                         </Form.Item>
                     </Form.Item>
 
-                    <Form {...formItemLayout} form={form} name='preference' onFinish={onFinish} initialValues={{ prefix: '86' }} style={{ maxWidth: 600 }} scrollToFirstError disabled={formDisabled}>
-                        <Form.Item name='preferredTime' label='Preferred Time' tooltip='Which is your preferred time?' style={{ marginBottom: 20 }} rules={[{ required: !formDisabled, message: 'Please input preferred time!' }]}>
-                            <Select placeholder='Day' style={{ marginRight: 8, display: 'inline-block', width: 'calc(30% - 8px)' }}>
-                                <Option value='M'>M</Option>
-                                <Option value='T'>T</Option>
-                                <Option value='W'>W</Option>
-                                <Option value='R'>R</Option>
-                                <Option value='F'>F</Option>
-                            </Select>
-                            <Form.Item name='Hour' noStyle rules={[{ required: false }]}>
-                                <Input placeholder='Hour' style={{ marginRight: 8, display: 'inline-block', width: 'calc(30% - 8px)' }} />
-                            </Form.Item>
-                            <Form.Item name='Min' noStyle rules={[{ required: false }]}>
-                                <Input placeholder='Min' style={{ marginRight: 8, display: 'inline-block', width: 'calc(30% - 8px)' }} />
-                            </Form.Item>
+                    <Form {...formItemLayout} form={form} name='preference' onFinish={onFinish} style={{ maxWidth: 600 }} scrollToFirstError disabled={formDisabled}>
+                        <Form.Item name='preferredTime' label='Preferred Time' tooltip='Input preferred time.' style={{ marginBottom: 20 }}>
+                            <Space align='baseline' style={{ marginBottom: 10 }}>
+                                <TimePicker use12Hours format='h:mm a' onChange={onChange} style={{ marginRight: 8, display: 'inline-block' }} placeholder='Start Time' />
+                                <TimePicker use12Hours format='h:mm a' onChange={onChange} style={{ display: 'inline-block' }} placeholder='End Time' />
+                            </Space>
+                            <Form.List name='added preferred time'>
+                                {(fields, { add, remove }) => (
+                                    <>
+                                        {fields.map((field) => (
+                                            <Space key={field.key} align='baseline'>
+                                                <Form.Item {...field} name={[field.name, 'start and end time']} rules={[{ required: true, message: 'Missing start and end time!' }]} style={{ marginBottom: 10 }}>
+                                                    <Space align='baseline'>
+                                                        <TimePicker use12Hours format='h:mm a' onChange={onChange} style={{ marginRight: 8, display: 'inline-block' }} placeholder='Start Time' />
+                                                        <TimePicker use12Hours format='h:mm a' onChange={onChange} style={{ display: 'inline-block' }} placeholder='End Time' />
+                                                    </Space>
+                                                </Form.Item>
+                                                <MinusCircleOutlined onClick={() => remove(field.name)} />
+                                            </Space>
+                                        ))}
+                                        <Button type='dashed' onClick={() => add()} block icon={<PlusOutlined />} style={{ width: '260px' }}>
+                                            Add
+                                        </Button>
+                                    </>
+                                )}
+                            </Form.List>
                         </Form.Item>
 
-                        <Form.Item name='classSize' label='Class Size' tooltip='Which class size do you prefer to teach?' style={{ marginBottom: 20 }} rules={[{ required: !formDisabled, message: 'Please input your preferred class size!', whitespace: true }]}>
-                            <Input />
+                        <Form.Item name='classSize' label='Class Size' tooltip='Input preferred class size.' style={{ marginBottom: 20 }} rules={[{ type: 'number', required: !formDisabled, message: 'Please input your preferred class size between 0 and 999!', min: 0, max: 999 }]}>
+                            <InputNumber />
                         </Form.Item>
 
-                        <Form.Item name='classFormat' label='Class Format' tooltip='Which class format do you prefer to teach?' style={{ marginBottom: 20 }} rules={[{ required: !formDisabled, message: 'Please input preferred class format!' }]}>
+                        <Form.Item name='classFormat' label='Class Format' tooltip='Select one or more preferred class formats' style={{ marginBottom: 20 }}>
                             <Row gutter={8}>
                                 <Col span={8}>
-                                    <Checkbox style={{ marginBottom: 5 }}>Once/Week</Checkbox>
-                                    <Checkbox style={{ marginBottom: 5 }}>M, R</Checkbox>
-                                    <Checkbox style={{ marginBottom: 5 }}>T, W, F</Checkbox>
-                                    <Checkbox style={{ marginBottom: 5 }}>Online</Checkbox>
+                                    <Form.Item style={{ marginBottom: 10 }} rules={[{ required: !formDisabled, message: 'Please input preferred class format!' }]}>
+                                        <Checkbox style={{ marginBottom: 5 }}>Once/Week</Checkbox>
+                                        <Checkbox style={{ marginBottom: 5 }}>M, R</Checkbox>
+                                        <Checkbox style={{ marginBottom: 5 }}>T, W, F</Checkbox>
+                                        <Checkbox style={{ marginBottom: 5 }}>Online</Checkbox>
+                                    </Form.Item>
                                     <Form.Item name='Class Format' noStyle rules={[{ required: false }]}>
                                         <Input placeholder='Other' />
                                     </Form.Item>
@@ -118,15 +124,15 @@ export const ProfPreferencePage: React.FC = () => {
 
                     <Form.Item {...tailFormItemLayout}>
                         <div style={{ width: '200px', display: 'flex', flexDirection: 'row', justifyContent: 'center', marginBottom: 20 }}>
-                            <Button type='primary' htmlType='reset' color='#ffffff'>
+                            <Button type='primary' htmlType='reset' style={{ backgroundColor: '#2c2a2a', color: '#ffffff', borderRadius: 32 }}>
                                 CLEAR
                             </Button>
                         </div>
                         <div style={{ width: '200px', display: 'flex', flexDirection: 'row', justifyContent: 'center', marginBottom: 20 }}>
-                            <Button type='primary' htmlType='button' color='#ffffff' style={{ marginRight: 200 }}>
+                            <Button type='primary' htmlType='button' style={{ marginRight: 200, backgroundColor: '#2c2a2a', color: '#ffffff', borderRadius: 32 }}>
                                 CANCEL
                             </Button>
-                            <Button type='primary' htmlType='submit' color='#ffffff'>
+                            <Button type='primary' htmlType='submit' style={{ backgroundColor: '#2c2a2a', color: '#ffffff', borderRadius: 32 }}>
                                 SUBMIT
                             </Button>
                         </div>
