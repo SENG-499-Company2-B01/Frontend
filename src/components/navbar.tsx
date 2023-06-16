@@ -6,6 +6,8 @@ import closeIcon from '../assets/icons/closed_default.png'
 import companyLogo from '../assets/icons/company_logo_dark.png'
 import userProfile from '../assets/icons/user_profile_light.png'
 import { NavUnlisted } from './atoms/navLink'
+import ProfileDropdown, { DropdownContainer } from './atoms/Dropdown_menu'
+import { DropdownButton } from 'react-bootstrap'
 
 const StickyContainer = styled.div`
     display: flex;
@@ -83,9 +85,7 @@ export const NavBarAdmin = () => {
                         <H7>CREATE ACCOUNT</H7>
                     </NavUnlisted>
                     <UserWrapper>
-                        <NavUnlisted to={'/user'}>
-                            <H7>ADMIN</H7>
-                        </NavUnlisted>
+                        <ProfileDropdown></ProfileDropdown>
                         <ProfileWrapper src={userProfile} />
                     </UserWrapper>
                 </LinkDiv>
