@@ -32,6 +32,7 @@ import { NavLink } from 'react-router-dom'
 
 export const SimpleLink = styled(Link)`
     text-decoration: none;
+    color: black;
 `
 
 export const NavUnlisted = styled(NavLink)`
