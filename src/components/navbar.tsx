@@ -84,7 +84,7 @@ export const NavBarAdmin = () => {
                     <NavUnlisted to={'/'}>
                         <H7>GENERATE SCHEDULE</H7>
                     </NavUnlisted>
-                    <NavUnlisted to={'/'}>
+                    <NavUnlisted to={'/Preferences'}>
                         <H7>VIEW PREFERENCES</H7>
                     </NavUnlisted>
                     <NavUnlisted to={'/'}>

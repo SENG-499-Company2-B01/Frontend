@@ -5,6 +5,7 @@ import { Login } from './Login'
 import { Practice } from './Practice'
 import { ProfHomepage } from './ProfHomepage'
 import { ProfPreferencePage } from './ProfPreferencePage'
+import { Preferences } from './Preferences'
 
 // Routes the web application to different pages
 
@@ -47,6 +48,14 @@ const Main = () => (
             element={
                 <>
                     <ProfPreferencePage />
+                </>
+            }
+        />
+        <Route
+            path='/Preferences'
+            element={
+                <>
+                    <Preferences />
                 </>
             }
         />
