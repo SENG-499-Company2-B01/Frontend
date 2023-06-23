@@ -6,6 +6,7 @@ import { Practice } from './Practice'
 import { ProfHomepage } from './ProfHomepage'
 import { ProfPreferencePage } from './ProfPreferencePage'
 import { Preferences } from './Preferences'
+import { LogoutPage } from './LoggedOut'
 
 // Routes the web application to different pages
 
@@ -56,6 +57,14 @@ const Main = () => (
             element={
                 <>
                     <Preferences />
+                </>
+            }
+        />
+        <Route
+            path='logout'
+            element={
+                <>
+                    <LogoutPage />
                 </>
             }
         />
