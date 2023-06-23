@@ -6,6 +6,7 @@ import { Practice } from './Practice'
 import { ProfHomepage } from './ProfHomepage'
 import { ProfPreferencePage } from './ProfPreferencePage'
 import { Preferences } from './Preferences'
+import { Generate } from './Generate'
 
 // Routes the web application to different pages
 
@@ -64,6 +65,14 @@ const Main = () => (
             element={
                 <>
                     <Loading />
+                </>
+            }
+        ></Route>
+        <Route
+            path='/generate'
+            element={
+                <>
+                    <Generate />
                 </>
             }
         ></Route>
