@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom'
 import { Home } from './Home'
 import { Loading } from './Loading'
 import { Login } from './Login'
+import { CreateAccountPage } from './CreateAccountPage'
 import { Practice } from './Practice'
 import { ProfHomepage } from './ProfHomepage'
 import { ProfPreferencePage } from './ProfPreferencePage'
@@ -26,7 +27,15 @@ const Main = () => (
                     <Login />
                 </>
             }
-        ></Route>
+        />
+        <Route
+            path='/CreateAccountPage'
+            element={
+                <>
+                    <CreateAccountPage />
+                </>
+            }
+        />
         <Route
             path='/practice'
             element={

@@ -81,13 +81,13 @@ export const NavBarAdmin = () => {
                 </SimpleLink>
 
                 <LinkDiv>
-                    <NavUnlisted to={'/'}>
+                    <NavUnlisted to={'/generate'}>
                         <H7>GENERATE SCHEDULE</H7>
                     </NavUnlisted>
                     <NavUnlisted to={'/Preferences'}>
                         <H7>VIEW PREFERENCES</H7>
                     </NavUnlisted>
-                    <NavUnlisted to={'/'}>
+                    <NavUnlisted to={'/CreateAccountPage'}>
                         <H7>CREATE ACCOUNT</H7>
                     </NavUnlisted>
                     <UserWrapper>
