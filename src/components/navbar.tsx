@@ -61,9 +61,7 @@ export const NavBarProf = () => {
                         <H7>SCHEDULING PREFERENCES</H7>
                     </NavUnlisted>
                     <UserWrapper>
-                        <NavUnlisted to={'/user'}>
-                            <H7>ACCOUNT</H7>
-                        </NavUnlisted>
+                        <ProfileDropdown name='ACCOUNT' />
                         <ProfileWrapper src={userProfile} />
                     </UserWrapper>
                 </LinkDiv>
@@ -91,7 +89,7 @@ export const NavBarAdmin = () => {
                         <H7>CREATE ACCOUNT</H7>
                     </NavUnlisted>
                     <UserWrapper>
-                        <ProfileDropdown></ProfileDropdown>
+                        <ProfileDropdown name='ADMIN' />
                         <ProfileWrapper src={userProfile} />
                     </UserWrapper>
                 </LinkDiv>

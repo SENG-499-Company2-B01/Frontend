@@ -56,9 +56,10 @@ export const DropdownMenuItem = styled.button`
     }
 `
 
-export const ProfileDropdown = () => {
+export const ProfileDropdown = (props: { name: string }) => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false)
     const dropdownRef = useRef<HTMLInputElement>(null)
+    const { name } = props
 
     useEffect(() => {
         const handleOutsideClick = (event: { target: any }) => {
@@ -82,14 +83,14 @@ export const ProfileDropdown = () => {
 
     return (
         <DropdownContainer>
-            <ProfileButton onClick={toggleDropdown}>ADMIN</ProfileButton>
+            <ProfileButton onClick={toggleDropdown}>{name}</ProfileButton>
             {isDropdownOpen && (
                 <DropdownMenu ref={dropdownRef}>
                     <DropdownMenuItem>Profile</DropdownMenuItem>
                     <DropdownMenuItem>Notifications</DropdownMenuItem>
                     <DropdownMenuItem>Account settings</DropdownMenuItem>
                     <DropdownMenuItem>
-                        <SimpleLink to='/'>Sign out</SimpleLink>
+                        <SimpleLink to='/logout'>Sign out</SimpleLink>
                     </DropdownMenuItem>
                 </DropdownMenu>
             )}
