@@ -79,7 +79,7 @@ export const NavBarAdmin = () => {
                 </SimpleLink>
 
                 <LinkDiv>
-                    <NavUnlisted to={'/'}>
+                    <NavUnlisted to={'/generate'}>
                         <H7>GENERATE SCHEDULE</H7>
                     </NavUnlisted>
                     <NavUnlisted to={'/Preferences'}>
