@@ -94,7 +94,7 @@ export const CreateAccountPage: React.FC = () => {
                                 CANCEL
                             </Button>
                             <Button type='primary' htmlType='submit' style={{ marginLeft: 200, backgroundColor: '#2c2a2a', color: '#ffffff', borderRadius: 32 }}>
-                                CREATE ACCOUNT
+                                CREATE
                             </Button>
                         </div>
                     </Form.Item>
