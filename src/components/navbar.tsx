@@ -85,7 +85,7 @@ export const NavBarAdmin = () => {
                     <NavUnlisted to={'/Preferences'}>
                         <H7>VIEW PREFERENCES</H7>
                     </NavUnlisted>
-                    <NavUnlisted to={'/'}>
+                    <NavUnlisted to={'/CreateAccountPage'}>
                         <H7>CREATE ACCOUNT</H7>
                     </NavUnlisted>
                     <UserWrapper>
