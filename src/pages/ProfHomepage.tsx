@@ -3,8 +3,23 @@ import { H1, H2 } from '../components/atoms/typography'
 import 'bootstrap/dist/css/bootstrap.css'
 import '../components/Homepage/homepage.css'
 import { NavBarProf } from '../components/navbar'
+import { useEffect } from 'react'
+
+const url = 'http://localhost:8000/signin'
 
 export const ProfHomepage = () => {
+    useEffect(() => {
+        ;(async () => {
+            await fetch(url, {
+                method: 'GET',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+            })
+        })()
+    })
     return (
         <div>
             <NavBarProf />

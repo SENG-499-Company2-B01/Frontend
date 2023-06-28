@@ -4,32 +4,37 @@ import { H1, H2 } from '../components/atoms/typography'
 import { InputField } from '../components/atoms/input_field'
 import { BlackButton } from '../components/atoms/button'
 import { NavUnlisted, SimpleLink } from '../components/atoms/navLink'
-import { useState } from 'react'
+import { Navigate } from 'react-router-dom'
+import { SyntheticEvent, useState } from 'react'
+import axios from 'axios'
 
 export const Login = () => {
-    const [username, setUsername] = useState()
+    const [email, setEmail] = useState()
     const [password, setPassword] = useState()
     const [userType, setUserType] = useState()
+    const [navigate, setNavigate] = useState(false)
 
-    function login(e: any) {
+    const login = async (e: SyntheticEvent) => {
         e.preventDefault()
-        const url = 'http://localhost:8000/' + 'login'
-        fetch(url, {
+        const url = 'http://localhost:8000/signin'
+        await fetch(url, {
             method: 'POST',
+            mode: 'no-cors',
             headers: {
                 'Content-Type': 'application/json',
             },
+            credentials: 'include',
             body: JSON.stringify({
-                username: username,
-                password: password,
+                email: email,
             }),
         })
-            .then((response) => {
-                return response.json()
-            })
-            .then((data) => {
-                console.log(data)
-            })
+
+        // const content = await response.json()
+        // console.log(content)
+        // setNavigate(true)
+    }
+    if (navigate) {
+        return <Navigate to='/user' />
     }
     return (
         <form onSubmit={login}>
@@ -40,13 +45,7 @@ export const Login = () => {
                 </TitleWrapper>
                 <InputWrapper>
                     <H1>NetLink ID:</H1>
-                    <InputField
-                        placeholder='jsmith'
-                        value={username}
-                        onChange={(e: any) => {
-                            setUsername(e.target.value)
-                        }}
-                    />
+                    <InputField placeholder='jsmith' type='email' value={email} required onChange={(e: any) => setEmail(e.target.value)} />
                     <H1>Password:</H1>
                     <InputField
                         type='password'
@@ -56,11 +55,9 @@ export const Login = () => {
                         }}
                     />
                 </InputWrapper>
-                <SimpleLink to='/user'>
-                    <BlackButton style={{ width: '260px' }}>
-                        <H1>SIGN IN</H1>
-                    </BlackButton>
-                </SimpleLink>
+                <BlackButton style={{ width: '260px' }} type='submit'>
+                    <H1>SIGN IN</H1>
+                </BlackButton>
                 <NavUnlisted to='/'>
                     <H1>Forgot your password?</H1>
                 </NavUnlisted>
