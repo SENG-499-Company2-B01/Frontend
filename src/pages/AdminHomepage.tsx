@@ -15,11 +15,10 @@ export const AdminHomepage = () => {
         ;(async () => {
             await fetch(url, {
                 method: 'GET',
-                mode: 'no-cors',
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'text/plain',
+                    Authorization: 'Bearer ' + localStorage.getItem('jwt'),
                 },
-                credentials: 'include',
             })
         })()
     })

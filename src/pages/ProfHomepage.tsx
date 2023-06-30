@@ -5,18 +5,17 @@ import '../components/Homepage/homepage.css'
 import { NavBarProf } from '../components/navbar'
 import { useEffect } from 'react'
 
-const url = 'http://localhost:8000/signin'
+const url = 'http://localhost:8000/users'
 
 export const ProfHomepage = () => {
     useEffect(() => {
         ;(async () => {
             await fetch(url, {
                 method: 'GET',
-                mode: 'no-cors',
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'text/plain',
+                    Authorization: 'Bearer ' + localStorage.getItem('jwt'),
                 },
-                credentials: 'include',
             })
         })()
     })

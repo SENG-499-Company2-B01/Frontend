@@ -5,34 +5,50 @@ import { InputField } from '../components/atoms/input_field'
 import { BlackButton } from '../components/atoms/button'
 import { NavUnlisted, SimpleLink } from '../components/atoms/navLink'
 import { Navigate } from 'react-router-dom'
-import { SyntheticEvent, useState } from 'react'
-import axios from 'axios'
+import { SyntheticEvent, useState, useEffect } from 'react'
+import { Home } from './Home'
+import Preloader from '../components/Loading/PreLoader'
+import { ProfHomepage } from './ProfHomepage'
+import { AdminHomepage } from './AdminHomepage'
 
 export const Login = () => {
-    const [email, setEmail] = useState()
+    const [username, setUsername] = useState()
     const [password, setPassword] = useState()
-    const [userType, setUserType] = useState()
+    const [isAdmin, setIsAdmin] = useState(false)
     const [navigate, setNavigate] = useState(false)
 
     const login = async (e: SyntheticEvent) => {
         e.preventDefault()
-        const url = 'http://localhost:8000/signin'
+        console.log(username)
+        console.log(password)
+        const url = 'http://localhost:8000/login'
         await fetch(url, {
             method: 'POST',
-            mode: 'no-cors',
+            // mode: 'no-cors',
             headers: {
-                'Content-Type': 'application/json',
+                // 'Access-Control-Allow-Origin': '*',
+                Accept: 'application/json',
+                'Content-Type': 'text/plain',
             },
-            credentials: 'include',
             body: JSON.stringify({
-                email: email,
+                username: username,
+                password: password,
             }),
         })
+            .then((response) => {
+                return response.json()
+            })
+            .then((data) => {
+                localStorage.setItem('jwt', data.jwt)
+                console.log(localStorage)
+            })
 
-        // const content = await response.json()
-        // console.log(content)
-        // setNavigate(true)
+        if (username == 'Rich.Little') {
+            console.log('admin!')
+            setIsAdmin(true)
+        }
     }
+
     if (navigate) {
         return <Navigate to='/user' />
     }
@@ -45,7 +61,7 @@ export const Login = () => {
                 </TitleWrapper>
                 <InputWrapper>
                     <H1>NetLink ID:</H1>
-                    <InputField placeholder='jsmith' type='email' value={email} required onChange={(e: any) => setEmail(e.target.value)} />
+                    <InputField placeholder='jsmith' value={username} required onChange={(e: any) => setUsername(e.target.value)} />
                     <H1>Password:</H1>
                     <InputField
                         type='password'
