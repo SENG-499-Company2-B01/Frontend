@@ -6,8 +6,22 @@ import { NavUnlisted } from '../components/atoms/navLink'
 import 'bootstrap/dist/css/bootstrap.css'
 import '../components/Homepage/homepage.css'
 import { NavBarAdmin } from '../components/navbar'
+import { useEffect } from 'react'
+
+const url = 'http://localhost:8000/users'
 
 export const AdminHomepage = () => {
+    useEffect(() => {
+        ;(async () => {
+            await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'text/plain',
+                    Authorization: 'Bearer ' + localStorage.getItem('jwt'),
+                },
+            })
+        })()
+    })
     return (
         <div>
             <NavBarAdmin />

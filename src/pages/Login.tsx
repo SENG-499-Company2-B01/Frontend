@@ -4,20 +4,31 @@ import { H1, H2 } from '../components/atoms/typography'
 import { InputField } from '../components/atoms/input_field'
 import { BlackButton } from '../components/atoms/button'
 import { NavUnlisted, SimpleLink } from '../components/atoms/navLink'
-import { useState } from 'react'
+import { Navigate } from 'react-router-dom'
+import { SyntheticEvent, useState, useEffect } from 'react'
+import { Home } from './Home'
+import Preloader from '../components/Loading/PreLoader'
+import { ProfHomepage } from './ProfHomepage'
+import { AdminHomepage } from './AdminHomepage'
 
 export const Login = () => {
     const [username, setUsername] = useState()
     const [password, setPassword] = useState()
-    const [userType, setUserType] = useState()
+    const [isAdmin, setIsAdmin] = useState(false)
+    const [navigate, setNavigate] = useState(false)
 
-    function login(e: any) {
+    const login = async (e: SyntheticEvent) => {
         e.preventDefault()
-        const url = 'http://localhost:8000/' + 'login'
-        fetch(url, {
+        console.log(username)
+        console.log(password)
+        const url = 'http://localhost:8000/login'
+        await fetch(url, {
             method: 'POST',
+            // mode: 'no-cors',
             headers: {
-                'Content-Type': 'application/json',
+                // 'Access-Control-Allow-Origin': '*',
+                Accept: 'application/json',
+                'Content-Type': 'text/plain',
             },
             body: JSON.stringify({
                 username: username,
@@ -28,8 +39,18 @@ export const Login = () => {
                 return response.json()
             })
             .then((data) => {
-                console.log(data)
+                localStorage.setItem('jwt', data.jwt)
+                console.log(localStorage)
             })
+
+        if (username == 'Rich.Little') {
+            console.log('admin!')
+            setIsAdmin(true)
+        }
+    }
+
+    if (navigate) {
+        return <Navigate to='/user' />
     }
     return (
         <form onSubmit={login}>
@@ -40,13 +61,7 @@ export const Login = () => {
                 </TitleWrapper>
                 <InputWrapper>
                     <H1>NetLink ID:</H1>
-                    <InputField
-                        placeholder='jsmith'
-                        value={username}
-                        onChange={(e: any) => {
-                            setUsername(e.target.value)
-                        }}
-                    />
+                    <InputField placeholder='jsmith' value={username} required onChange={(e: any) => setUsername(e.target.value)} />
                     <H1>Password:</H1>
                     <InputField
                         type='password'
@@ -56,11 +71,9 @@ export const Login = () => {
                         }}
                     />
                 </InputWrapper>
-                <SimpleLink to='/user'>
-                    <BlackButton style={{ width: '260px' }}>
-                        <H1>SIGN IN</H1>
-                    </BlackButton>
-                </SimpleLink>
+                <BlackButton style={{ width: '260px' }} type='submit'>
+                    <H1>SIGN IN</H1>
+                </BlackButton>
                 <NavUnlisted to='/'>
                     <H1>Forgot your password?</H1>
                 </NavUnlisted>
