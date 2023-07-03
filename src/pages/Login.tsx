@@ -15,11 +15,12 @@ import PreLoader from '../components/Loading/PreLoader'
 export const Login = () => {
     const [username, setUsername] = useState()
     const [password, setPassword] = useState()
-    const [isAdmin, setIsAdmin] = useState(false)
+    const [loading, setLoading] = useState(false)
     const [navigate, setNavigate] = useState(false)
 
     const login = async (e: SyntheticEvent) => {
         e.preventDefault()
+        setLoading(true)
 
         // console.log(username)
         // console.log(password)
@@ -38,6 +39,7 @@ export const Login = () => {
             }),
         })
             .then((response) => {
+                setLoading(false)
                 return response.json()
             })
             .then((data) => {
@@ -49,7 +51,6 @@ export const Login = () => {
             console.log('admin!')
             localStorage.setItem('username', String(username))
             localStorage.setItem('user', 'admin')
-            setIsAdmin(true)
             setNavigate(true)
         } else {
             console.log('prof!')
@@ -86,6 +87,7 @@ export const Login = () => {
                 <BlackButton style={{ width: '260px' }} type='submit'>
                     <H1>SIGN IN</H1>
                 </BlackButton>
+                {loading ? <PreLoader /> : ''}
                 <NavUnlisted to='/'>
                     <H1>Forgot your password?</H1>
                 </NavUnlisted>

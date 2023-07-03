@@ -13,18 +13,9 @@ export function Loading() {
         }, 3000)
     }, [])
     const user = localStorage.getItem('user')
-    const status = localStorage.getItem('status')
-    if (status == 'home' && user == 'admin') {
+    if (user == 'admin') {
         return <div>{<AdminHomepage />}</div>
-    }
-    if (status == 'home' && user == 'prof') {
-        return <div>{<ProfHomepage />}</div>
-    }
-    if (status == 'login' && user == 'admin') {
-        localStorage.setItem('status', 'home')
-        return <div>{loading ? <Preloader /> : <AdminHomepage />}</div>
     } else {
-        localStorage.setItem('status', 'home')
-        return <div>{loading ? <Preloader /> : <ProfHomepage />}</div>
+        return <div>{<ProfHomepage />}</div>
     }
 }
