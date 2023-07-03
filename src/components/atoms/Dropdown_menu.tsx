@@ -32,8 +32,8 @@ export const DropdownMenu = styled.div`
     position: absolute;
     width: 236px;
     height: 198px;
-    left: 1535px;
-    top: 91px;
+    left: 84%;
+    top: 85%;
     background: #ffffff;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 10px;
@@ -56,7 +56,7 @@ export const DropdownMenuItem = styled.button`
     }
 `
 
-export const ProfileDropdown = (props: { name: string }) => {
+export const ProfileDropdown = (props: { name: string | null }) => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false)
     const dropdownRef = useRef<HTMLInputElement>(null)
     const { name } = props

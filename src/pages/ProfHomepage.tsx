@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.css'
 import '../components/Homepage/homepage.css'
 import { NavBarProf } from '../components/navbar'
 import { useEffect } from 'react'
+import { SimpleLink } from '../components/atoms/navLink'
 
 const url = 'http://localhost:8000/users'
 
@@ -33,9 +34,11 @@ export const ProfHomepage = () => {
                     </div>
                     <div className='col rig'>
                         <p className='para'> We create schedules for UVic Professors based on personal prefences to better their teaching experience.</p>
-                        <BlackButton className='bt2'>
-                            <H1>SET YOUR PREFERENCES</H1>
-                        </BlackButton>
+                        <SimpleLink to='/ProfPreferencePage'>
+                            <BlackButton className='bt2'>
+                                <H1>SET YOUR PREFERENCES</H1>
+                            </BlackButton>
+                        </SimpleLink>
                     </div>
                 </div>
             </div>

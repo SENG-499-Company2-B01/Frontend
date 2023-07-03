@@ -12,5 +12,19 @@ export function Loading() {
             setLoading(false)
         }, 3000)
     }, [])
-    return <div>{loading ? <Preloader /> : <AdminHomepage />}</div>
+    const user = localStorage.getItem('user')
+    const status = localStorage.getItem('status')
+    if (status == 'home' && user == 'admin') {
+        return <div>{<AdminHomepage />}</div>
+    }
+    if (status == 'home' && user == 'prof') {
+        return <div>{<ProfHomepage />}</div>
+    }
+    if (status == 'login' && user == 'admin') {
+        localStorage.setItem('status', 'home')
+        return <div>{loading ? <Preloader /> : <AdminHomepage />}</div>
+    } else {
+        localStorage.setItem('status', 'home')
+        return <div>{loading ? <Preloader /> : <ProfHomepage />}</div>
+    }
 }

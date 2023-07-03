@@ -10,6 +10,7 @@ import { Home } from './Home'
 import Preloader from '../components/Loading/PreLoader'
 import { ProfHomepage } from './ProfHomepage'
 import { AdminHomepage } from './AdminHomepage'
+import PreLoader from '../components/Loading/PreLoader'
 
 export const Login = () => {
     const [username, setUsername] = useState()
@@ -19,8 +20,9 @@ export const Login = () => {
 
     const login = async (e: SyntheticEvent) => {
         e.preventDefault()
-        console.log(username)
-        console.log(password)
+
+        // console.log(username)
+        // console.log(password)
         const url = 'http://localhost:8000/login'
         await fetch(url, {
             method: 'POST',
@@ -40,18 +42,28 @@ export const Login = () => {
             })
             .then((data) => {
                 localStorage.setItem('jwt', data.jwt)
-                console.log(localStorage)
+                localStorage.setItem('status', 'login')
             })
 
         if (username == 'Rich.Little') {
             console.log('admin!')
+            localStorage.setItem('username', String(username))
+            localStorage.setItem('user', 'admin')
             setIsAdmin(true)
+            setNavigate(true)
+        } else {
+            console.log('prof!')
+            localStorage.setItem('username', String(username))
+            localStorage.setItem('user', 'prof')
+            setNavigate(true)
         }
+        console.log(localStorage)
     }
 
     if (navigate) {
         return <Navigate to='/user' />
     }
+
     return (
         <form onSubmit={login}>
             <LoginBackground>
@@ -60,8 +72,8 @@ export const Login = () => {
                     <H2>LOG IN</H2>
                 </TitleWrapper>
                 <InputWrapper>
-                    <H1>NetLink ID:</H1>
-                    <InputField placeholder='jsmith' value={username} required onChange={(e: any) => setUsername(e.target.value)} />
+                    <H1>Username:</H1>
+                    <InputField placeholder='John.Smith' value={username} required onChange={(e: any) => setUsername(e.target.value)} />
                     <H1>Password:</H1>
                     <InputField
                         type='password'

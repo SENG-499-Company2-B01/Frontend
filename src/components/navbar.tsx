@@ -49,19 +49,19 @@ const LinkDiv = styled.div`
 `
 
 export const NavBarProf = () => {
+    const username = localStorage.getItem('username')
     return (
         <StickyContainer>
             <NavWrapper>
                 <SimpleLink to={'/user'}>
                     <LogoWrapper src={companyLogo} />
                 </SimpleLink>
-
                 <LinkDiv>
                     <NavUnlisted to={'/ProfPreferencePage'}>
                         <H7>SCHEDULING PREFERENCES</H7>
                     </NavUnlisted>
                     <UserWrapper>
-                        <ProfileDropdown name='ACCOUNT' />
+                        <ProfileDropdown name={String(username).toUpperCase()} />
                         <ProfileWrapper src={userProfile} />
                     </UserWrapper>
                 </LinkDiv>
@@ -71,6 +71,7 @@ export const NavBarProf = () => {
 }
 
 export const NavBarAdmin = () => {
+    const username = localStorage.getItem('username')
     return (
         <StickyContainer>
             <NavWrapper>
@@ -89,7 +90,7 @@ export const NavBarAdmin = () => {
                         <H7>CREATE ACCOUNT</H7>
                     </NavUnlisted>
                     <UserWrapper>
-                        <ProfileDropdown name='ADMIN' />
+                        <ProfileDropdown name={String(username).toUpperCase()} />
                         <ProfileWrapper src={userProfile} />
                     </UserWrapper>
                 </LinkDiv>
