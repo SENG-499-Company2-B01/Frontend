@@ -89,9 +89,9 @@ export const ProfileDropdown = (props: { name: string | null }) => {
                     <DropdownMenuItem>Profile</DropdownMenuItem>
                     <DropdownMenuItem>Notifications</DropdownMenuItem>
                     <DropdownMenuItem>Account settings</DropdownMenuItem>
-                    <DropdownMenuItem>
-                        <SimpleLink to='/logout'>Sign out</SimpleLink>
-                    </DropdownMenuItem>
+                    <SimpleLink to='/logout'>
+                        <DropdownMenuItem>Sign out</DropdownMenuItem>
+                    </SimpleLink>
                 </DropdownMenu>
             )}
         </DropdownContainer>
