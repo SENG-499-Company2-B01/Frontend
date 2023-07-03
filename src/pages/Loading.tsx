@@ -12,5 +12,10 @@ export function Loading() {
             setLoading(false)
         }, 3000)
     }, [])
-    return <div>{loading ? <Preloader /> : <AdminHomepage />}</div>
+    const user = localStorage.getItem('user')
+    if (user == 'admin') {
+        return <div>{<AdminHomepage />}</div>
+    } else {
+        return <div>{<ProfHomepage />}</div>
+    }
 }
