@@ -5,7 +5,8 @@ import { NavBarProf } from '../components/navbar'
 
 import { Button, Checkbox, Col, Form, Input, InputNumber, Row, Radio, Space, TimePicker } from 'antd'
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
-import React, { useState } from 'react'
+import { Navigate } from 'react-router-dom'
+import React, { SyntheticEvent, useState, useEffect } from 'react'
 import type { Dayjs } from 'dayjs'
 
 const formItemLayout = {
@@ -41,6 +42,42 @@ export const ProfPreferencePage: React.FC = () => {
 
     const onFinish = (values: any) => {
         console.log('Received values of form: ', values)
+    }
+
+    const [semester, setSemester] = useState('Fall')
+    const [ableToTeach, setAbleToTeach] = useState(true)
+    const [loading, setLoading] = useState(false)
+    const [navigate, setNavigate] = useState(false)
+
+    const login = async (e: SyntheticEvent) => {
+        e.preventDefault()
+        setLoading(true)
+
+        const url = 'http://localhost:8000/ProfPreferencePage'
+        await fetch(url, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'text/plain',
+            },
+            body: JSON.stringify({
+                semester: semester,
+                ableToTeach: ableToTeach,
+            }),
+        })
+            .then((response) => {
+                setLoading(false)
+                return response.json()
+            })
+            .then((data) => {
+                localStorage.setItem('jwt', data.jwt)
+                localStorage.setItem('status', 'login')
+            })
+        console.log(localStorage)
+    }
+
+    if (navigate) {
+        return <Navigate to='/user' />
     }
 
     const [formDisabled, setFormDisabled] = useState<boolean>(false)
