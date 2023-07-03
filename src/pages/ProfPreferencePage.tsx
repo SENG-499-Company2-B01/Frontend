@@ -101,7 +101,7 @@ export const ProfPreferencePage: React.FC = () => {
                             </Form.List>
                         </Form.Item>
 
-                        <Form.Item name='classSize' label='Class Size' tooltip='Input preferred class size.' style={{ marginBottom: 20 }} rules={[{ type: 'number', required: !formDisabled, message: 'Please input your preferred class size between 0 and 999!', min: 0, max: 999 }]}>
+                        <Form.Item name='numberOfClasses' label='Number of Classes' tooltip='Input number of classes.' style={{ marginBottom: 20 }} rules={[{ type: 'number', required: !formDisabled, message: 'Please input number of classes between 0 and 999!', min: 0, max: 999 }]}>
                             <InputNumber />
                         </Form.Item>
 
