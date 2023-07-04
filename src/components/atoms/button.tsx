@@ -74,3 +74,7 @@ export const BlackButton = styled.button`
         border: 2px solid #2c2a2a;
     }
 `
+
+export const SmallBlackButton = styled(BlackButton)`
+    padding: 8px 24px;
+`

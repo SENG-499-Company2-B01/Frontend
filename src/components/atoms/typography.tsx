@@ -45,4 +45,12 @@ export const H7 = styled.div`
     font-family: Montserrat-Medium;
     font-size: 14px;
     letter-spacing: 0.015em;
+    line-height: 140%;
+`
+
+export const H8 = styled.div`
+    font-family: Montserrat-Bold;
+    font-size: 14px;
+    letter-spacing: 0.015em;
+    line-height: 140%;
 `

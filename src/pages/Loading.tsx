@@ -5,13 +5,13 @@ import { ProfHomepage } from './ProfHomepage'
 import { AdminHomepage } from './AdminHomepage'
 
 export function Loading() {
-    const [loading, setLoading] = useState(false)
-    useEffect(() => {
-        setLoading(true)
-        setTimeout(() => {
-            setLoading(false)
-        }, 3000)
-    }, [])
+    // const [loading, setLoading] = useState(false)
+    // useEffect(() => {
+    //     setLoading(true)
+    //     setTimeout(() => {
+    //         setLoading(false)
+    //     }, 3000)
+    // }, [])
     const user = localStorage.getItem('user')
     if (user == 'admin') {
         return <div>{<AdminHomepage />}</div>
