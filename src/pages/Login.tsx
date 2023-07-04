@@ -4,20 +4,34 @@ import { H1, H2 } from '../components/atoms/typography'
 import { InputField } from '../components/atoms/input_field'
 import { BlackButton } from '../components/atoms/button'
 import { NavUnlisted, SimpleLink } from '../components/atoms/navLink'
-import { useState } from 'react'
+import { Navigate } from 'react-router-dom'
+import { SyntheticEvent, useState, useEffect } from 'react'
+import { Home } from './Home'
+import Preloader from '../components/Loading/PreLoader'
+import { ProfHomepage } from './ProfHomepage'
+import { AdminHomepage } from './AdminHomepage'
+import PreLoader from '../components/Loading/PreLoader'
 
 export const Login = () => {
     const [username, setUsername] = useState()
     const [password, setPassword] = useState()
-    const [userType, setUserType] = useState()
+    const [loading, setLoading] = useState(false)
+    const [navigate, setNavigate] = useState(false)
 
-    function login(e: any) {
+    const login = async (e: SyntheticEvent) => {
         e.preventDefault()
-        const url = 'http://localhost:8000/' + 'login'
-        fetch(url, {
+        setLoading(true)
+
+        // console.log(username)
+        // console.log(password)
+        const url = 'http://localhost:8000/login'
+        await fetch(url, {
             method: 'POST',
+            // mode: 'no-cors',
             headers: {
-                'Content-Type': 'application/json',
+                // 'Access-Control-Allow-Origin': '*',
+                Accept: 'application/json',
+                'Content-Type': 'text/plain',
             },
             body: JSON.stringify({
                 username: username,
@@ -25,12 +39,32 @@ export const Login = () => {
             }),
         })
             .then((response) => {
+                setLoading(false)
                 return response.json()
             })
             .then((data) => {
-                console.log(data)
+                localStorage.setItem('jwt', data.jwt)
+                localStorage.setItem('status', 'login')
             })
+
+        if (username == 'Rich.Little') {
+            console.log('admin!')
+            localStorage.setItem('username', String(username))
+            localStorage.setItem('user', 'admin')
+            setNavigate(true)
+        } else {
+            console.log('prof!')
+            localStorage.setItem('username', String(username))
+            localStorage.setItem('user', 'prof')
+            setNavigate(true)
+        }
+        console.log(localStorage)
     }
+
+    if (navigate) {
+        return <Navigate to='/user' />
+    }
+
     return (
         <form onSubmit={login}>
             <LoginBackground>
@@ -39,14 +73,8 @@ export const Login = () => {
                     <H2>LOG IN</H2>
                 </TitleWrapper>
                 <InputWrapper>
-                    <H1>NetLink ID:</H1>
-                    <InputField
-                        placeholder='jsmith'
-                        value={username}
-                        onChange={(e: any) => {
-                            setUsername(e.target.value)
-                        }}
-                    />
+                    <H1>Username:</H1>
+                    <InputField placeholder='John.Smith' value={username} required onChange={(e: any) => setUsername(e.target.value)} />
                     <H1>Password:</H1>
                     <InputField
                         type='password'
@@ -56,11 +84,10 @@ export const Login = () => {
                         }}
                     />
                 </InputWrapper>
-                <SimpleLink to='/user'>
-                    <BlackButton style={{ width: '260px' }}>
-                        <H1>SIGN IN</H1>
-                    </BlackButton>
-                </SimpleLink>
+                <BlackButton style={{ width: '260px' }} type='submit'>
+                    <H1>SIGN IN</H1>
+                </BlackButton>
+                {loading ? <PreLoader /> : ''}
                 <NavUnlisted to='/'>
                     <H1>Forgot your password?</H1>
                 </NavUnlisted>

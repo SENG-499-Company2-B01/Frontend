@@ -6,6 +6,7 @@ import { LogoWrapper, TitleWrapper } from '../components/login/login'
 import companyLogo from '../assets/icons/company_logo_dark.png'
 
 export const LogoutPage = () => {
+    localStorage.clear()
     return (
         <>
             <div className='cen'>
