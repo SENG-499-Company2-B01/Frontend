@@ -9,6 +9,7 @@ import { ProfPreferencePage } from './ProfPreferencePage'
 import { LogoutPage } from './LoggedOut'
 import { Generate } from './Generate'
 import { NewPreferences } from './NewPreferences'
+import { ProfTimetable } from './ProfTimetable'
 
 // Routes the web application to different pages
 
@@ -35,6 +36,14 @@ const Main = () => (
             element={
                 <>
                     <CreateAccountPage />
+                </>
+            }
+        />
+        <Route
+            path='/profview'
+            element={
+                <>
+                    <ProfTimetable />
                 </>
             }
         />
