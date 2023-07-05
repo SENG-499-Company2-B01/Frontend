@@ -1,0 +1,40 @@
+.prof
+{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 100px;
+    margin-bottom: 40px;
+}
+
+.tab
+{
+    width: 80%;
+    text-align: center;
+    display: flex;
+    margin: auto;
+}
+
+.row
+{
+    height: 90px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.times
+{
+    font-family: 'Open Sans';
+}
+
+.co
+{
+    margin-top: 25px;
+    background-color: rgb(174, 229, 143);
+    border-radius: 20px;
+}
+
+
+
