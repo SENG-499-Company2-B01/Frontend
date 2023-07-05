@@ -40,26 +40,40 @@ export const ProfTimetable = () => {
         <div>
             <NavBarAdmin />
             <div className='prof'>
-                <h2>Professor</h2>
+                <H2>Professor Timetable</H2>
             </div>
             <div className='tab'>
                 <table className='table table-striped-columns'>
                     <thead>
                         <tr>
                             <th className='col'></th>
-                            <th className='col'>Monday</th>
-                            <th className='col'>Tuesday</th>
-                            <th className='col'>Wednesday</th>
-                            <th className='col'>Thursaday</th>
-                            <th className='col'>Friday</th>
-                            <th className='col'>Saturday</th>
-                            <th className='col'>Sunday</th>
+                            <th className='col'>
+                                <H1>Monday</H1>
+                            </th>
+                            <th className='col'>
+                                <H1>Tuesday</H1>
+                            </th>
+                            <th className='col'>
+                                <H1>Wednesday</H1>
+                            </th>
+                            <th className='col'>
+                                <H1>Thursday</H1>
+                            </th>
+                            <th className='col'>
+                                <H1>Friday</H1>
+                            </th>
+                            <th className='col'>
+                                <H1>Saturday</H1>
+                            </th>
+                            <th className='col'>
+                                <H1>Sunday</H1>
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
                         {[7, 8, 9, 10, 11, 12, 13, 14, 15].map((hour) => (
                             <tr key={hour}>
-                                <th className='row times'>{`${hour > 12 ? hour - 12 : hour}:00 ${hour >= 12 ? 'PM' : 'AM'} to ${hour + 1 > 12 ? hour + 1 - 12 : hour + 1}:00 ${hour + 1 >= 12 ? 'PM' : 'AM'}`}</th>
+                                <th className='row1 times'>{`${hour > 12 ? hour - 12 : hour}:00 ${hour >= 12 ? 'PM' : 'AM'} to ${hour + 1 > 12 ? hour + 1 - 12 : hour + 1}:00 ${hour + 1 >= 12 ? 'PM' : 'AM'}`}</th>
                                 <td>
                                     <div className='co'>{schedule.Monday?.[hour.toString()] || ''}</div>
                                 </td>
