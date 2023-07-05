@@ -6,9 +6,9 @@ import { CreateAccountPage } from './CreateAccountPage'
 import { Practice } from './Practice'
 import { ProfHomepage } from './ProfHomepage'
 import { ProfPreferencePage } from './ProfPreferencePage'
-import { Preferences } from './Preferences'
 import { LogoutPage } from './LoggedOut'
 import { Generate } from './Generate'
+import { NewPreferences } from './NewPreferences'
 
 // Routes the web application to different pages
 
@@ -66,7 +66,7 @@ const Main = () => (
             path='/Preferences'
             element={
                 <>
-                    <Preferences />
+                    <NewPreferences />
                 </>
             }
         />
