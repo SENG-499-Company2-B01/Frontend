@@ -10,17 +10,17 @@ import { ProfessorHowTo } from './HowTo'
 const url = 'http://localhost:8000/users'
 
 export const ProfHomepage = () => {
-    useEffect(() => {
-        ;(async () => {
-            await fetch(url, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'text/plain',
-                    Authorization: 'Bearer ' + localStorage.getItem('jwt'),
-                },
-            })
-        })()
-    })
+    // useEffect(() => {
+    //     ;(async () => {
+    //         await fetch(url, {
+    //             method: 'GET',
+    //             headers: {
+    //                 'Content-Type': 'text/plain',
+    //                 Authorization: 'Bearer ' + localStorage.getItem('jwt'),
+    //             },
+    //         })
+    //     })()
+    // })
     return (
         <div>
             <NavBarProf />
