@@ -8,6 +8,7 @@ import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
 import { Navigate } from 'react-router-dom'
 import React, { SyntheticEvent, useState, useEffect } from 'react'
 import type { Dayjs } from 'dayjs'
+import { RangeValue } from 'rc-picker/lib/interface'
 import type { CheckboxChangeEvent } from 'antd/es/checkbox'
 
 const formItemLayout = {
@@ -34,9 +35,9 @@ const tailFormItemLayout = {
     },
 }
 
-// let nextId = 0
-
 export const ProfPreferencePage: React.FC = () => {
+    const { RangePicker } = TimePicker
+
     const [form] = Form.useForm()
 
     const onFinish = (values: any) => {
@@ -44,12 +45,13 @@ export const ProfPreferencePage: React.FC = () => {
     }
 
     const initialValue = [{ name: 'Once/Week', value: 'Once/Week' }]
+    const initialTime = [{ id: -1, value: ['', ''] }]
 
     const [formDisabled, setFormDisabled] = useState<boolean>(false)
     const [semester, setSemester] = useState('Fall')
     const [ableToTeach, setAbleToTeach] = useState<boolean>(!formDisabled)
     const [reason, setReason] = useState('')
-    const [preferredTime, setPreferredTime] = useState([])
+    const [preferredTime, setPreferredTime] = useState(initialTime)
     const [numberOfClasses, setNumberOfClasses] = useState()
     const [classFormat, setClassFormat] = useState(initialValue)
     const [navigate, setNavigate] = useState(false)
@@ -57,9 +59,9 @@ export const ProfPreferencePage: React.FC = () => {
     const submit = async (e: SyntheticEvent) => {
         e.preventDefault()
 
-        const url = 'http://localhost:8000/ProfPreferencePage'
+        const url = 's'
         await fetch(url, {
-            method: 'POST',
+            method: 'PUT',
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'text/plain',
@@ -77,8 +79,7 @@ export const ProfPreferencePage: React.FC = () => {
                 return response.json()
             })
             .then((data) => {
-                localStorage.setItem('jwt', data.jwt)
-                localStorage.setItem('status', 'login')
+                localStorage.setItem('status', 'user')
             })
         console.log(localStorage)
         setNavigate(true)
@@ -88,12 +89,25 @@ export const ProfPreferencePage: React.FC = () => {
         return <Navigate to='/user' />
     }
 
-    const onSelectStartTime = (time: Dayjs | null, timeString: string) => {
-        console.log(time, timeString)
+    const onSelectTime = (values: RangeValue<Dayjs>, formatString: [string, string]) => {
+        setPreferredTime(preferredTime.filter((item) => item.id !== -1))
+        {
+            preferredTime.map((time) => {
+                if (time.id == 0) {
+                    time.value = formatString
+                    return
+                }
+            })
+        }
+        preferredTime.push({ id: 0, value: formatString })
     }
 
-    const onSelectEndTime = (time: Dayjs | null, timeString: string) => {
-        console.log(time, timeString)
+    const onSelectNewTime = (values: RangeValue<Dayjs>, formatString: [string, string]) => {
+        preferredTime.push({ id: 0, value: formatString })
+    }
+
+    const onDeleteTime = (values: RangeValue<Dayjs>, formatString: [string, string]) => {
+        // setPreferredTime(preferredTime.filter((item) => item.id !== Number(formatString.replace(':', ''))))
     }
 
     const selectClassFormat = (e: CheckboxChangeEvent) => {
@@ -156,9 +170,8 @@ export const ProfPreferencePage: React.FC = () => {
 
                     <Form {...formItemLayout} form={form} name='preference' onFinish={onFinish} style={{ maxWidth: 600 }} scrollToFirstError disabled={formDisabled}>
                         <Form.Item name='preferredTime' label='Preferred Time' tooltip='Input preferred time.' style={{ marginBottom: 20 }}>
-                            <Space align='baseline' style={{ marginBottom: 10 }}>
-                                <TimePicker use12Hours format='h:mm a' onChange={onSelectStartTime} style={{ marginRight: 8, display: 'inline-block' }} placeholder='Start Time' />
-                                <TimePicker use12Hours format='h:mm a' onChange={onSelectEndTime} style={{ display: 'inline-block' }} placeholder='End Time' />
+                            <Space align='baseline' direction='vertical' size={12} style={{ marginBottom: 10 }}>
+                                <RangePicker use12Hours format='h:mm a' onChange={onSelectTime} />
                             </Space>
                             <Form.List name='added preferred time'>
                                 {(fields, { add, remove }) => (
@@ -167,11 +180,15 @@ export const ProfPreferencePage: React.FC = () => {
                                             <Space key={field.key} align='baseline'>
                                                 <Form.Item {...field} name={[field.name, 'start and end time']} rules={[{ required: true, message: 'Missing start and end time!' }]} style={{ marginBottom: 10 }}>
                                                     <Space align='baseline'>
-                                                        <TimePicker use12Hours format='h:mm a' onChange={onSelectStartTime} style={{ marginRight: 8, display: 'inline-block' }} placeholder='Start Time' />
-                                                        <TimePicker use12Hours format='h:mm a' onChange={onSelectEndTime} style={{ display: 'inline-block' }} placeholder='End Time' />
+                                                        <RangePicker use12Hours format='h:mm a' onChange={onSelectNewTime} />
                                                     </Space>
                                                 </Form.Item>
-                                                <MinusCircleOutlined onClick={() => remove(field.name)} />
+                                                <MinusCircleOutlined
+                                                    onClick={() => {
+                                                        remove(field.name)
+                                                        onDeleteTime
+                                                    }}
+                                                />
                                             </Space>
                                         ))}
                                         <Button type='dashed' onClick={() => add()} block icon={<PlusOutlined />} style={{ width: '260px' }}>
