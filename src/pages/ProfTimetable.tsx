@@ -73,7 +73,7 @@ export const ProfTimetable = () => {
                     <tbody>
                         {[7, 8, 9, 10, 11, 12, 13, 14, 15].map((hour) => (
                             <tr key={hour}>
-                                <th className='row1 times'>{`${hour > 12 ? hour - 12 : hour}:00 ${hour >= 12 ? 'PM' : 'AM'} to ${hour + 1 > 12 ? hour + 1 - 12 : hour + 1}:00 ${hour + 1 >= 12 ? 'PM' : 'AM'}`}</th>
+                                <th className='row2 times'>{`${hour > 12 ? hour - 12 : hour}:00 ${hour >= 12 ? 'PM' : 'AM'} to ${hour + 1 > 12 ? hour + 1 - 12 : hour + 1}:00 ${hour + 1 >= 12 ? 'PM' : 'AM'}`}</th>
                                 <td>
                                     <div className='co'>{schedule.Monday?.[hour.toString()] || ''}</div>
                                 </td>
