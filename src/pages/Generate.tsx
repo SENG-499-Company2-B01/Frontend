@@ -5,12 +5,38 @@ import { NavBarAdmin } from '../components/navbar'
 import Check from '../assets/icons/Check_ring.png'
 import XMark from '../assets/icons/Dell.png'
 import { Form, Radio } from 'antd'
+import { SyntheticEvent, useState } from 'react'
+import generateCalendar from 'antd/es/calendar/generateCalendar'
+import PreLoader from '../components/Loading/PreLoader'
 
 export const Generate = () => {
     const [form] = Form.useForm()
+    const [term, setTerm] = useState('Fall')
+    const [loading, setLoading] = useState(false)
+    console.log(localStorage.getItem('jwt'))
+
+    const createSchedule = async (e: SyntheticEvent) => {
+        e.preventDefault()
+        setLoading(true)
+
+        const url = 'http://localhost:8000/schedules/' + 2023 + '/' + term + '/generate'
+        await fetch(url, {
+            method: 'POST',
+            headers: {
+                // Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${localStorage.getItem('jwt')}`,
+            },
+        }).then((response) => {
+            setLoading(false)
+            return response
+        })
+
+        console.log(localStorage)
+    }
 
     return (
-        <div>
+        <form onSubmit={createSchedule}>
             <NavBarAdmin />
             <GenerateBackground>
                 <H2>Generate Schedule</H2>
@@ -35,10 +61,11 @@ export const Generate = () => {
                         </Radio.Group>
                     </Form.Item>
                 </Form>
-                <BlackButton>
+                <BlackButton type='submit'>
                     <H1>START GENERATING</H1>
                 </BlackButton>
+                {loading ? <PreLoader /> : ''}
             </GenerateBackground>
-        </div>
+        </form>
     )
 }
