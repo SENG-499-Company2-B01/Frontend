@@ -1,6 +1,14 @@
 import { Routes, Route } from 'react-router-dom'
 import { Home } from './Home'
+import { Loading } from './Loading'
+import { Login } from './Login'
+import { CreateAccountPage } from './CreateAccountPage'
 import { Practice } from './Practice'
+import { ProfHomepage } from './ProfHomepage'
+import { ProfPreferencePage } from './ProfPreferencePage'
+import { LogoutPage } from './LoggedOut'
+import { Generate } from './Generate'
+import { NewPreferences } from './NewPreferences'
 
 // Routes the web application to different pages
 
@@ -13,12 +21,76 @@ const Main = () => (
                     <Home />
                 </>
             }
-        ></Route>
+        />
         <Route
             path='/'
             element={
                 <>
+                    <Login />
+                </>
+            }
+        />
+        <Route
+            path='/CreateAccountPage'
+            element={
+                <>
+                    <CreateAccountPage />
+                </>
+            }
+        />
+        <Route
+            path='/practice'
+            element={
+                <>
                     <Practice />
+                </>
+            }
+        />
+        <Route
+            path='/ProfHomepage'
+            element={
+                <>
+                    <ProfHomepage />
+                </>
+            }
+        />
+        <Route
+            path='/ProfPreferencePage'
+            element={
+                <>
+                    <ProfPreferencePage />
+                </>
+            }
+        />
+        <Route
+            path='/Preferences'
+            element={
+                <>
+                    <NewPreferences />
+                </>
+            }
+        />
+        <Route
+            path='logout'
+            element={
+                <>
+                    <LogoutPage />
+                </>
+            }
+        />
+        <Route
+            path='/user'
+            element={
+                <>
+                    <Loading />
+                </>
+            }
+        ></Route>
+        <Route
+            path='/generate'
+            element={
+                <>
+                    <Generate />
                 </>
             }
         ></Route>

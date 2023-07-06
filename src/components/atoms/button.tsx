@@ -1,8 +1,24 @@
 import styled from '@emotion/styled'
 
+export const MediumWhiteButton = styled.button`
+    padding: 16px 40px;
+    color: #000000;
+    border-radius: 32px;
+    background-color: #f4f5f8;
+    display: flex;
+    align-items: center;
+    border: 2px solid #c8c8c8;
+    justify-content: center;
+    &:hover {
+        background-color: #c8c8c8;
+    }
+    &:active {
+        border: 2px solid #2c2a2a;
+    }
+`
+
 export const MediumBlackButton = styled.button`
     height: 36px;
-    padding: 0px 24px;
     border-radius: 32px;
     font-family: Monsterrat-Medium;
     font-size: 18px;
@@ -39,4 +55,26 @@ export const MediumBlueButton = styled(MediumBlackButton)`
     &:active {
         border: 2px solid #364da8;
     }
+`
+
+export const BlackButton = styled.button`
+    background-color: #2c2a2a;
+    color: #ffffff;
+    padding: 16px 40px;
+    display: flex;
+    font-family: Monsterrat-Medium;
+    border-radius: 32px;
+    align-items: center;
+    border: 2px solid transparent;
+    justify-content: center;
+    &:hover {
+        background-color: #585757;
+    }
+    &:active {
+        border: 2px solid #2c2a2a;
+    }
+`
+
+export const SmallBlackButton = styled(BlackButton)`
+    padding: 8px 24px;
 `
