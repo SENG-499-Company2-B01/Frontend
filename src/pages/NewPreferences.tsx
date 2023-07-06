@@ -13,7 +13,7 @@ export const NewPreferences: React.FC = () => {
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 const response = await axios
                     .post(
-                        'http://localhost:8000/login',
+                        'https://company2-backend.onrender.com/login',
                         {
                             username: 'Rich.Little',
                             password: 'Rich.Little12345',
@@ -29,7 +29,7 @@ export const NewPreferences: React.FC = () => {
                         const token = response.data.jwt
                         localStorage.setItem('jwt', token)
                         console.log(localStorage.getItem('jwt'))
-                        const response_1 = await axios.get('http://localhost:8000/users', {
+                        const response_1 = await axios.get('https://company2-backend.onrender.com/users', {
                             headers: {
                                 // Accept: 'application/json',
                                 'Content-Type': 'text/plain',

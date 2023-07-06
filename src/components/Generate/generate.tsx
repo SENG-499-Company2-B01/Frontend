@@ -2,10 +2,9 @@ import styled from '@emotion/styled'
 
 export const GenerateBackground = styled.div`
     width: 100%;
-    height: 100vh;
     background-color: #fcfcfc;
-    padding-top: 128px;
-    padding-bottom: 128px;
+    padding-top: 64px;
+    padding-bottom: 64px;
     display: flex;
     flex-direction: column;
     gap: 64px;

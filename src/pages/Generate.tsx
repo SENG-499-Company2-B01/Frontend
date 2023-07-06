@@ -8,6 +8,7 @@ import { Form, Radio } from 'antd'
 import { SyntheticEvent, useState } from 'react'
 import generateCalendar from 'antd/es/calendar/generateCalendar'
 import PreLoader from '../components/Loading/PreLoader'
+import DropdownMenu from '../components/atoms/term_dropdown'
 
 export const Generate = () => {
     const [form] = Form.useForm()
@@ -19,7 +20,7 @@ export const Generate = () => {
         e.preventDefault()
         setLoading(true)
 
-        const url = 'http://localhost:8000/schedules/' + 2023 + '/' + term + '/generate'
+        const url = 'https://company2-backend.onrender.com/' + 2023 + '/' + term + '/generate'
         await fetch(url, {
             method: 'POST',
             headers: {
@@ -52,15 +53,7 @@ export const Generate = () => {
                         <H3>Unapproved preferences</H3>
                     </UnapprovedCard>
                 </CardsWrapper>
-                <Form form={form} name='preference' scrollToFirstError>
-                    <Form.Item name='semester' style={{ margin: 0 }}>
-                        <Radio.Group defaultValue='Fall'>
-                            <Radio.Button value='Fall'>Fall</Radio.Button>
-                            <Radio.Button value='Winter'>Winter</Radio.Button>
-                            <Radio.Button value='Summer'>Summer</Radio.Button>
-                        </Radio.Group>
-                    </Form.Item>
-                </Form>
+                <DropdownMenu label={'Term'} data={['Fall', 'Spring', 'Summer']} />
                 <BlackButton type='submit'>
                     <H1>START GENERATING</H1>
                 </BlackButton>
