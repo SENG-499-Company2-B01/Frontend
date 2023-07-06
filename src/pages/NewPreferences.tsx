@@ -1,7 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.css'
 import '../components/Homepage/homepage.css'
 import { NavBarAdmin } from '../components/navbar'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import './test.css'
 import ProfTable from './ProfTable'
 import axios from 'axios'

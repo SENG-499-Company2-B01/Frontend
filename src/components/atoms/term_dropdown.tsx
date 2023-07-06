@@ -81,6 +81,8 @@ export default function DropdownMenu(props: any) {
     const selectHandler = (event: any) => {
         setShowDropDown(false)
         setSelectedValue(event.target.getAttribute('value'))
+        localStorage.setItem('term', event.target.getAttribute('value').toLowerCase())
+        console.log(localStorage)
     }
 
     const refClick = useRef<any>(null)

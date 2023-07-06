@@ -12,15 +12,16 @@ import DropdownMenu from '../components/atoms/term_dropdown'
 
 export const Generate = () => {
     const [form] = Form.useForm()
-    const [term, setTerm] = useState('Fall')
     const [loading, setLoading] = useState(false)
-    console.log(localStorage.getItem('jwt'))
+    // console.log(localStorage.getItem('jwt'))
 
     const createSchedule = async (e: SyntheticEvent) => {
         e.preventDefault()
         setLoading(true)
+        const term = localStorage.getItem('term')
 
-        const url = 'https://company2-backend.onrender.com/' + 2023 + '/' + term + '/generate'
+        const url = 'https://company2-backend.onrender.com/schedules/' + 2023 + '/' + term + '/generate'
+        console.log('Given url: ' + url)
         await fetch(url, {
             method: 'POST',
             headers: {
@@ -29,12 +30,20 @@ export const Generate = () => {
                 Authorization: `Bearer ${localStorage.getItem('jwt')}`,
             },
         }).then((response) => {
-            setLoading(false)
-            return response
+            response.json().then((data) => {
+                console.log(data)
+            })
+            // return response.formData()
         })
-
-        console.log(localStorage)
+        // .then((data) => {
+        //     console.log(data)
+        // })
     }
+
+    // const handleChange = (e: any) => {
+    //     setTerm(e)
+    //     console.log(term)
+    // }
 
     return (
         <form onSubmit={createSchedule}>
