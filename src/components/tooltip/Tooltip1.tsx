@@ -1,16 +1,30 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './Tooltip1.css'
 
 type TooltipPosition = 'top' | 'bottom' | 'left' | 'right'
 
 interface TooltipProps {
-    position?: TooltipPosition
+    position?: TooltipPosition,
+    message: string // This line defines a new prop for the tooltip message.
 }
 
-const Tooltip: React.FC<TooltipProps> = ({ position = 'top' }) => {
+const Tooltip: React.FC<TooltipProps> = ({ position = 'top', message }) => {
     const [isTooltipOpen, setTooltipOpen] = useState(false)
 
-    const toggleTooltip = () => {
+    useEffect(() => {
+        const closeTooltip = () => {
+            setTooltipOpen(false)
+        }
+
+        document.addEventListener('click', closeTooltip)
+
+        return () => {
+            document.removeEventListener('click', closeTooltip)
+        }
+    }, [])
+
+    const toggleTooltip = (e: React.MouseEvent) => {
+        e.stopPropagation()
         setTooltipOpen(!isTooltipOpen)
     }
 
@@ -28,7 +42,7 @@ const Tooltip: React.FC<TooltipProps> = ({ position = 'top' }) => {
             <div className={`tooltip-trigger ${isTooltipOpen ? 'active' : ''}`} onClick={toggleTooltip}>
                 <span className='tooltip-icon'>?</span>
             </div>
-            {isTooltipOpen && <div className={getTooltipContentClassName()}>This is the tooltip content.</div>}
+            {isTooltipOpen && <div className={getTooltipContentClassName()}>{message}</div>}
         </div>
     )
 }

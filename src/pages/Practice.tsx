@@ -4,6 +4,7 @@ import { HomeBackground } from '../components/home/background'
 import { InputField } from '../components/atoms/input_field'
 import { NavUnlisted } from '../components/atoms/navLink'
 import { NavBarAdmin } from '../components/navbar'
+import Tooltip from '../components/tooltip/Tooltip1'
 
 // Page to display created components
 
@@ -26,7 +27,7 @@ export const Practice = () => {
                     <MediumBlueButton>
                         <H1>Blue Button</H1>
                     </MediumBlueButton>
-                    <Tooltip position="right" />
+                    <Tooltip position="right" message="This is a custom message" /> // Specify custom message here.
                 </a>
                 <InputField placeholder='jsmith'></InputField>
                 <NavUnlisted to='/Home'>Home</NavUnlisted>
