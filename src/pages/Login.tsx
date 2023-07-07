@@ -24,7 +24,7 @@ export const Login = () => {
 
         // console.log(username)
         // console.log(password)
-        const url = 'https://company2-backend.onrender.com/login'
+        const url = 'http://localhost:8000/login'
         await fetch(url, {
             method: 'POST',
             // mode: 'no-cors',

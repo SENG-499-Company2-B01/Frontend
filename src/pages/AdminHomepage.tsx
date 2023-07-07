@@ -6,8 +6,9 @@ import { NavUnlisted, SimpleLink } from '../components/atoms/navLink'
 import 'bootstrap/dist/css/bootstrap.css'
 import '../components/Homepage/homepage.css'
 import { goToTop, NavBarAdmin } from '../components/navbar'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { AdminHowTo } from './HowTo'
+import BasicCalendar from '../components/calendar/BasicCalendar'
 
 const url = 'http://localhost:8000/users'
 
@@ -23,6 +24,10 @@ export const AdminHomepage = () => {
     //         })
     //     })()
     // })
+    // const [isGenerated, setIsGenerated] = useState(false)
+    // if (localStorage.getItem('generated') == 'true') {
+    //     setIsGenerated(true)
+    // }
     return (
         <div>
             <NavBarAdmin />
@@ -45,6 +50,7 @@ export const AdminHomepage = () => {
                     </div>
                 </div>
             </div>
+            {/* {isGenerated ? <BasicCalendar /> : null} */}
             <AdminHowTo />
         </div>
     )

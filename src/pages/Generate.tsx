@@ -5,7 +5,7 @@ import { NavBarAdmin } from '../components/navbar'
 import Check from '../assets/icons/Check_ring.png'
 import XMark from '../assets/icons/Dell.png'
 import { Form, Radio } from 'antd'
-import { SyntheticEvent, useState } from 'react'
+import { SyntheticEvent, useRef, useState } from 'react'
 import generateCalendar from 'antd/es/calendar/generateCalendar'
 import PreLoader from '../components/Loading/PreLoader'
 import DropdownMenu from '../components/atoms/term_dropdown'
@@ -16,6 +16,7 @@ export const Generate = () => {
     const [form] = Form.useForm()
     const [loading, setLoading] = useState(false)
     const [isGenerated, setIsGenerated] = useState(false)
+    const scrollRef = useRef<any>()
     // console.log(localStorage.getItem('jwt'))
 
     const createSchedule = async (e: SyntheticEvent) => {
@@ -32,12 +33,18 @@ export const Generate = () => {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${localStorage.getItem('jwt')}`,
             },
-        }).then((response) => {
-            response.json().then((data) => {
+        })
+            .then((response) => {
+                setLoading(false)
+                return response.json()
+                // return response.formData()
+            })
+            .then((data) => {
                 console.log(data)
             })
-            // return response.formData()
-        })
+        setIsGenerated(true)
+        scrollRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        localStorage.setItem('generated', 'true')
         // .then((data) => {
         //     console.log(data)
         // })
@@ -66,10 +73,13 @@ export const Generate = () => {
                 </BlackButton>
                 {loading ? <PreLoader /> : ''}
                 {/* {isGenerated ? <ProfTable />} */}
+            </GenerateBackground>
+            <div ref={scrollRef}></div>
+            {isGenerated ? (
                 <div style={{ height: '95vh' }}>
                     <BasicCalendar />
                 </div>
-            </GenerateBackground>
+            ) : null}
         </form>
     )
 }
