@@ -89,7 +89,7 @@ export const NavBarAdmin = () => {
                         <H7>GENERATE SCHEDULE</H7>
                     </NavUnlisted>
                     <NavUnlisted to={'/Preferences'} onClick={goToTop}>
-                        <H7>VIEW PREFERENCES</H7>
+                        <H7>VIEW PROFESSORS</H7>
                     </NavUnlisted>
                     <NavUnlisted to={'/CreateAccountPage'} onClick={goToTop}>
                         <H7>CREATE ACCOUNT</H7>

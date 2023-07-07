@@ -7,7 +7,7 @@ import companyLogo from '../assets/icons/company_logo_dark.png'
 import { HomeBackground } from '../components/home/background'
 
 export const LogoutPage = () => {
-    localStorage.clear()
+    // localStorage.clear()
     return (
         <>
             <HomeBackground>
