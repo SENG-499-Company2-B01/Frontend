@@ -9,10 +9,13 @@ import { SyntheticEvent, useState } from 'react'
 import generateCalendar from 'antd/es/calendar/generateCalendar'
 import PreLoader from '../components/Loading/PreLoader'
 import DropdownMenu from '../components/atoms/term_dropdown'
+import ProfTable from './ProfTable'
+import BasicCalendar from '../components/calendar/BasicCalendar'
 
 export const Generate = () => {
     const [form] = Form.useForm()
     const [loading, setLoading] = useState(false)
+    const [isGenerated, setIsGenerated] = useState(false)
     // console.log(localStorage.getItem('jwt'))
 
     const createSchedule = async (e: SyntheticEvent) => {
@@ -20,7 +23,7 @@ export const Generate = () => {
         setLoading(true)
         const term = localStorage.getItem('term')
 
-        const url = 'https://company2-backend.onrender.com/schedules/' + 2023 + '/' + term + '/generate'
+        const url = 'http://localhost:8000/schedules/' + 2023 + '/' + term + '/generate'
         console.log('Given url: ' + url)
         await fetch(url, {
             method: 'POST',
@@ -39,11 +42,6 @@ export const Generate = () => {
         //     console.log(data)
         // })
     }
-
-    // const handleChange = (e: any) => {
-    //     setTerm(e)
-    //     console.log(term)
-    // }
 
     return (
         <form onSubmit={createSchedule}>
@@ -67,6 +65,10 @@ export const Generate = () => {
                     <H1>START GENERATING</H1>
                 </BlackButton>
                 {loading ? <PreLoader /> : ''}
+                {/* {isGenerated ? <ProfTable />} */}
+                <div style={{ height: '95vh' }}>
+                    <BasicCalendar />
+                </div>
             </GenerateBackground>
         </form>
     )

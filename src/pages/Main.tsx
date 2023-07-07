@@ -10,6 +10,7 @@ import { LogoutPage } from './LoggedOut'
 import { Generate } from './Generate'
 import { NewPreferences } from './NewPreferences'
 import { ProfTimetable } from './ProfTimetable'
+import 'react-big-calendar/lib/css/react-big-calendar.css'
 
 // Routes the web application to different pages
 
