@@ -49,10 +49,10 @@ export const ProfPreferencePage: React.FC = () => {
 
     const [formDisabled, setFormDisabled] = useState<boolean>(false)
     const [semester, setSemester] = useState('Fall')
-    const [ableToTeach, setAbleToTeach] = useState<boolean>(!formDisabled)
+    const [ableToTeach, setAbleToTeach] = useState((!formDisabled).toString())
     const [reason, setReason] = useState('')
     const [preferredTime, setPreferredTime] = useState(initialTime)
-    const [numberOfClasses, setNumberOfClasses] = useState()
+    const [numberOfClasses, setNumberOfClasses] = useState(0)
     const [classFormat, setClassFormat] = useState(initialValue)
     const [navigate, setNavigate] = useState(false)
 
@@ -61,25 +61,30 @@ export const ProfPreferencePage: React.FC = () => {
         const username = localStorage.getItem('username')
 
         const url = 'https://company2-backend.onrender.com/users/' + username
+
+        const time = { F: [['08:30', '16:00']], M: [['08:30', '16:00']], R: [['08:30', '16:00']], T: [['08:30', '16:00']], W: [['08:30', '16:00']] }
+
         await fetch(url, {
             method: 'PUT',
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'text/plain',
+                Authorization: 'Bearer ' + localStorage.getItem('jwt'),
             },
             body: JSON.stringify({
-                semester: semester,
-                ableToTeach: ableToTeach,
-                reason: reason,
-                preferredTime: preferredTime,
-                numberOfClasses: numberOfClasses,
-                classFormat: classFormat,
+                // semester: semester,
+                // ableToTeach: ableToTeach,
+                // reason: reason,
+                available: time,
+                // numberOfClasses: numberOfClasses,
+                // classFormat: classFormat,
             }),
         })
             .then((response) => {
                 return response.json()
             })
             .then((data) => {
+                console.log(data)
                 localStorage.setItem('status', 'user')
             })
         console.log(localStorage)
@@ -90,7 +95,19 @@ export const ProfPreferencePage: React.FC = () => {
         return <Navigate to='/user' />
     }
 
+    const onAbleToTeach = (checked: boolean, value: string) => {
+        setFormDisabled(!checked)
+        setAbleToTeach(value)
+        setReason('')
+    }
+
+    const onDisableToTeach = (checked: boolean, value: string) => {
+        setFormDisabled(checked)
+        setAbleToTeach(value)
+    }
+
     const onSelectTime = (values: RangeValue<Dayjs>, formatString: [string, string]) => {
+        console.log(formatString)
         setPreferredTime(preferredTime.filter((item) => item.id !== -1))
         {
             preferredTime.map((time) => {
@@ -104,6 +121,7 @@ export const ProfPreferencePage: React.FC = () => {
     }
 
     const onSelectNewTime = (values: RangeValue<Dayjs>, formatString: [string, string]) => {
+        console.log(formatString)
         preferredTime.push({ id: 0, value: formatString })
     }
 
@@ -121,13 +139,17 @@ export const ProfPreferencePage: React.FC = () => {
         }
     }
 
+    const onChangeNumberOfClasses = (value: number | null) => {
+        setNumberOfClasses(value!)
+    }
+
     return (
         <div>
             <NavBarProf />
             <div className='cen'>
                 <H2>Preference</H2>
                 <Form {...formItemLayout} form={form} name='preference' onFinish={onFinish} style={{ maxWidth: 600 }} scrollToFirstError>
-                    <Form.Item name='semester' label='Semester' tooltip='Select a semester.' style={{ marginBottom: 20 }}>
+                    <Form.Item name='Semester' label='Semester' tooltip='Select a semester.' style={{ marginBottom: 20 }}>
                         <Radio.Group defaultValue='Fall'>
                             <Radio.Button value='Fall' onChange={(e: any) => setSemester(e.target.value)}>
                                 Fall
@@ -141,47 +163,33 @@ export const ProfPreferencePage: React.FC = () => {
                         </Radio.Group>
                     </Form.Item>
 
-                    <Form.Item name='ableToTeach' label='Able To Teach' tooltip='Are you able to teach this semester?' style={{ marginBottom: 20 }}>
+                    <Form.Item name='Able To Teach' label='Able To Teach' tooltip='Are you able to teach this semester?' style={{ marginBottom: 20 }}>
                         <Radio.Group defaultValue='Yes' style={{ marginBottom: 10 }}>
-                            <Radio
-                                value='Yes'
-                                checked={formDisabled}
-                                onChange={(e) => {
-                                    setFormDisabled(!e.target.checked)
-                                    setAbleToTeach(true)
-                                }}
-                            >
+                            <Radio value='Yes' checked={formDisabled} onChange={(e) => onAbleToTeach(e.target.checked, e.target.value)}>
                                 Yes
                             </Radio>
-                            <Radio
-                                value='No'
-                                checked={formDisabled}
-                                onChange={(e) => {
-                                    setFormDisabled(e.target.checked)
-                                    setAbleToTeach(false)
-                                }}
-                            >
+                            <Radio value='No' checked={formDisabled} onChange={(e) => onDisableToTeach(e.target.checked, e.target.value)}>
                                 No
                             </Radio>
                         </Radio.Group>
                         <Form.Item name='reason' rules={[{ required: formDisabled, message: 'Please input reason!' }]}>
-                            <Input.TextArea showCount maxLength={100} value={reason} placeholder='Reason' onChange={(e: any) => setReason(e.target.value)} />
+                            <Input.TextArea showCount disabled={!formDisabled} maxLength={100} value={reason} placeholder='Reason' onChange={(e: any) => setReason(e.target.value)} />
                         </Form.Item>
                     </Form.Item>
 
                     <Form {...formItemLayout} form={form} name='preference' onFinish={onFinish} style={{ maxWidth: 600 }} scrollToFirstError disabled={formDisabled}>
-                        <Form.Item name='preferredTime' label='Preferred Time' tooltip='Input preferred time.' style={{ marginBottom: 20 }}>
+                        <Form.Item name='Preferred Time' label='Preferred Time' tooltip='Input preferred time.' style={{ marginBottom: 20 }}>
                             <Space align='baseline' direction='vertical' size={12} style={{ marginBottom: 10 }}>
-                                <RangePicker use12Hours format='h:mm a' onChange={onSelectTime} />
+                                <RangePicker format='HH:mm' onChange={onSelectTime} />
                             </Space>
-                            <Form.List name='added preferred time'>
+                            <Form.List name='Added Preferred Time'>
                                 {(fields, { add, remove }) => (
                                     <>
                                         {fields.map((field) => (
                                             <Space key={field.key} align='baseline'>
-                                                <Form.Item {...field} name={[field.name, 'start and end time']} rules={[{ required: true, message: 'Missing start and end time!' }]} style={{ marginBottom: 10 }}>
+                                                <Form.Item {...field} name={[field.name, 'start and end time']} style={{ marginBottom: 10 }}>
                                                     <Space align='baseline'>
-                                                        <RangePicker use12Hours format='h:mm a' onChange={onSelectNewTime} />
+                                                        <RangePicker format='HH:mm' onChange={onSelectNewTime} />
                                                     </Space>
                                                 </Form.Item>
                                                 <MinusCircleOutlined
@@ -200,8 +208,8 @@ export const ProfPreferencePage: React.FC = () => {
                             </Form.List>
                         </Form.Item>
 
-                        <Form.Item name='numberOfClasses' label='Number of Classes' tooltip='Input number of classes.' style={{ marginBottom: 20 }} rules={[{ type: 'number', required: !formDisabled, message: 'Please input your number of classes between 0 and 999!', min: 0, max: 999 }]}>
-                            <InputNumber value={numberOfClasses} onChange={(e: any) => setNumberOfClasses(e.target.value)} />
+                        <Form.Item name='numberOfClasses' label='Number of Classes' tooltip='Input number of classes.' style={{ marginBottom: 20 }}>
+                            <InputNumber min={0} max={999} defaultValue={0} onChange={onChangeNumberOfClasses} />
                         </Form.Item>
 
                         <Form.Item name='classFormat' label='Class Format' tooltip='Select one or more preferred class formats' style={{ marginBottom: 20 }}>
