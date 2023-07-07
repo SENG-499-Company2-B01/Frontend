@@ -58,8 +58,9 @@ export const ProfPreferencePage: React.FC = () => {
 
     const submit = async (e: SyntheticEvent) => {
         e.preventDefault()
+        const username = localStorage.getItem('username')
 
-        const url = 's'
+        const url = 'https://company2-backend.onrender.com/users/' + username
         await fetch(url, {
             method: 'PUT',
             headers: {
