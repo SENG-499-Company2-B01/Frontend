@@ -24,7 +24,7 @@ export const Generate = () => {
         setLoading(true)
         const term = localStorage.getItem('term')
 
-        const url = 'http://localhost:8000/schedules/' + 2023 + '/' + term + '/generate'
+        const url = 'https://company2-backend.onrender.com/schedules/' + 2023 + '/' + term + '/generate'
         console.log('Given url: ' + url)
         await fetch(url, {
             method: 'POST',
