@@ -27,7 +27,7 @@ export const Practice = () => {
                     <MediumBlueButton>
                         <H1>Blue Button</H1>
                     </MediumBlueButton>
-                    <Tooltip position="right" message="This is a custom message" /> // Specify custom message here.
+                    <Tooltip position='right' message='This is a custom message' />
                 </a>
                 <InputField placeholder='jsmith'></InputField>
                 <NavUnlisted to='/Home'>Home</NavUnlisted>
