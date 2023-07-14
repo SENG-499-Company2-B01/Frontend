@@ -8,3 +8,8 @@
     flex-direction: column;
     margin-top: 0%;
 }
+
+.blue-table thead th {
+    background-color: #6885CE;
+    color: white;
+}

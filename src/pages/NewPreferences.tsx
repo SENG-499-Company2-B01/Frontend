@@ -54,7 +54,7 @@ export const NewPreferences: React.FC = () => {
     return (
         <div>
             <NavBarAdmin />
-            <div className='con d-flex flex-row justify-content-between'>
+            <div className='tab'>
                 <h1 className='hea_1'>Professors</h1>
             </div>
             {loading ? <PreLoader /> : ''}
