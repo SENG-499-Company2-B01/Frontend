@@ -50,6 +50,11 @@ export const Generate = () => {
         // })
     }
 
+    const approveSchedule = async (e: SyntheticEvent) => {
+        e.preventDefault()
+        console.log('Schedule approved!')
+    }
+
     return (
         <form onSubmit={createSchedule}>
             <NavBarAdmin />
@@ -78,6 +83,9 @@ export const Generate = () => {
             {isGenerated ? (
                 <div style={{ height: '95vh' }}>
                     <BasicCalendar />
+                    <BlackButton onClick={approveSchedule}>
+                        <H1>APPROVE SCHEDULE</H1>
+                    </BlackButton>
                 </div>
             ) : null}
         </form>

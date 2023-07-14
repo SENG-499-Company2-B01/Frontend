@@ -2,7 +2,7 @@ import styled from '@emotion/styled'
 
 export const GenerateBackground = styled.div`
     width: 100%;
-    background-color: #fcfcfc;
+    height: 100vh;
     padding-top: 64px;
     padding-bottom: 64px;
     display: flex;
