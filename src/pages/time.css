@@ -1,0 +1,28 @@
+.mai
+{
+    margin: 50px;
+    margin-bottom: 10px;
+    display: flex;
+    margin-left: 40%;
+}
+
+.navy
+{
+    margin-left: auto;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.taa
+{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+}
+
+.y
+{
+    margin-right: 50px;
+}

@@ -4,7 +4,7 @@ import './Tooltip1.css'
 type TooltipPosition = 'top' | 'bottom' | 'left' | 'right'
 
 interface TooltipProps {
-    position?: TooltipPosition,
+    position?: TooltipPosition
     message: string // This line defines a new prop for the tooltip message.
 }
 

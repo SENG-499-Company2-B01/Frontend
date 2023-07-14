@@ -1,8 +1,4 @@
-import { MediumBlackButton, MediumBlueButton, MediumRedButton, MediumWhiteButton } from '../components/atoms/button'
 import { H1, H2 } from '../components/atoms/typography'
-import { HomeBackground } from '../components/home/background'
-import { InputField } from '../components/atoms/input_field'
-import { NavUnlisted } from '../components/atoms/navLink'
 import { NavBarAdmin } from '../components/navbar'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './proftimetable.css'
