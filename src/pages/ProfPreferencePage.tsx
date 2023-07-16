@@ -54,7 +54,7 @@ export const ProfPreferencePage: React.FC = () => {
                     <Form.Item name='semester' label='Semester' tooltip='Select a semester.' style={{ marginBottom: 20 }}>
                         <Radio.Group defaultValue='Fall'>
                             <Radio.Button value='Fall'>Fall</Radio.Button>
-                            <Radio.Button value='Winter'>Winter</Radio.Button>
+                            <Radio.Button value='Spring'>Spring</Radio.Button>
                             <Radio.Button value='Summer'>Summer</Radio.Button>
                         </Radio.Group>
                     </Form.Item>
