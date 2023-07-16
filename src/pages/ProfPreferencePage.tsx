@@ -124,7 +124,7 @@ export const ProfPreferencePage: React.FC = () => {
 
                     <Form.Item {...tailFormItemLayout}>
                         <div style={{ width: '200px', display: 'flex', flexDirection: 'row', justifyContent: 'center', marginBottom: 20 }}>
-                            <Button type='primary' htmlType='reset' style={{ backgroundColor: '#2c2a2a', color: '#ffffff', borderRadius: 32 }}>
+                            <Button type='primary' htmlType='reset' style={{ backgroundColor: '#2c2a2a', color: '#ffffff', borderRadius: 32 }} onClick={() => setFormDisabled(false)}>
                                 CLEAR
                             </Button>
                         </div>
