@@ -84,7 +84,7 @@ export const Login = () => {
                         }}
                     />
                 </InputWrapper>
-                <BlackButton style={{ width: '260px' }} type='submit'>
+                <BlackButton style={{ width: '260px', marginTop: '2vh' }} type='submit'>
                     <H1>SIGN IN</H1>
                 </BlackButton>
                 {loading ? <PreLoader /> : ''}

@@ -6,13 +6,16 @@ export const LoginBackground = styled.div`
     background-color: #fcfcfc;
     display: flex;
     flex-direction: column;
-    gap: 64px;
-    justify-content: center;
     align-items: center;
+    justify-content: flex-start;
+    padding: 10vh 0;
 `
 
 export const LogoWrapper = styled.img`
-    height: 50px;
+    height: 30vh;
+    width: auto;
+    max-width: 80%;
+    object-fit: contain;
 `
 
 export const TitleWrapper = styled.div`
@@ -20,13 +23,15 @@ export const TitleWrapper = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 8px;
+    gap: 0vh;
+    margin-top: 2vh;
 `
 
 export const InputWrapper = styled.div`
-    width: 392px;
+    width: 80%;
+    max-width: 400px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    gap: 16px;
+    gap: 2vh;
 `
