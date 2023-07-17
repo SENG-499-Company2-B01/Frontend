@@ -32,7 +32,8 @@ export const Timetable: React.FC = () => {
     const [activeLink, setActiveLink] = useState('courses')
     useEffect(() => {
         const fetchData = async () => {
-            // setLoading(true)
+            setLoading(true)
+            const term = localStorage.getItem('term')
             try {
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 const response = await axios
@@ -54,11 +55,11 @@ export const Timetable: React.FC = () => {
                         localStorage.setItem('jwt', token)
                         console.log(localStorage.getItem('jwt'))
                         const response2 = await axios.post(
-                            'http://localhost:8000/schedules/2023/fall/generate',
+                            'http://localhost:8000/schedules/2023/summer/generate',
                             {},
                             {
                                 headers: {
-                                    Authorization: `Bearer ${token}`,
+                                    Authorization: `Bearer ${localStorage.getItem('jwt')}`,
                                     'Content-Type': 'text/plain',
                                 },
                             }
@@ -88,7 +89,7 @@ export const Timetable: React.FC = () => {
                         })
                         setProfessorCourses(professorCoursesData)
                         setLocationCourses(locationCoursesData)
-                        // setLoading(false)
+                        setLoading(false)
                     })
             } catch (error) {
                 console.error('Error:', error)
@@ -102,7 +103,7 @@ export const Timetable: React.FC = () => {
     return (
         <div>
             <NavBarAdmin />
-            {/* {loading ? <PreLoader /> : ''} */}
+            {loading ? <PreLoader /> : ''}
             <H2 className='mai'>Timetable</H2>
             <div className='taa'>
                 <h2 className='y'>Term: {term}</h2>
