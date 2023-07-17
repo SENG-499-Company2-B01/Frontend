@@ -31,6 +31,21 @@ const ProfTable = (props: Props) => {
         setSelectedProfessor(null)
         setShowModal(false)
     }
+    const renderProfessors = () => {
+        if (Array.isArray(filteredProfessors)) {
+            return filteredProfessors.map((prof, index) => {
+                return (
+                    <tr key={prof.username} onClick={() => handleShowModal(prof)}>
+                        <th scope='row'>{index + 1}</th>
+                        <td>{`${prof.username}`}</td>
+                        <td>{`${prof.email}`}</td>
+                    </tr>
+                )
+            })
+        } else {
+            return null
+        }
+    }
     return (
         <div className='tab'>
             <nav className='navbar navbar-light se justify-content-end'>
@@ -47,17 +62,7 @@ const ProfTable = (props: Props) => {
                             <th scope='col'>Email</th>
                         </tr>
                     </thead>
-                    <tbody className='table-group-divider'>
-                        {filteredProfessors.map((prof, index) => {
-                            return (
-                                <tr key={prof.username} onClick={() => handleShowModal(prof)}>
-                                    <th scope='row'>{index + 1}</th>
-                                    <td>{`${prof.username}`}</td>
-                                    <td>{`${prof.email}`}</td>
-                                </tr>
-                            )
-                        })}
-                    </tbody>
+                    <tbody className='table-group-divider'>{renderProfessors()}</tbody>
                 </table>
             </div>
             {/* Modal */}
