@@ -28,28 +28,30 @@ export const AdminHomepage = () => {
     }
 
     return (
-        <form onSubmit={generateSchedule}>
+        <div>
             <NavBarAdmin />
-            <div className='cen'>
-                <div className='row'>
-                    <div className='col'>
-                        <span>
-                            <H2>Simple</H2>
-                            <H2 className='tex_sch'>Scheduling</H2>
-                            <H2>For Professors</H2>
-                        </span>
-                    </div>
-                    <div className='col rig'>
-                        <p className='para'> We create schedules for UVic Professors based on personal prefences to better their teaching experience.</p>
-                        <DropdownMenu label={'Term'} data={['Fall', 'Spring', 'Summer']} />
-                        <BlackButton className='bt2' type='submit'>
-                            <H1>GENERATE SCHEDULE</H1>
-                        </BlackButton>
+            <form onSubmit={generateSchedule}>
+                <div className='cen'>
+                    <div className='row'>
+                        <div className='col'>
+                            <span>
+                                <H2>Simple</H2>
+                                <H2 className='tex_sch'>Scheduling</H2>
+                                <H2>For Professors</H2>
+                            </span>
+                        </div>
+                        <div className='col rig'>
+                            <p className='para'> We create schedules for UVic Professors based on personal prefences to better their teaching experience.</p>
+                            <DropdownMenu label={'Term'} data={['Fall', 'Spring', 'Summer']} />
+                            <BlackButton className='bt2' type='submit'>
+                                <H1>GENERATE SCHEDULE</H1>
+                            </BlackButton>
+                        </div>
                     </div>
                 </div>
-            </div>
-            {/* {isGenerated ? <BasicCalendar /> : null} */}
-            <AdminHowTo />
-        </form>
+                {/* {isGenerated ? <BasicCalendar /> : null} */}
+                <AdminHowTo />
+            </form>
+        </div>
     )
 }
