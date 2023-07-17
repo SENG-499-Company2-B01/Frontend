@@ -9,17 +9,17 @@ import { SimpleLink } from '../components/atoms/navLink'
 const url = 'http://localhost:8000/users'
 
 export const ProfHomepage = () => {
-    useEffect(() => {
-        ;(async () => {
-            await fetch(url, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'text/plain',
-                    Authorization: 'Bearer ' + localStorage.getItem('jwt'),
-                },
-            })
-        })()
-    })
+    // useEffect(() => {
+    //     ;(async () => {
+    //         await fetch(url, {
+    //             method: 'GET',
+    //             headers: {
+    //                 'Content-Type': 'text/plain',
+    //                 Authorization: 'Bearer ' + localStorage.getItem('jwt'),
+    //             },
+    //         })
+    //     })()
+    // })
     return (
         <div>
             <NavBarProf />

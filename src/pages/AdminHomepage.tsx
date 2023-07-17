@@ -11,17 +11,17 @@ import { useEffect } from 'react'
 const url = 'http://localhost:8000/users'
 
 export const AdminHomepage = () => {
-    useEffect(() => {
-        ;(async () => {
-            await fetch(url, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'text/plain',
-                    Authorization: 'Bearer ' + localStorage.getItem('jwt'),
-                },
-            })
-        })()
-    })
+    // useEffect(() => {
+    //     ;(async () => {
+    //         await fetch(url, {
+    //             method: 'GET',
+    //             headers: {
+    //                 'Content-Type': 'text/plain',
+    //                 Authorization: 'Bearer ' + localStorage.getItem('jwt'),
+    //             },
+    //         })
+    //     })()
+    // })
     return (
         <div>
             <NavBarAdmin />

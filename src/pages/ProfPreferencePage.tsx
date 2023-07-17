@@ -62,7 +62,14 @@ export const ProfPreferencePage: React.FC = () => {
 
         const url = 'https://company2-backend.onrender.com/users/' + username
 
-        const time = { F: [['08:30', '16:00']], M: [['08:30', '16:00']], R: [['08:30', '16:00']], T: [['08:30', '16:00']], W: [['08:30', '16:00']] }
+        const time = { F: [['07:30', '16:00']], M: [['07:30', '16:00']], R: [['08:30', '16:00']], T: [['08:30', '16:00']], W: [['08:30', '16:00']] }
+
+        const body = { max_courses: numberOfClasses, available: time }
+        // semester: semester,
+        // ableToTeach: ableToTeach,
+        // reason: reason,
+        // numberOfClasses: numberOfClasses,
+        // classFormat: classFormat,
 
         await fetch(url, {
             method: 'PUT',
@@ -71,22 +78,17 @@ export const ProfPreferencePage: React.FC = () => {
                 'Content-Type': 'text/plain',
                 Authorization: 'Bearer ' + localStorage.getItem('jwt'),
             },
-            body: JSON.stringify({
-                // semester: semester,
-                // ableToTeach: ableToTeach,
-                // reason: reason,
-                available: time,
-                // numberOfClasses: numberOfClasses,
-                // classFormat: classFormat,
-            }),
+            body: JSON.stringify(body),
         })
             .then((response) => {
-                return response.json()
+                return response
             })
             .then((data) => {
                 console.log(data)
                 localStorage.setItem('status', 'user')
             })
+        console.log(body)
+        console.log(numberOfClasses)
         console.log(localStorage)
         setNavigate(true)
     }
@@ -131,10 +133,12 @@ export const ProfPreferencePage: React.FC = () => {
 
     const selectClassFormat = (e: CheckboxChangeEvent) => {
         {
-            if (e.target.checked === true) {
-                setClassFormat(classFormat.filter((item) => item.value !== e.target.value))
+            if (e.target.checked === false) {
+                setClassFormat(classFormat.filter((item) => item.value !== e.target.name))
+                // console.log('remove', e.target.name, classFormat)
             } else {
-                classFormat.push({ name: e.target.name!, value: e.target.value })
+                classFormat.push({ name: e.target.name!, value: e.target.name! })
+                // console.log('add', e.target.name, classFormat)
             }
         }
     }
@@ -148,7 +152,7 @@ export const ProfPreferencePage: React.FC = () => {
             <NavBarProf />
             <div className='cen'>
                 <H2>Preference</H2>
-                <Form {...formItemLayout} form={form} name='preference' onFinish={onFinish} style={{ maxWidth: 600 }} scrollToFirstError>
+                <Form {...formItemLayout} form={form} name='ableToTeachPreference' onFinish={onFinish} style={{ maxWidth: 600 }} scrollToFirstError>
                     <Form.Item name='Semester' label='Semester' tooltip='Select a semester.' style={{ marginBottom: 20 }}>
                         <Radio.Group defaultValue='Fall'>
                             <Radio.Button value='Fall' onChange={(e: any) => setSemester(e.target.value)}>
@@ -212,26 +216,22 @@ export const ProfPreferencePage: React.FC = () => {
                             <InputNumber min={0} max={999} defaultValue={0} onChange={onChangeNumberOfClasses} />
                         </Form.Item>
 
-                        <Form.Item name='classFormat' label='Class Format' tooltip='Select one or more preferred class formats' style={{ marginBottom: 20 }}>
+                        <Form.Item name='Class Format' label='Class Format' tooltip='Select one or more preferred class formats' style={{ marginBottom: 20 }}>
                             <Row gutter={8}>
                                 <Col span={8}>
-                                    <Form.Item style={{ marginBottom: 10 }} rules={[{ required: !formDisabled, message: 'Please input preferred class format!' }]}>
-                                        <Checkbox defaultChecked={true} name='Once/Week' value='Once/Week' style={{ marginBottom: 5 }} onChange={selectClassFormat}>
-                                            Once/Week
-                                        </Checkbox>
-                                        <Checkbox name='M, R' value='M, R' style={{ marginBottom: 5 }} onChange={selectClassFormat}>
-                                            M, R
-                                        </Checkbox>
-                                        <Checkbox name='T, W, F' value='T, W, F' style={{ marginBottom: 5 }} onChange={selectClassFormat}>
-                                            T, W, F
-                                        </Checkbox>
-                                        <Checkbox name='Online' value='Online' style={{ marginBottom: 5 }} onChange={selectClassFormat}>
-                                            Online
-                                        </Checkbox>
-                                    </Form.Item>
-                                    <Form.Item name='Class Format' noStyle rules={[{ required: false }]}>
-                                        <Input placeholder='Other' />
-                                    </Form.Item>
+                                    <Checkbox defaultChecked={true} name='Once/Week' style={{ marginBottom: 5 }} onChange={selectClassFormat}>
+                                        Once/Week
+                                    </Checkbox>
+                                    <Checkbox name='M, R' style={{ marginBottom: 5 }} onChange={selectClassFormat}>
+                                        M, R
+                                    </Checkbox>
+                                    <Checkbox name='T, W, F' style={{ marginBottom: 5 }} onChange={selectClassFormat}>
+                                        T, W, F
+                                    </Checkbox>
+                                    <Checkbox name='Online' style={{ marginBottom: 5 }} onChange={selectClassFormat}>
+                                        Online
+                                    </Checkbox>
+                                    <Input placeholder='Other' />
                                 </Col>
                             </Row>
                         </Form.Item>
@@ -247,7 +247,7 @@ export const ProfPreferencePage: React.FC = () => {
                             <Button type='primary' htmlType='button' style={{ marginRight: 200, backgroundColor: '#2c2a2a', color: '#ffffff', borderRadius: 32 }}>
                                 CANCEL
                             </Button>
-                            <Button type='primary' htmlType='submit' style={{ backgroundColor: '#2c2a2a', color: '#ffffff', borderRadius: 32 }} onSubmit={submit}>
+                            <Button type='primary' htmlType='submit' style={{ backgroundColor: '#2c2a2a', color: '#ffffff', borderRadius: 32 }} onClick={submit}>
                                 SUBMIT
                             </Button>
                         </div>
