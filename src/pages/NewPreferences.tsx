@@ -6,6 +6,7 @@ import './test.css'
 import ProfTable from './ProfTable'
 import axios from 'axios'
 import PreLoader from '../components/Loading/PreLoader'
+import { H2 } from '../components/atoms/typography'
 
 export const NewPreferences: React.FC = () => {
     const [loading, setLoading] = useState(false)
@@ -55,7 +56,9 @@ export const NewPreferences: React.FC = () => {
         <div>
             <NavBarAdmin />
             <div className='tab'>
-                <h1 className='hea_1'>Professors</h1>
+                <h1 className='hea_1'>
+                    <H2>Professors</H2>
+                </h1>
             </div>
             {loading ? <PreLoader /> : ''}
             <ProfTable list={parsedData} />
