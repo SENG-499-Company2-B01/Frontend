@@ -11,6 +11,7 @@ import { Generate } from './Generate'
 import { NewPreferences } from './NewPreferences'
 import { ProfTimetable } from './ProfTimetable'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
+import { Timetable } from './Timetable'
 
 // Routes the web application to different pages
 
@@ -101,6 +102,14 @@ const Main = () => (
             element={
                 <>
                     <Generate />
+                </>
+            }
+        ></Route>
+        <Route
+            path='/timetable'
+            element={
+                <>
+                    <Timetable />
                 </>
             }
         ></Route>

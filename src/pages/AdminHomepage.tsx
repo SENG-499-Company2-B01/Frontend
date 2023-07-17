@@ -9,27 +9,26 @@ import { goToTop, NavBarAdmin } from '../components/navbar'
 import { useEffect, useState } from 'react'
 import { AdminHowTo } from './HowTo'
 import BasicCalendar from '../components/calendar/BasicCalendar'
-
-const url = 'http://localhost:8000/users'
+import DropdownMenu from '../components/atoms/term_dropdown'
+import { Navigate } from 'react-router-dom'
 
 export const AdminHomepage = () => {
-    // useEffect(() => {
-    //     ;(async () => {
-    //         await fetch(url, {
-    //             method: 'GET',
-    //             headers: {
-    //                 'Content-Type': 'text/plain',
-    //                 Authorization: 'Bearer ' + localStorage.getItem('jwt'),
-    //             },
-    //         })
-    //     })()
-    // })
-    // const [isGenerated, setIsGenerated] = useState(false)
-    // if (localStorage.getItem('generated') == 'true') {
-    //     setIsGenerated(true)
-    // }
+    console.log(localStorage)
+    const [term, setTerm] = useState(false)
+    const generateSchedule = () => {
+        console.log(localStorage.getItem('term'))
+        if (localStorage.getItem('term') != '') {
+            setTerm(true)
+        } else {
+            console.log('false')
+        }
+    }
+    if (term) {
+        return <Navigate to='/timetable' />
+    }
+
     return (
-        <div>
+        <form onSubmit={generateSchedule}>
             <NavBarAdmin />
             <div className='cen'>
                 <div className='row'>
@@ -42,16 +41,15 @@ export const AdminHomepage = () => {
                     </div>
                     <div className='col rig'>
                         <p className='para'> We create schedules for UVic Professors based on personal prefences to better their teaching experience.</p>
-                        <SimpleLink to='/generate' onClick={goToTop}>
-                            <BlackButton className='bt2'>
-                                <H1>GENERATE SCHEDULE</H1>
-                            </BlackButton>
-                        </SimpleLink>
+                        <DropdownMenu label={'Term'} data={['Fall', 'Spring', 'Summer']} />
+                        <BlackButton className='bt2' type='submit'>
+                            <H1>GENERATE SCHEDULE</H1>
+                        </BlackButton>
                     </div>
                 </div>
             </div>
             {/* {isGenerated ? <BasicCalendar /> : null} */}
             <AdminHowTo />
-        </div>
+        </form>
     )
 }

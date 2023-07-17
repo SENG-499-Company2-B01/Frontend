@@ -11,6 +11,7 @@ import PreLoader from '../components/Loading/PreLoader'
 import DropdownMenu from '../components/atoms/term_dropdown'
 import ProfTable from './ProfTable'
 import BasicCalendar from '../components/calendar/BasicCalendar'
+import { Timetable } from './Timetable'
 
 export const Generate = () => {
     const [form] = Form.useForm()
@@ -77,7 +78,7 @@ export const Generate = () => {
             <div ref={scrollRef}></div>
             {isGenerated ? (
                 <div style={{ height: '95vh' }}>
-                    <BasicCalendar />
+                    <Timetable />
                 </div>
             ) : null}
         </form>
