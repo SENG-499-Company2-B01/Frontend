@@ -15,7 +15,6 @@ import { Navigate } from 'react-router-dom'
 export const AdminHomepage = () => {
     console.log(localStorage)
     const [term, setTerm] = useState(false)
-    localStorage.setItem('term', '')
     const generateSchedule = () => {
         console.log(localStorage.getItem('term'))
         if (localStorage.getItem('term') != '') {

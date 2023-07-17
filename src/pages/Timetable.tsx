@@ -55,7 +55,7 @@ export const Timetable: React.FC = () => {
                         localStorage.setItem('jwt', token)
                         console.log(localStorage.getItem('jwt'))
                         const response2 = await axios.post(
-                            'http://localhost:8000/schedules/2023/summer/generate',
+                            'https://company2-backend.onrender.com/schedules/2023/' + term + '/generate',
                             {},
                             {
                                 headers: {
@@ -104,7 +104,7 @@ export const Timetable: React.FC = () => {
         <div>
             <NavBarAdmin />
             {loading ? <PreLoader /> : ''}
-            <H2 className='mai'>Timetable</H2>
+            <H2 className='mai'>Schedule</H2>
             <div className='taa'>
                 <h2 className='y'>Term: {term}</h2>
                 <h2 className='y'>Year: {year}</h2>
