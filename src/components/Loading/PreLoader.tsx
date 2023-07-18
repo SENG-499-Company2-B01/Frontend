@@ -9,6 +9,7 @@ const LoadingBackground = styled.div`
     background-color: #fcfcfc;
     justify-content: center;
     align-items: center;
+    z-index: 5;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
