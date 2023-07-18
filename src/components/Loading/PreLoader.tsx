@@ -6,7 +6,7 @@ const LoadingBackground = styled.div`
     display: flex;
     width: 100%;
     height: 100%;
-    background-color: #fcfc11;
+    background-color: #fcfcfc;
     justify-content: center;
     align-items: center;
     top: 50%;
