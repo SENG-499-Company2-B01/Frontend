@@ -25,7 +25,7 @@ export const Generate = () => {
         setLoading(true)
         const term = localStorage.getItem('term')
 
-        const url = 'https://company2-backend.onrender.com/schedules/' + 2023 + '/' + term + '/generate'
+        const url = process.env.REACT_APP_BACKEND_URL + '/schedules/' + 2023 + '/' + term + '/generate'
         console.log('Given url: ' + url)
         await fetch(url, {
             method: 'POST',
