@@ -83,14 +83,7 @@ export const Generate = () => {
             <div ref={scrollRef}></div>
             {isGenerated ? (
                 <div style={{ height: '95vh' }}>
-<<<<<<< HEAD
-                    <BasicCalendar />
-                    <BlackButton onClick={approveSchedule}>
-                        <H1>APPROVE SCHEDULE</H1>
-                    </BlackButton>
-=======
                     <Timetable />
->>>>>>> origin/dev
                 </div>
             ) : null}
         </form>

@@ -1,12 +1,14 @@
 import 'bootstrap/dist/css/bootstrap.css'
 import '../components/Homepage/homepage.css'
 import { NavBarAdmin } from '../components/navbar'
-import React, { useEffect, useState } from 'react'
+import React, { SyntheticEvent, useEffect, useState } from 'react'
 import './time.css'
 import ProfTable from './ProfTable'
 import axios from 'axios'
 import PreLoader from '../components/Loading/PreLoader'
-import { H1, H2 } from '../components/atoms/typography'
+import { H1, H2, H7 } from '../components/atoms/typography'
+import { BlackButton, SmallBlackButton } from '../components/atoms/button'
+import { ApproveContainer } from '../components/timetable/timetable'
 
 interface Section {
     num: string
@@ -25,6 +27,7 @@ interface Course {
 export const Timetable: React.FC = () => {
     const [timetableData, setTimetableData] = useState<Course[]>([])
     const [loading, setLoading] = useState(false)
+    const [isApproved, setIsApproved] = useState(false)
     const [term, setTerm] = useState('')
     const [year, setYear] = useState('')
     const [professorCourses, setProfessorCourses] = useState<Record<string, string[]>>({})
@@ -32,7 +35,7 @@ export const Timetable: React.FC = () => {
     const [activeLink, setActiveLink] = useState('courses')
     useEffect(() => {
         const fetchData = async () => {
-            setLoading(true)
+            // setLoading(true)
             const term = localStorage.getItem('term')
             try {
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -100,6 +103,23 @@ export const Timetable: React.FC = () => {
     const handleLinkClick = (link: string) => {
         setActiveLink(link)
     }
+
+    const approveSchedule = async (e: SyntheticEvent) => {
+        e.preventDefault()
+        console.log('Schedule approved!')
+        const url = process.env.REACT_APP_BACKEND_URL + '/schedules/prev'
+        await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${localStorage.getItem('jwt')}`,
+            },
+            body: JSON.stringify(localStorage.getItem('dat')),
+        }).then((response) => {
+            setIsApproved(true)
+            return response
+        })
+    }
     return (
         <div>
             <NavBarAdmin />
@@ -128,6 +148,14 @@ export const Timetable: React.FC = () => {
                     </li>
                 </ul>
             </div>
+
+            <form onSubmit={approveSchedule}>
+                <ApproveContainer>
+                    <SmallBlackButton type='submit'>
+                        <H7>APPROVE SCHEDULE</H7>
+                    </SmallBlackButton>
+                </ApproveContainer>
+            </form>
 
             <div className='bottom-content'>
                 {activeLink === 'courses' && (
