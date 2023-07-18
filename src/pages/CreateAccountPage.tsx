@@ -2,7 +2,7 @@ import { H2 } from '../components/atoms/typography'
 import 'bootstrap/dist/css/bootstrap.css'
 import '../components/Homepage/homepage.css'
 import { NavBarAdmin } from '../components/navbar'
-import { Button, Form, Input } from 'antd'
+import { Button, Form, Input, InputNumber } from 'antd'
 
 const tailFormItemLayout = {
     wrapperCol: {
@@ -47,8 +47,8 @@ export const CreateAccountPage: React.FC = () => {
                             <Input />
                         </Form.Item>
 
-                        <Form.Item name='yearsOfExperience' label='Years of Experience' tooltip='Input years of experience.' style={{ marginBottom: 20 }} rules={[{ type: 'number', min: 0, max: 50, required: true, message: 'Please input years of experience!' }]}>
-                            <Input />
+                        <Form.Item name='yearsOfExperience' label='Years of Experience' tooltip='Input years of experience.' style={{ marginBottom: 20 }} rules={[{ required: true, message: 'Please input years of experience!' }]}>
+                            <InputNumber min={0} max={50} style={{ width: '100%' }} />
                         </Form.Item>
 
                         <Form.Item name='highestEducationObtained' label='Highest Education Obtained' tooltip='Input highest education obtained.' style={{ marginBottom: 20 }} rules={[{ required: true, message: 'Please input highest education obtained!' }]}>
