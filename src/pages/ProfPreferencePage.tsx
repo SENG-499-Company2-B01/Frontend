@@ -45,13 +45,12 @@ export const ProfPreferencePage: React.FC = () => {
     }
 
     const initialValue = [{ name: 'Once/Week', value: 'Once/Week' }]
-    const initialTime = [{ id: -1, value: ['', ''] }]
 
     const [formDisabled, setFormDisabled] = useState<boolean>(false)
     const [semester, setSemester] = useState('Fall')
     const [ableToTeach, setAbleToTeach] = useState((!formDisabled).toString())
     const [reason, setReason] = useState('')
-    const [preferredTime, setPreferredTime] = useState(initialTime)
+    const [preferredTime, setPreferredTime] = useState(['', ''])
     const [numberOfClasses, setNumberOfClasses] = useState(0)
     const [classFormat, setClassFormat] = useState(initialValue)
     const [navigate, setNavigate] = useState(false)
@@ -60,16 +59,11 @@ export const ProfPreferencePage: React.FC = () => {
         e.preventDefault()
         const username = localStorage.getItem('username')
 
-        const url = 'https://company2-backend.onrender.com/users/' + username
+        const url = 'http://localhost:8000/users/' + username
 
-        const time = { F: [['07:30', '16:00']], M: [['07:30', '16:00']], R: [['08:30', '16:00']], T: [['08:30', '16:00']], W: [['08:30', '16:00']] }
+        const time = { F: [preferredTime], M: [preferredTime], R: [preferredTime], T: [preferredTime], W: [preferredTime] }
 
         const body = { max_courses: numberOfClasses, available: time }
-        // semester: semester,
-        // ableToTeach: ableToTeach,
-        // reason: reason,
-        // numberOfClasses: numberOfClasses,
-        // classFormat: classFormat,
 
         await fetch(url, {
             method: 'PUT',
@@ -109,22 +103,12 @@ export const ProfPreferencePage: React.FC = () => {
     }
 
     const onSelectTime = (values: RangeValue<Dayjs>, formatString: [string, string]) => {
-        console.log(formatString)
-        setPreferredTime(preferredTime.filter((item) => item.id !== -1))
-        {
-            preferredTime.map((time) => {
-                if (time.id == 0) {
-                    time.value = formatString
-                    return
-                }
-            })
-        }
-        preferredTime.push({ id: 0, value: formatString })
+        setPreferredTime(formatString)
     }
 
     const onSelectNewTime = (values: RangeValue<Dayjs>, formatString: [string, string]) => {
         console.log(formatString)
-        preferredTime.push({ id: 0, value: formatString })
+        // preferredTime.push({ id: 0, value: formatString })
     }
 
     const onDeleteTime = (values: RangeValue<Dayjs>, formatString: [string, string]) => {
