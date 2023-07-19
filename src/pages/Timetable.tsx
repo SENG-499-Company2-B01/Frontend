@@ -1,4 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.css'
+import styled from '@emotion/styled'
 import '../components/Homepage/homepage.css'
 import { NavBarAdmin } from '../components/navbar'
 import React, { SyntheticEvent, useEffect, useState } from 'react'
@@ -6,9 +7,35 @@ import './time.css'
 import ProfTable from './ProfTable'
 import axios from 'axios'
 import PreLoader from '../components/Loading/PreLoader'
-import { H1, H2, H7 } from '../components/atoms/typography'
-import { BlackButton, SmallBlackButton } from '../components/atoms/button'
+import { H1, H2, H6, H7 } from '../components/atoms/typography'
+import { SmallBlackButton } from '../components/atoms/button'
 import { ApproveContainer } from '../components/timetable/timetable'
+
+const PopupBackground = styled.div`
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.3);
+`
+
+const PopupWrapper = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    height: 400px;
+    z-index: 4;
+    flex-direction: column;
+    gap: 32px;
+    width: 400px;
+    background-color: #fcfcfc;
+    padding: 16px 64px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+`
 
 interface Section {
     num: string
@@ -33,6 +60,19 @@ export const Timetable: React.FC = () => {
     const [professorCourses, setProfessorCourses] = useState<Record<string, string[]>>({})
     const [locationCourses, setLocationCourses] = useState<Record<string, Course[]>>({})
     const [activeLink, setActiveLink] = useState('courses')
+
+    const ApprovePopup = () => {
+        return (
+            <PopupBackground>
+                <PopupWrapper>
+                    <H6>Schedule Approved!</H6>
+                    <SmallBlackButton onClick={() => setIsApproved(false)}>
+                        <H7>CLOSE</H7>
+                    </SmallBlackButton>
+                </PopupWrapper>
+            </PopupBackground>
+        )
+    }
     useEffect(() => {
         const fetchData = async () => {
             // setLoading(true)
@@ -124,6 +164,7 @@ export const Timetable: React.FC = () => {
         <div>
             <NavBarAdmin />
             {loading ? <PreLoader /> : ''}
+            {isApproved ? <ApprovePopup /> : ''}
             <H2 className='mai'>Schedule</H2>
             <div className='taa'>
                 <h2 className='y'>Term: {term}</h2>
@@ -149,13 +190,14 @@ export const Timetable: React.FC = () => {
                 </ul>
             </div>
 
-            <form onSubmit={approveSchedule}>
-                <ApproveContainer>
-                    <SmallBlackButton type='submit'>
-                        <H7>APPROVE SCHEDULE</H7>
-                    </SmallBlackButton>
-                </ApproveContainer>
-            </form>
+            <ApproveContainer>
+                <SmallBlackButton onClick={() => setIsApproved(true)}>
+                    <H7>APPROVE SCHEDULE</H7>
+                </SmallBlackButton>
+            </ApproveContainer>
+            {/* <form onSubmit={approveSchedule}>
+    
+            </form> */}
 
             <div className='bottom-content'>
                 {activeLink === 'courses' && (
