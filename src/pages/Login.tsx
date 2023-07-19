@@ -24,7 +24,9 @@ export const Login = () => {
 
         // console.log(username)
         // console.log(password)
+
         const url = process.env.REACT_APP_BACKEND_URL + '/login'
+
         await fetch(url, {
             method: 'POST',
             // mode: 'no-cors',

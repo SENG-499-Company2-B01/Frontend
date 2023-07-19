@@ -5,8 +5,11 @@ import { NavBarProf } from '../components/navbar'
 
 import { Button, Checkbox, Col, Form, Input, InputNumber, Row, Radio, Space, TimePicker } from 'antd'
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
-import React, { useState } from 'react'
+import { Navigate } from 'react-router-dom'
+import React, { SyntheticEvent, useState, useEffect } from 'react'
 import type { Dayjs } from 'dayjs'
+import { RangeValue } from 'rc-picker/lib/interface'
+import type { CheckboxChangeEvent } from 'antd/es/checkbox'
 
 const formItemLayout = {
     labelCol: {
@@ -32,65 +35,157 @@ const tailFormItemLayout = {
     },
 }
 
-const onChange = (time: Dayjs | null, timeString: string) => {
-    console.log(time, timeString)
-}
-
 export const ProfPreferencePage: React.FC = () => {
+    const { RangePicker } = TimePicker
+
     const [form] = Form.useForm()
 
     const onFinish = (values: any) => {
         console.log('Received values of form: ', values)
     }
 
+    const initialValue = [{ name: 'Once/Week', value: 'Once/Week' }]
+
     const [formDisabled, setFormDisabled] = useState<boolean>(false)
+    const [semester, setSemester] = useState('Fall')
+    const [ableToTeach, setAbleToTeach] = useState((!formDisabled).toString())
+    const [reason, setReason] = useState('')
+    const [preferredTime, setPreferredTime] = useState(['', ''])
+    const [numberOfClasses, setNumberOfClasses] = useState(0)
+    const [classFormat, setClassFormat] = useState(initialValue)
+    const [navigate, setNavigate] = useState(false)
+
+    const submit = async (e: SyntheticEvent) => {
+        e.preventDefault()
+        const username = localStorage.getItem('username')
+
+        const url = 'https://company2-backend.onrender.com/users/' + username
+
+        const time = { F: [preferredTime], M: [preferredTime], R: [preferredTime], T: [preferredTime], W: [preferredTime] }
+
+        const body = { max_courses: numberOfClasses, available: time }
+
+        await fetch(url, {
+            method: 'PUT',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'text/plain',
+                Authorization: 'Bearer ' + localStorage.getItem('jwt'),
+            },
+            body: JSON.stringify(body),
+        })
+            .then((response) => {
+                return response
+            })
+            .then((data) => {
+                console.log(data)
+                localStorage.setItem('status', 'user')
+            })
+        console.log(body)
+        console.log(numberOfClasses)
+        console.log(localStorage)
+        setNavigate(true)
+    }
+
+    if (navigate) {
+        return <Navigate to='/user' />
+    }
+
+    const onAbleToTeach = (checked: boolean, value: string) => {
+        setFormDisabled(!checked)
+        setAbleToTeach(value)
+        setReason('')
+    }
+
+    const onDisableToTeach = (checked: boolean, value: string) => {
+        setFormDisabled(checked)
+        setAbleToTeach(value)
+    }
+
+    const onSelectTime = (values: RangeValue<Dayjs>, formatString: [string, string]) => {
+        setPreferredTime(formatString)
+    }
+
+    const onSelectNewTime = (values: RangeValue<Dayjs>, formatString: [string, string]) => {
+        console.log(formatString)
+        // preferredTime.push({ id: 0, value: formatString })
+    }
+
+    const onDeleteTime = (values: RangeValue<Dayjs>, formatString: [string, string]) => {
+        // setPreferredTime(preferredTime.filter((item) => item.id !== Number(formatString.replace(':', ''))))
+    }
+
+    const selectClassFormat = (e: CheckboxChangeEvent) => {
+        {
+            if (e.target.checked === false) {
+                setClassFormat(classFormat.filter((item) => item.value !== e.target.name))
+                // console.log('remove', e.target.name, classFormat)
+            } else {
+                classFormat.push({ name: e.target.name!, value: e.target.name! })
+                // console.log('add', e.target.name, classFormat)
+            }
+        }
+    }
+
+    const onChangeNumberOfClasses = (value: number | null) => {
+        setNumberOfClasses(value!)
+    }
 
     return (
         <div>
             <NavBarProf />
             <div className='cen'>
                 <H2>Preference</H2>
-                <Form {...formItemLayout} form={form} name='preference' onFinish={onFinish} style={{ maxWidth: 600 }} scrollToFirstError>
-                    <Form.Item name='semester' label='Semester' tooltip='Select a semester.' style={{ marginBottom: 20 }}>
+                <Form {...formItemLayout} form={form} name='ableToTeachPreference' onFinish={onFinish} style={{ maxWidth: 600 }} scrollToFirstError>
+                    <Form.Item name='Semester' label='Semester' tooltip='Select a semester.' style={{ marginBottom: 20 }}>
                         <Radio.Group defaultValue='Fall'>
-                            <Radio.Button value='Fall'>Fall</Radio.Button>
-                            <Radio.Button value='Spring'>Spring</Radio.Button>
-                            <Radio.Button value='Summer'>Summer</Radio.Button>
+                            <Radio.Button value='Fall' onChange={(e: any) => setSemester(e.target.value)}>
+                                Fall
+                            </Radio.Button>
+                            <Radio.Button value='Winter' onChange={(e: any) => setSemester(e.target.value)}>
+                                Winter
+                            </Radio.Button>
+                            <Radio.Button value='Summer' onChange={(e: any) => setSemester(e.target.value)}>
+                                Summer
+                            </Radio.Button>
                         </Radio.Group>
                     </Form.Item>
 
-                    <Form.Item name='ableToTeach' label='Able To Teach' tooltip='Are you able to teach this semester?' style={{ marginBottom: 20 }}>
+                    <Form.Item name='Able To Teach' label='Able To Teach' tooltip='Are you able to teach this semester?' style={{ marginBottom: 20 }}>
                         <Radio.Group defaultValue='Yes' style={{ marginBottom: 10 }}>
-                            <Radio value='Yes' checked={formDisabled} onChange={(e) => setFormDisabled(!e.target.checked)}>
+                            <Radio value='Yes' checked={formDisabled} onChange={(e) => onAbleToTeach(e.target.checked, e.target.value)}>
                                 Yes
                             </Radio>
-                            <Radio value='No' checked={formDisabled} onChange={(e) => setFormDisabled(e.target.checked)}>
+                            <Radio value='No' checked={formDisabled} onChange={(e) => onDisableToTeach(e.target.checked, e.target.value)}>
                                 No
                             </Radio>
                         </Radio.Group>
                         <Form.Item name='reason' rules={[{ required: formDisabled, message: 'Please input reason!' }]}>
-                            <Input.TextArea showCount maxLength={100} placeholder='Reason' />
+                            <Input.TextArea showCount disabled={!formDisabled} maxLength={100} value={reason} placeholder='Reason' onChange={(e: any) => setReason(e.target.value)} />
                         </Form.Item>
                     </Form.Item>
 
                     <Form {...formItemLayout} form={form} name='preference' onFinish={onFinish} style={{ maxWidth: 600 }} scrollToFirstError disabled={formDisabled}>
-                        <Form.Item name='preferredTime' label='Preferred Time' tooltip='Input preferred time.' style={{ marginBottom: 20 }}>
-                            <Space align='baseline' style={{ marginBottom: 10 }}>
-                                <TimePicker use12Hours format='h:mm a' onChange={onChange} style={{ marginRight: 8, display: 'inline-block' }} placeholder='Start Time' />
-                                <TimePicker use12Hours format='h:mm a' onChange={onChange} style={{ display: 'inline-block' }} placeholder='End Time' />
+                        <Form.Item name='Preferred Time' label='Preferred Time' tooltip='Input preferred time.' style={{ marginBottom: 20 }}>
+                            <Space align='baseline' direction='vertical' size={12} style={{ marginBottom: 10 }}>
+                                <RangePicker format='HH:mm' onChange={onSelectTime} />
                             </Space>
-                            <Form.List name='added preferred time'>
+                            <Form.List name='Added Preferred Time'>
                                 {(fields, { add, remove }) => (
                                     <>
                                         {fields.map((field) => (
                                             <Space key={field.key} align='baseline'>
-                                                <Form.Item {...field} name={[field.name, 'start and end time']} rules={[{ required: true, message: 'Missing start and end time!' }]} style={{ marginBottom: 10 }}>
+                                                <Form.Item {...field} name={[field.name, 'start and end time']} style={{ marginBottom: 10 }}>
                                                     <Space align='baseline'>
-                                                        <TimePicker use12Hours format='h:mm a' onChange={onChange} style={{ marginRight: 8, display: 'inline-block' }} placeholder='Start Time' />
-                                                        <TimePicker use12Hours format='h:mm a' onChange={onChange} style={{ display: 'inline-block' }} placeholder='End Time' />
+                                                        <RangePicker format='HH:mm' onChange={onSelectNewTime} />
                                                     </Space>
                                                 </Form.Item>
-                                                <MinusCircleOutlined onClick={() => remove(field.name)} />
+                                                <MinusCircleOutlined
+                                                    onClick={() => {
+                                                        remove(field.name)
+                                                        onDeleteTime
+                                                    }}
+                                                />
                                             </Space>
                                         ))}
                                         <Button type='dashed' onClick={() => add()} block icon={<PlusOutlined />} style={{ width: '260px' }}>
@@ -101,22 +196,26 @@ export const ProfPreferencePage: React.FC = () => {
                             </Form.List>
                         </Form.Item>
 
-                        <Form.Item name='numberOfClasses' label='Number of Classes' tooltip='Input number of classes.' style={{ marginBottom: 20 }} rules={[{ type: 'number', required: !formDisabled, message: 'Please input number of classes between 0 and 999!', min: 0, max: 999 }]}>
-                            <InputNumber />
+                        <Form.Item name='numberOfClasses' label='Number of Classes' tooltip='Input number of classes.' style={{ marginBottom: 20 }}>
+                            <InputNumber min={0} max={999} defaultValue={0} onChange={onChangeNumberOfClasses} />
                         </Form.Item>
 
-                        <Form.Item name='classFormat' label='Class Format' tooltip='Select one or more preferred class formats' style={{ marginBottom: 20 }}>
+                        <Form.Item name='Class Format' label='Class Format' tooltip='Select one or more preferred class formats' style={{ marginBottom: 20 }}>
                             <Row gutter={8}>
                                 <Col span={8}>
-                                    <Form.Item style={{ marginBottom: 10 }} rules={[{ required: !formDisabled, message: 'Please input preferred class format!' }]}>
-                                        <Checkbox style={{ marginBottom: 5 }}>Once/Week</Checkbox>
-                                        <Checkbox style={{ marginBottom: 5 }}>M, R</Checkbox>
-                                        <Checkbox style={{ marginBottom: 5 }}>T, W, F</Checkbox>
-                                        <Checkbox style={{ marginBottom: 5 }}>Online</Checkbox>
-                                    </Form.Item>
-                                    <Form.Item name='Class Format' noStyle rules={[{ required: false }]}>
-                                        <Input placeholder='Other' />
-                                    </Form.Item>
+                                    <Checkbox defaultChecked={true} name='Once/Week' style={{ marginBottom: 5 }} onChange={selectClassFormat}>
+                                        Once/Week
+                                    </Checkbox>
+                                    <Checkbox name='M, R' style={{ marginBottom: 5 }} onChange={selectClassFormat}>
+                                        M, R
+                                    </Checkbox>
+                                    <Checkbox name='T, W, F' style={{ marginBottom: 5 }} onChange={selectClassFormat}>
+                                        T, W, F
+                                    </Checkbox>
+                                    <Checkbox name='Online' style={{ marginBottom: 5 }} onChange={selectClassFormat}>
+                                        Online
+                                    </Checkbox>
+                                    <Input placeholder='Other' />
                                 </Col>
                             </Row>
                         </Form.Item>
@@ -132,7 +231,7 @@ export const ProfPreferencePage: React.FC = () => {
                             <Button type='primary' htmlType='button' style={{ marginRight: 200, backgroundColor: '#2c2a2a', color: '#ffffff', borderRadius: 32 }}>
                                 CANCEL
                             </Button>
-                            <Button type='primary' htmlType='submit' style={{ backgroundColor: '#2c2a2a', color: '#ffffff', borderRadius: 32 }}>
+                            <Button type='primary' htmlType='submit' style={{ backgroundColor: '#2c2a2a', color: '#ffffff', borderRadius: 32 }} onClick={submit}>
                                 SUBMIT
                             </Button>
                         </div>
