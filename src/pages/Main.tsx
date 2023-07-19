@@ -6,9 +6,12 @@ import { CreateAccountPage } from './CreateAccountPage'
 import { Practice } from './Practice'
 import { ProfHomepage } from './ProfHomepage'
 import { ProfPreferencePage } from './ProfPreferencePage'
-import { Preferences } from './Preferences'
 import { LogoutPage } from './LoggedOut'
 import { Generate } from './Generate'
+import { NewPreferences } from './NewPreferences'
+import { ProfTimetable } from './ProfTimetable'
+import 'react-big-calendar/lib/css/react-big-calendar.css'
+import { Timetable } from './Timetable'
 
 // Routes the web application to different pages
 
@@ -35,6 +38,14 @@ const Main = () => (
             element={
                 <>
                     <CreateAccountPage />
+                </>
+            }
+        />
+        <Route
+            path='/profview'
+            element={
+                <>
+                    <ProfTimetable />
                 </>
             }
         />
@@ -66,7 +77,7 @@ const Main = () => (
             path='/Preferences'
             element={
                 <>
-                    <Preferences />
+                    <NewPreferences />
                 </>
             }
         />
@@ -91,6 +102,14 @@ const Main = () => (
             element={
                 <>
                     <Generate />
+                </>
+            }
+        ></Route>
+        <Route
+            path='/timetable'
+            element={
+                <>
+                    <Timetable />
                 </>
             }
         ></Route>

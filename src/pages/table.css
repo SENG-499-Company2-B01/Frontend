@@ -1,0 +1,10 @@
+.gh {
+    border-radius: 20px;
+}
+
+.tab
+{
+    display: inline-block;
+    flex-direction: column;
+    margin-top: 0%;
+}

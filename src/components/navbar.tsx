@@ -47,17 +47,22 @@ const LinkDiv = styled.div`
     align-items: center;
     display: flex;
 `
+export const goToTop = () => {
+    window.scrollTo({
+        top: 0,
+    })
+}
 
 export const NavBarProf = () => {
     const username = localStorage.getItem('username')
     return (
         <StickyContainer>
             <NavWrapper>
-                <SimpleLink to={'/user'}>
+                <SimpleLink to={'/user'} onClick={goToTop}>
                     <LogoWrapper src={companyLogo} />
                 </SimpleLink>
                 <LinkDiv>
-                    <NavUnlisted to={'/ProfPreferencePage'}>
+                    <NavUnlisted to={'/ProfPreferencePage'} onClick={goToTop}>
                         <H7>SCHEDULING PREFERENCES</H7>
                     </NavUnlisted>
                     <UserWrapper>
@@ -75,18 +80,18 @@ export const NavBarAdmin = () => {
     return (
         <StickyContainer>
             <NavWrapper>
-                <SimpleLink to={'/user'}>
+                <SimpleLink to={'/user'} onClick={goToTop}>
                     <LogoWrapper src={companyLogo} />
                 </SimpleLink>
 
                 <LinkDiv>
-                    <NavUnlisted to={'/generate'}>
-                        <H7>GENERATE SCHEDULE</H7>
+                    <NavUnlisted to={'/timetable'} onClick={goToTop}>
+                        <H7>VIEW SCHEDULE</H7>
                     </NavUnlisted>
-                    <NavUnlisted to={'/Preferences'}>
-                        <H7>VIEW PREFERENCES</H7>
+                    <NavUnlisted to={'/Preferences'} onClick={goToTop}>
+                        <H7>VIEW PROFESSORS</H7>
                     </NavUnlisted>
-                    <NavUnlisted to={'/CreateAccountPage'}>
+                    <NavUnlisted to={'/CreateAccountPage'} onClick={goToTop}>
                         <H7>CREATE ACCOUNT</H7>
                     </NavUnlisted>
                     <UserWrapper>

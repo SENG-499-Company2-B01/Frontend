@@ -59,7 +59,7 @@ export const ProfPreferencePage: React.FC = () => {
         e.preventDefault()
         const username = localStorage.getItem('username')
 
-        const url = 'http://localhost:8000/users/' + username
+        const url = 'https://company2-backend.onrender.com/users/' + username
 
         const time = { F: [preferredTime], M: [preferredTime], R: [preferredTime], T: [preferredTime], W: [preferredTime] }
 
@@ -223,7 +223,7 @@ export const ProfPreferencePage: React.FC = () => {
 
                     <Form.Item {...tailFormItemLayout}>
                         <div style={{ width: '200px', display: 'flex', flexDirection: 'row', justifyContent: 'center', marginBottom: 20 }}>
-                            <Button type='primary' htmlType='reset' style={{ backgroundColor: '#2c2a2a', color: '#ffffff', borderRadius: 32 }}>
+                            <Button type='primary' htmlType='reset' style={{ backgroundColor: '#2c2a2a', color: '#ffffff', borderRadius: 32 }} onClick={() => setFormDisabled(false)}>
                                 CLEAR
                             </Button>
                         </div>

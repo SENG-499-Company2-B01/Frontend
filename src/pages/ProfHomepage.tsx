@@ -2,9 +2,10 @@ import { BlackButton } from '../components/atoms/button'
 import { H1, H2 } from '../components/atoms/typography'
 import 'bootstrap/dist/css/bootstrap.css'
 import '../components/Homepage/homepage.css'
-import { NavBarProf } from '../components/navbar'
+import { goToTop, NavBarProf } from '../components/navbar'
 import { useEffect } from 'react'
 import { SimpleLink } from '../components/atoms/navLink'
+import { ProfessorHowTo } from './HowTo'
 
 const url = 'http://localhost:8000/users'
 
@@ -34,7 +35,7 @@ export const ProfHomepage = () => {
                     </div>
                     <div className='col rig'>
                         <p className='para'> We create schedules for UVic Professors based on personal prefences to better their teaching experience.</p>
-                        <SimpleLink to='/ProfPreferencePage'>
+                        <SimpleLink to='/ProfPreferencePage' onClick={goToTop}>
                             <BlackButton className='bt2'>
                                 <H1>SET YOUR PREFERENCES</H1>
                             </BlackButton>
@@ -42,6 +43,7 @@ export const ProfHomepage = () => {
                     </div>
                 </div>
             </div>
+            <ProfessorHowTo />
         </div>
     )
 }
