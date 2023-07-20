@@ -51,6 +51,11 @@ export const Generate = () => {
         // })
     }
 
+    const approveSchedule = async (e: SyntheticEvent) => {
+        e.preventDefault()
+        console.log('Schedule approved!')
+    }
+
     return (
         <form onSubmit={createSchedule}>
             <NavBarAdmin />
