@@ -13,6 +13,7 @@ import { ApproveContainer } from '../components/timetable/timetable'
 
 const PopupBackground = styled.div`
     display: flex;
+    overflow: hidden;
     width: 100%;
     height: 100vh;
     display: flex;
@@ -27,6 +28,7 @@ const PopupWrapper = styled.div`
     justify-content: center;
     align-items: center;
     position: absolute;
+    overflow: hidden;
     height: 400px;
     z-index: 4;
     flex-direction: column;
@@ -75,8 +77,10 @@ export const Timetable: React.FC = () => {
     }
     useEffect(() => {
         const fetchData = async () => {
-            // setLoading(true)
+            setLoading(true)
             const term = localStorage.getItem('term')
+            const year = Number(localStorage.getItem('year'))
+            console.log()
             try {
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 const response = await axios
@@ -98,7 +102,7 @@ export const Timetable: React.FC = () => {
                         localStorage.setItem('jwt', token)
                         console.log(localStorage.getItem('jwt'))
                         const response2 = await axios.post(
-                            'https://company2-backend.onrender.com/schedules/2023/' + term + '/generate',
+                            process.env.REACT_APP_BACKEND_URL + '/schedules/' + year + '/' + term + '/generate',
                             {},
                             {
                                 headers: {
@@ -147,6 +151,9 @@ export const Timetable: React.FC = () => {
     const approveSchedule = async (e: SyntheticEvent) => {
         e.preventDefault()
         console.log('Schedule approved!')
+        console.log(localStorage.getItem('dat'))
+        const term = localStorage.getItem('term')
+        const year = Number(localStorage.getItem('year'))
         const url = process.env.REACT_APP_BACKEND_URL + '/schedules/prev'
         await fetch(url, {
             method: 'POST',
@@ -154,9 +161,10 @@ export const Timetable: React.FC = () => {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${localStorage.getItem('jwt')}`,
             },
-            body: JSON.stringify(localStorage.getItem('dat')),
+            body: JSON.stringify({ term: term, year: year }),
         }).then((response) => {
             setIsApproved(true)
+            console.log('Schedule Sent')
             return response
         })
     }
@@ -190,14 +198,13 @@ export const Timetable: React.FC = () => {
                 </ul>
             </div>
 
-            <ApproveContainer>
-                <SmallBlackButton onClick={() => setIsApproved(true)}>
-                    <H7>APPROVE SCHEDULE</H7>
-                </SmallBlackButton>
-            </ApproveContainer>
-            {/* <form onSubmit={approveSchedule}>
-    
-            </form> */}
+            <form onSubmit={approveSchedule}>
+                <ApproveContainer>
+                    <SmallBlackButton onClick={() => setIsApproved(true)}>
+                        <H7>APPROVE SCHEDULE</H7>
+                    </SmallBlackButton>
+                </ApproveContainer>
+            </form>
 
             <div className='bottom-content'>
                 {activeLink === 'courses' && (

@@ -63,7 +63,7 @@ const ListItem = styled.li`
     }
 `
 
-export default function DropdownMenu(props: any) {
+export default function YearDropdownMenu(props: any) {
     //list of countries
     const data = props.data
     const length = data.length
@@ -81,7 +81,7 @@ export default function DropdownMenu(props: any) {
     const selectHandler = (event: any) => {
         setShowDropDown(false)
         setSelectedValue(event.target.getAttribute('value'))
-        localStorage.setItem('term', event.target.getAttribute('value').toLowerCase())
+        localStorage.setItem('year', event.target.getAttribute('value'))
         console.log(localStorage)
     }
 
