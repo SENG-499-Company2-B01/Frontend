@@ -48,14 +48,16 @@ const ProfTable = (props: Props) => {
     }
     return (
         <div className='tab'>
-            <nav className='navbar navbar-light se justify-content-end'>
-                <form className='form-inline'>
-                    <input className='form-control mr-sm-2 gh' type='search' placeholder='Search' aria-label='Search' value={searchQuery} onChange={handleSearchQueryChange} />
-                </form>
-            </nav>
             <div className='tab'>
-                <table className='table table-striped table-hover'>
-                    <thead className='thead-dark '>
+                <nav className='navbar navbar-light se justify-content-end'>
+                    <form className='form-inline'>
+                        <input className='form-control mr-sm-2 gh' type='search' placeholder='Search' aria-label='Search' value={searchQuery} onChange={handleSearchQueryChange} />
+                    </form>
+                </nav>
+            </div>
+            <div className='tab'>
+                <table className='table table-hover blue-table'>
+                    <thead className='thead-dark'>
                         <tr>
                             <th scope='col'>#</th>
                             <th scope='col'>Professor Name</th>
