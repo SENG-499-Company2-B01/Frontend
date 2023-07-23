@@ -26,3 +26,26 @@
 {
     margin-right: 50px;
 }
+
+.butto
+{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 3em;
+}
+
+.sa
+{
+    margin-left: 10px;
+    width: 5em;
+    border-radius: 50px;
+}
+
+.ed
+{
+    margin-right: 10px;
+    width: 5em;
+    border-radius: 50px;
+}
