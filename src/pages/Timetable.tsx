@@ -165,7 +165,7 @@ export const Timetable: React.FC = () => {
             ],
         }
         try {
-            const response = await axios.post('http://localhost:8000/schedules/2023/fall', finalData, {
+            const response = await axios.put('http://localhost:8000/schedules/2023/fall', finalData, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('jwt')}`,
                     'Content-Type': 'text/plain',
