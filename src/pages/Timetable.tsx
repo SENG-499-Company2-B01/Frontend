@@ -7,6 +7,7 @@ import './time.css'
 import ProfTable from './ProfTable'
 import axios from 'axios'
 import PreLoader from '../components/Loading/PreLoader'
+import { Button, Modal } from 'react-bootstrap'
 import { H1, H2, H6, H7 } from '../components/atoms/typography'
 import { SmallBlackButton } from '../components/atoms/button'
 import { ApproveContainer } from '../components/timetable/timetable'
@@ -62,7 +63,10 @@ export const Timetable: React.FC = () => {
     const [professorCourses, setProfessorCourses] = useState<Record<string, string[]>>({})
     const [locationCourses, setLocationCourses] = useState<Record<string, Course[]>>({})
     const [activeLink, setActiveLink] = useState('courses')
-
+    const [editing, setEditing] = useState(false)
+    const [showModal, setShowModal] = useState(false)
+    const handleClose = () => setShowModal(false)
+    const handleShow = () => setShowModal(true)
     const ApprovePopup = () => {
         return (
             <PopupBackground>
@@ -147,7 +151,79 @@ export const Timetable: React.FC = () => {
     const handleLinkClick = (link: string) => {
         setActiveLink(link)
     }
+    const handleEditClick = () => {
+        setEditing(true)
+    }
+    const handleSaveClick = async () => {
+        setEditing(false)
+        const editedProfessorData = { ...professorCourses }
+        const editedLocationData = { ...locationCourses }
+        const professorsTable = document.querySelector('.professors-table')
+        if (professorsTable) {
+            const rows = Array.from(professorsTable.getElementsByTagName('tr'))
+            rows.forEach((row, i) => {
+                if (i === 0) return
+                const cells = Array.from(row.getElementsByTagName('td'))
+                cells.forEach((cell, j) => {
+                    if (j === 0) {
+                        editedProfessorData[cell.innerText] = professorCourses[cell.innerText]
+                    } else if (j === 1) {
+                        editedProfessorData[cells[0].innerText] = cell.innerText.split(', ')
+                    }
+                })
+            })
+        }
+        const locationTable = document.querySelector('.location-table')
+        if (locationTable) {
+            const rows = Array.from(locationTable.getElementsByTagName('tr'))
+            rows.forEach((row, i) => {
+                if (i === 0) return
+                const cells = Array.from(row.getElementsByTagName('td'))
+                cells.forEach((cell, j) => {
+                    if (j === 0) {
+                        editedLocationData[cell.innerText] = locationCourses[cell.innerText]
+                    } else if (j === 1) {
+                        editedLocationData[cells[0].innerText][i - 1].course = cell.innerText
+                    } else if (j === 2) {
+                        editedLocationData[cells[0].innerText][i - 1].sections[0].days = cell.innerText.split(', ')
+                    } else if (j === 3) {
+                        editedLocationData[cells[0].innerText][i - 1].sections[0].num_seats = cell.innerText
+                    }
+                })
+            })
+        }
+        setProfessorCourses(editedProfessorData)
+        setLocationCourses(editedLocationData)
+        const finalData = {
+            year: year,
+            terms: [
+                {
+                    term: term,
+                    courses: timetableData.map((course) => ({
+                        ...course,
+                        sections: course.sections.map((section) => ({
+                            ...section,
+                            professor: editedProfessorData[section.professor],
+                            building: Object.keys(editedLocationData).find((key) => editedLocationData[key].find((c) => c.course === course.course) !== undefined) || '',
+                        })),
+                    })),
+                },
+            ],
+        }
+        try {
+            const response = await axios.put('http://localhost:8000/schedules/2023/fall', finalData, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('jwt')}`,
+                    'Content-Type': 'text/plain',
+                },
+            })
 
+            if (response.status === 200) {
+                handleShow()
+            }
+        } catch (error) {
+            console.error('Error:', error)
+        }
     const approveSchedule = async (e: SyntheticEvent) => {
         e.preventDefault()
         console.log('Schedule approved!')
@@ -177,6 +253,14 @@ export const Timetable: React.FC = () => {
             <div className='taa'>
                 <h2 className='y'>Term: {term}</h2>
                 <h2 className='y'>Year: {year}</h2>
+            </div>
+            <div className='butto'>
+                <button className='btn btn-dark ed' onClick={handleEditClick} disabled={editing}>
+                    Edit
+                </button>
+                <button className='btn btn-success sa' onClick={handleSaveClick} disabled={!editing}>
+                    Save
+                </button>
             </div>
             <div className='navy'>
                 <ul className='nav nav-pills lis'>
@@ -224,12 +308,12 @@ export const Timetable: React.FC = () => {
                                 {timetableData.map((course) =>
                                     course.sections.map((section) => (
                                         <tr key={`${course.course}-${section.num}`}>
-                                            <td>{course.course}</td>
-                                            <td>{section.num}</td>
-                                            <td>{section.professor}</td>
-                                            <td>{section.days.join(', ')}</td>
-                                            <td>{section.start_time}</td>
-                                            <td>{section.end_time}</td>
+                                            <td contentEditable={editing}>{course.course}</td>
+                                            <td contentEditable={editing}>{section.num}</td>
+                                            <td contentEditable={editing}>{section.professor}</td>
+                                            <td contentEditable={editing}>{section.days.join(', ')}</td>
+                                            <td contentEditable={editing}>{section.start_time}</td>
+                                            <td contentEditable={editing}>{section.end_time}</td>
                                         </tr>
                                     ))
                                 )}
@@ -249,8 +333,8 @@ export const Timetable: React.FC = () => {
                             <tbody>
                                 {Object.entries(professorCourses).map(([professor, courses]) => (
                                     <tr key={professor}>
-                                        <td>{professor}</td>
-                                        <td>{courses.join(', ')}</td>
+                                        <td contentEditable={editing}>{professor}</td>
+                                        <td contentEditable={editing}>{courses.join(', ')}</td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -272,10 +356,14 @@ export const Timetable: React.FC = () => {
                                 {Object.entries(locationCourses).map(([building, courses]) =>
                                     courses.map((course, index) => (
                                         <tr key={`${building}-${index}`}>
-                                            {index === 0 && <td rowSpan={courses.length}>{building}</td>}
-                                            <td>{course.course}</td>
-                                            <td>{course.sections[0].days.join(', ')}</td>
-                                            <td>{course.sections[0].num_seats}</td>
+                                            {index === 0 && (
+                                                <td rowSpan={courses.length} contentEditable={editing}>
+                                                    {building}
+                                                </td>
+                                            )}
+                                            <td contentEditable={editing}>{course.course}</td>
+                                            <td contentEditable={editing}>{course.sections[0].days.join(', ')}</td>
+                                            <td contentEditable={editing}>{course.sections[0].num_seats}</td>
                                         </tr>
                                     ))
                                 )}
@@ -284,6 +372,17 @@ export const Timetable: React.FC = () => {
                     </div>
                 )}
             </div>
+            <Modal show={showModal} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Timetable Update</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>Timetable has been updated successfully!</Modal.Body>
+                <Modal.Footer>
+                    <Button variant='secondary' onClick={handleClose}>
+                        Close
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </div>
     )
 }
