@@ -1,5 +1,6 @@
 .gh {
     border-radius: 20px;
+    z-index: -1;
 }
 
 .tab
@@ -7,4 +8,9 @@
     display: inline-block;
     flex-direction: column;
     margin-top: 0%;
+}
+
+.blue-table thead th {
+    background-color: #6885CE;
+    color: white;
 }

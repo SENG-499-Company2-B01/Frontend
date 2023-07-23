@@ -40,7 +40,7 @@ export const CreateAccountPage: React.FC = () => {
     const submit = async (e: SyntheticEvent) => {
         e.preventDefault()
 
-        const url = 'https://company2-backend.onrender.com/users'
+        const url = process.env.REACT_APP_BACKEND_URL + '/users'
 
         const body = { username: username, email: email, firstname: firstName, lastname: lastName, password: password }
 

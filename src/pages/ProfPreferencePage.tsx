@@ -59,7 +59,7 @@ export const ProfPreferencePage: React.FC = () => {
         e.preventDefault()
         const username = localStorage.getItem('username')
 
-        const url = 'https://company2-backend.onrender.com/users/' + username
+        const url = process.env.REACT_APP_BACKEND_URL + '/users/' + username
 
         const time = { F: [preferredTime], M: [preferredTime], R: [preferredTime], T: [preferredTime], W: [preferredTime] }
 
@@ -170,7 +170,7 @@ export const ProfPreferencePage: React.FC = () => {
                             <Space align='baseline' direction='vertical' size={12} style={{ marginBottom: 10 }}>
                                 <RangePicker format='HH:mm' onChange={onSelectTime} />
                             </Space>
-                            <Form.List name='Added Preferred Time'>
+                            {/* <Form.List name='Added Preferred Time'>
                                 {(fields, { add, remove }) => (
                                     <>
                                         {fields.map((field) => (
@@ -193,7 +193,7 @@ export const ProfPreferencePage: React.FC = () => {
                                         </Button>
                                     </>
                                 )}
-                            </Form.List>
+                            </Form.List> */}
                         </Form.Item>
 
                         <Form.Item name='numberOfClasses' label='Number of Classes' tooltip='Input number of classes.' style={{ marginBottom: 20 }}>
