@@ -1,7 +1,8 @@
 import { IProfessor } from './Professor.type'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import './table.css'
 import { Modal, Button } from 'react-bootstrap'
+import { Checkbox } from '../components/atoms/checkbox'
 
 type Props = {
     list: IProfessor[]
@@ -9,6 +10,7 @@ type Props = {
 
 const ProfTable = (props: Props) => {
     const { list } = props
+    const isChecked = useRef(false)
     const [searchQuery, setSearchQuery] = useState('')
     const [filteredProfessors, setFilteredProfessors] = useState(list)
     const [showModal, setShowModal] = useState(false)
@@ -123,9 +125,10 @@ const ProfTable = (props: Props) => {
                         </>
                     )}
                 </Modal.Body>
-                <Modal.Footer>
+                <Modal.Footer style={{ justifyContent: 'center', flexDirection: 'column' }}>
+                    <Checkbox label={'Approve Preferences?'} onClick={(value: boolean) => (isChecked.current = value)} />
                     <Button variant='secondary' onClick={handleCloseModal}>
-                        Close
+                        Submit
                     </Button>
                 </Modal.Footer>
             </Modal>

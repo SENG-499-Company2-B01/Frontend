@@ -224,165 +224,166 @@ export const Timetable: React.FC = () => {
         } catch (error) {
             console.error('Error:', error)
         }
-    const approveSchedule = async (e: SyntheticEvent) => {
-        e.preventDefault()
-        console.log('Schedule approved!')
-        console.log(localStorage.getItem('dat'))
-        const term = localStorage.getItem('term')
-        const year = Number(localStorage.getItem('year'))
-        const url = process.env.REACT_APP_BACKEND_URL + '/schedules/prev'
-        await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${localStorage.getItem('jwt')}`,
-            },
-            body: JSON.stringify({ term: term, year: year }),
-        }).then((response) => {
-            setIsApproved(true)
-            console.log('Schedule Sent')
-            return response
-        })
-    }
-    return (
-        <div>
-            <NavBarAdmin />
-            {loading ? <PreLoader /> : ''}
-            {isApproved ? <ApprovePopup /> : ''}
-            <H2 className='mai'>Schedule</H2>
-            <div className='taa'>
-                <h2 className='y'>Term: {term}</h2>
-                <h2 className='y'>Year: {year}</h2>
-            </div>
-            <div className='butto'>
-                <button className='btn btn-dark ed' onClick={handleEditClick} disabled={editing}>
-                    Edit
-                </button>
-                <button className='btn btn-success sa' onClick={handleSaveClick} disabled={!editing}>
-                    Save
-                </button>
-            </div>
-            <div className='navy'>
-                <ul className='nav nav-pills lis'>
-                    <li className='nav-item'>
-                        <a className={`nav-link ${activeLink === 'courses' ? 'active' : ''}`} aria-current='page' href='#' onClick={() => handleLinkClick('courses')}>
-                            Courses
-                        </a>
-                    </li>
-                    <li className='nav-item dropdown'>
-                        <a className={`nav-link ${activeLink === 'professors' ? 'active' : ''}`} href='#' role='button' aria-expanded='false' onClick={() => handleLinkClick('professors')}>
-                            Professors
-                        </a>
-                    </li>
-                    <li className='nav-item dropdown'>
-                        <a className={`nav-link ${activeLink === 'location' ? 'active' : ''}`} href='#' role='button' aria-expanded='false' onClick={() => handleLinkClick('location')}>
-                            Location
-                        </a>
-                    </li>
-                </ul>
-            </div>
+        const approveSchedule = async (e: SyntheticEvent) => {
+            e.preventDefault()
+            console.log('Schedule approved!')
+            console.log(localStorage.getItem('dat'))
+            const term = localStorage.getItem('term')
+            const year = Number(localStorage.getItem('year'))
+            const url = process.env.REACT_APP_BACKEND_URL + '/schedules/prev'
+            await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('jwt')}`,
+                },
+                body: JSON.stringify({ term: term, year: year }),
+            }).then((response) => {
+                setIsApproved(true)
+                console.log('Schedule Sent')
+                return response
+            })
+        }
+        return (
+            <div>
+                <NavBarAdmin />
+                {loading ? <PreLoader /> : ''}
+                {isApproved ? <ApprovePopup /> : ''}
+                <H2 className='mai'>Schedule</H2>
+                <div className='taa'>
+                    <h2 className='y'>Term: {term}</h2>
+                    <h2 className='y'>Year: {year}</h2>
+                </div>
+                <div className='butto'>
+                    <button className='btn btn-dark ed' onClick={handleEditClick} disabled={editing}>
+                        Edit
+                    </button>
+                    <button className='btn btn-success sa' onClick={handleSaveClick} disabled={!editing}>
+                        Save
+                    </button>
+                </div>
+                <div className='navy'>
+                    <ul className='nav nav-pills lis'>
+                        <li className='nav-item'>
+                            <a className={`nav-link ${activeLink === 'courses' ? 'active' : ''}`} aria-current='page' href='#' onClick={() => handleLinkClick('courses')}>
+                                Courses
+                            </a>
+                        </li>
+                        <li className='nav-item dropdown'>
+                            <a className={`nav-link ${activeLink === 'professors' ? 'active' : ''}`} href='#' role='button' aria-expanded='false' onClick={() => handleLinkClick('professors')}>
+                                Professors
+                            </a>
+                        </li>
+                        <li className='nav-item dropdown'>
+                            <a className={`nav-link ${activeLink === 'location' ? 'active' : ''}`} href='#' role='button' aria-expanded='false' onClick={() => handleLinkClick('location')}>
+                                Location
+                            </a>
+                        </li>
+                    </ul>
+                </div>
 
-            <form onSubmit={approveSchedule}>
-                <ApproveContainer>
-                    <SmallBlackButton onClick={() => setIsApproved(true)}>
-                        <H7>APPROVE SCHEDULE</H7>
-                    </SmallBlackButton>
-                </ApproveContainer>
-            </form>
+                <form onSubmit={approveSchedule}>
+                    <ApproveContainer>
+                        <SmallBlackButton onClick={() => setIsApproved(true)}>
+                            <H7>APPROVE SCHEDULE</H7>
+                        </SmallBlackButton>
+                    </ApproveContainer>
+                </form>
 
-            <div className='bottom-content'>
-                {activeLink === 'courses' && (
-                    <div>
-                        <table className='table'>
-                            <thead>
-                                <tr>
-                                    <th>Course</th>
-                                    <th>Section</th>
-                                    <th>Professor</th>
-                                    <th>Days</th>
-                                    <th>Start Time</th>
-                                    <th>End Time</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {timetableData.map((course) =>
-                                    course.sections.map((section) => (
-                                        <tr key={`${course.course}-${section.num}`}>
-                                            <td contentEditable={editing}>{course.course}</td>
-                                            <td contentEditable={editing}>{section.num}</td>
-                                            <td contentEditable={editing}>{section.professor}</td>
-                                            <td contentEditable={editing}>{section.days.join(', ')}</td>
-                                            <td contentEditable={editing}>{section.start_time}</td>
-                                            <td contentEditable={editing}>{section.end_time}</td>
-                                        </tr>
-                                    ))
-                                )}
-                            </tbody>
-                        </table>
-                    </div>
-                )}
-                {activeLink === 'professors' && (
-                    <div>
-                        <table className='table'>
-                            <thead>
-                                <tr>
-                                    <th>Professor</th>
-                                    <th>Courses</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {Object.entries(professorCourses).map(([professor, courses]) => (
-                                    <tr key={professor}>
-                                        <td contentEditable={editing}>{professor}</td>
-                                        <td contentEditable={editing}>{courses.join(', ')}</td>
+                <div className='bottom-content'>
+                    {activeLink === 'courses' && (
+                        <div>
+                            <table className='table'>
+                                <thead>
+                                    <tr>
+                                        <th>Course</th>
+                                        <th>Section</th>
+                                        <th>Professor</th>
+                                        <th>Days</th>
+                                        <th>Start Time</th>
+                                        <th>End Time</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                )}
-                {activeLink === 'location' && (
-                    <div>
-                        <table className='table'>
-                            <thead>
-                                <tr>
-                                    <th>Building</th>
-                                    <th>Course</th>
-                                    <th>Days</th>
-                                    <th>Num Seats</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {Object.entries(locationCourses).map(([building, courses]) =>
-                                    courses.map((course, index) => (
-                                        <tr key={`${building}-${index}`}>
-                                            {index === 0 && (
-                                                <td rowSpan={courses.length} contentEditable={editing}>
-                                                    {building}
-                                                </td>
-                                            )}
-                                            <td contentEditable={editing}>{course.course}</td>
-                                            <td contentEditable={editing}>{course.sections[0].days.join(', ')}</td>
-                                            <td contentEditable={editing}>{course.sections[0].num_seats}</td>
+                                </thead>
+                                <tbody>
+                                    {timetableData.map((course) =>
+                                        course.sections.map((section) => (
+                                            <tr key={`${course.course}-${section.num}`}>
+                                                <td contentEditable={editing}>{course.course}</td>
+                                                <td contentEditable={editing}>{section.num}</td>
+                                                <td contentEditable={editing}>{section.professor}</td>
+                                                <td contentEditable={editing}>{section.days.join(', ')}</td>
+                                                <td contentEditable={editing}>{section.start_time}</td>
+                                                <td contentEditable={editing}>{section.end_time}</td>
+                                            </tr>
+                                        ))
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
+                    )}
+                    {activeLink === 'professors' && (
+                        <div>
+                            <table className='table'>
+                                <thead>
+                                    <tr>
+                                        <th>Professor</th>
+                                        <th>Courses</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {Object.entries(professorCourses).map(([professor, courses]) => (
+                                        <tr key={professor}>
+                                            <td contentEditable={editing}>{professor}</td>
+                                            <td contentEditable={editing}>{courses.join(', ')}</td>
                                         </tr>
-                                    ))
-                                )}
-                            </tbody>
-                        </table>
-                    </div>
-                )}
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    )}
+                    {activeLink === 'location' && (
+                        <div>
+                            <table className='table'>
+                                <thead>
+                                    <tr>
+                                        <th>Building</th>
+                                        <th>Course</th>
+                                        <th>Days</th>
+                                        <th>Num Seats</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {Object.entries(locationCourses).map(([building, courses]) =>
+                                        courses.map((course, index) => (
+                                            <tr key={`${building}-${index}`}>
+                                                {index === 0 && (
+                                                    <td rowSpan={courses.length} contentEditable={editing}>
+                                                        {building}
+                                                    </td>
+                                                )}
+                                                <td contentEditable={editing}>{course.course}</td>
+                                                <td contentEditable={editing}>{course.sections[0].days.join(', ')}</td>
+                                                <td contentEditable={editing}>{course.sections[0].num_seats}</td>
+                                            </tr>
+                                        ))
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
+                    )}
+                </div>
+                <Modal show={showModal} onHide={handleClose}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Timetable Update</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>Timetable has been updated successfully!</Modal.Body>
+                    <Modal.Footer>
+                        <Button variant='secondary' onClick={handleClose}>
+                            Close
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
             </div>
-            <Modal show={showModal} onHide={handleClose}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Timetable Update</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>Timetable has been updated successfully!</Modal.Body>
-                <Modal.Footer>
-                    <Button variant='secondary' onClick={handleClose}>
-                        Close
-                    </Button>
-                </Modal.Footer>
-            </Modal>
-        </div>
-    )
+        )
+    }
 }
