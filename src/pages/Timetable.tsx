@@ -2,7 +2,7 @@ import 'bootstrap/dist/css/bootstrap.css'
 import styled from '@emotion/styled'
 import '../components/Homepage/homepage.css'
 import { NavBarAdmin } from '../components/navbar'
-import React, { SyntheticEvent, useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef, SyntheticEvent } from 'react'
 import './time.css'
 import ProfTable from './ProfTable'
 import axios from 'axios'
@@ -33,6 +33,7 @@ const PopupWrapper = styled.div`
     height: 400px;
     z-index: 4;
     flex-direction: column;
+    border-radius: 8px;
     gap: 32px;
     width: 400px;
     background-color: #fcfcfc;
