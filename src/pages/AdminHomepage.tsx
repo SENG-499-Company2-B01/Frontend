@@ -11,7 +11,6 @@ import { AdminHowTo } from './HowTo'
 import BasicCalendar from '../components/calendar/BasicCalendar'
 import DropdownMenu from '../components/atoms/term_dropdown'
 import { Navigate } from 'react-router-dom'
-import Checkbox from 'antd/es/checkbox/Checkbox'
 import YearDropdownMenu from '../components/atoms/year_dropdown'
 import styled from '@emotion/styled'
 
@@ -56,7 +55,6 @@ export const AdminHomepage = () => {
                             <DropdownContainer>
                                 <DropdownMenu label={'Term'} data={['Fall', 'Spring', 'Summer']} />
                                 <YearDropdownMenu label={'Year'} data={[2023, 2024, 2025, 2026]} />
-                                <Checkbox label={'Yes'} onClick={(value: boolean) => (isChecked.current = value)} />
                             </DropdownContainer>
 
                             <BlackButton className='bt2' type='submit'>

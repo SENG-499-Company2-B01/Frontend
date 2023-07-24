@@ -37,7 +37,23 @@ const ProfTable = (props: Props) => {
     const handleCloseModal = () => {
         setSelectedProfessor(null)
         setShowModal(false)
+
+        if (isChecked) {
+            const url = process.env.REACT_APP_BACKEND_URL + '/schedules/prev'
+            fetch(url, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('jwt')}`,
+                },
+                body: JSON.stringify({ pref_approved: true }),
+            }).then((response) => {
+                console.log('Preference approved!')
+                return response
+            })
+        }
     }
+
     const renderProfessors = () => {
         if (Array.isArray(filteredProfessors)) {
             return filteredProfessors.map((prof, index) => {
