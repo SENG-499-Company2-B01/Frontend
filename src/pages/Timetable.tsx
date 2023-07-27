@@ -90,7 +90,7 @@ export const Timetable: React.FC = () => {
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 const response = await axios
                     .post(
-                        'http://localhost:8000/login',
+                        `${process.env.REACT_APP_BACKEND_URL}/login`,
                         {
                             username: 'Rich.Little',
                             password: 'Rich.Little12345',
@@ -212,7 +212,9 @@ export const Timetable: React.FC = () => {
             ],
         }
         try {
-            const response = await axios.put('http://localhost:8000/schedules/2023/fall', finalData, {
+            const term = localStorage.getItem('term')
+            const year = Number(localStorage.getItem('year'))
+            const response = await axios.put(process.env.REACT_APP_BACKEND_URL + '/schedules/' + year + '/' + term, finalData, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('jwt')}`,
                     'Content-Type': 'text/plain',

@@ -85,9 +85,9 @@ export const NavBarAdmin = () => {
                 </SimpleLink>
 
                 <LinkDiv>
-                    <NavUnlisted to={'/timetable'} onClick={goToTop}>
+                    {/* <NavUnlisted to={'/timetable'} onClick={goToTop}>
                         <H7>VIEW SCHEDULE</H7>
-                    </NavUnlisted>
+                    </NavUnlisted> */}
                     <NavUnlisted to={'/Preferences'} onClick={goToTop}>
                         <H7>VIEW PROFESSORS</H7>
                     </NavUnlisted>

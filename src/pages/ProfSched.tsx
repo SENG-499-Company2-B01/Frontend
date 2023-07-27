@@ -72,7 +72,7 @@ interface Course {
 }
 export const Profsched = () => {
     const [loading, setLoading] = useState<boolean>(false)
-    const [professor, setProfessor] = useState('Issa Traore')
+    // const [professor, setProfessor] = useState('Issa Traore')
     const [courses, setCourses] = useState<Course[]>([])
     const [schedule, setSchedule] = useState(emptySchedule)
 
@@ -81,7 +81,7 @@ export const Profsched = () => {
             setLoading(true)
             try {
                 const response = await axios.post(
-                    'http://localhost:8000/login',
+                    `${process.env.REACT_APP_BACKEND_URL}/login`,
                     {
                         username: 'Rich.Little',
                         password: 'Rich.Little12345',
@@ -97,23 +97,25 @@ export const Profsched = () => {
                 const token = response.data.jwt
                 localStorage.setItem('jwt', token)
                 const term = localStorage.getItem('term')
-                const response2 = await axios.post(
-                    `http://localhost:8000/schedules/2023/${term}/generate`,
-                    {},
-                    {
-                        headers: {
-                            Authorization: `Bearer ${localStorage.getItem('jwt')}`,
-                            'Content-Type': 'text/plain',
-                        },
-                    }
-                )
+                const year = Number(localStorage.getItem('year'))
+                console.log(year)
+                console.log(term)
+                const response2 = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/schedules/prev`, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('jwt')}`,
+                        'Content-Type': 'text/plain',
+                    },
+                })
                 const data = response2.data
                 localStorage.setItem('dat', JSON.stringify(data))
-                const parsedData = JSON.parse(localStorage.getItem('dat') || '[]')
+                const parsedData_old = JSON.parse(localStorage.getItem('dat') || '[]')
                 const professorSchedule: Schedule = { ...emptySchedule }
+                const parsedData = parsedData_old[parsedData_old.length - 1]
+                console.log(parsedData)
                 parsedData.terms[0].courses.forEach((course: Course) => {
                     course.sections.forEach((section: Section) => {
-                        if (section.professor === professor) {
+                        if (section.professor === localStorage.getItem('username')?.replace('.', ' ')) {
+                            console.log('HERE')
                             const startHour = parseInt(convertTime12to24(section.start_time).split(':')[0])
                             const endHour = parseInt(convertTime12to24(section.end_time).split(':')[0])
 

@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import './table.css'
 import { Modal, Button } from 'react-bootstrap'
 import { Checkbox } from '../components/atoms/checkbox'
+import { profileEnd } from 'console'
 
 type Props = {
     list: IProfessor[]
@@ -39,7 +40,7 @@ const ProfTable = (props: Props) => {
         setShowModal(false)
 
         if (isChecked) {
-            const url = process.env.REACT_APP_BACKEND_URL + '/schedules/prev'
+            const url = process.env.REACT_APP_BACKEND_URL + '/users/' + selectedProfessor?.username
             fetch(url, {
                 method: 'PUT',
                 headers: {
