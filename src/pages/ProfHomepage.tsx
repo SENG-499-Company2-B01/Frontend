@@ -6,6 +6,7 @@ import { goToTop, NavBarProf } from '../components/navbar'
 import { useEffect } from 'react'
 import { SimpleLink } from '../components/atoms/navLink'
 import { ProfessorHowTo } from './HowTo'
+import { Profsched } from './ProfSched'
 
 const url = 'http://localhost:8000/users'
 
@@ -43,6 +44,7 @@ export const ProfHomepage = () => {
                     </div>
                 </div>
             </div>
+            <Profsched />
             <ProfessorHowTo />
         </div>
     )

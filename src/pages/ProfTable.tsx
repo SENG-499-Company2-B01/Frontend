@@ -1,7 +1,9 @@
 import { IProfessor } from './Professor.type'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import './table.css'
 import { Modal, Button } from 'react-bootstrap'
+import { Checkbox } from '../components/atoms/checkbox'
+import { profileEnd } from 'console'
 
 type Props = {
     list: IProfessor[]
@@ -9,6 +11,7 @@ type Props = {
 
 const ProfTable = (props: Props) => {
     const { list } = props
+    const isChecked = useRef(false)
     const [searchQuery, setSearchQuery] = useState('')
     const [filteredProfessors, setFilteredProfessors] = useState(list)
     const [showModal, setShowModal] = useState(false)
@@ -35,7 +38,23 @@ const ProfTable = (props: Props) => {
     const handleCloseModal = () => {
         setSelectedProfessor(null)
         setShowModal(false)
+
+        if (isChecked) {
+            const url = process.env.REACT_APP_BACKEND_URL + '/users/' + selectedProfessor?.username
+            fetch(url, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('jwt')}`,
+                },
+                body: JSON.stringify({ pref_approved: true }),
+            }).then((response) => {
+                console.log('Preference approved!')
+                return response
+            })
+        }
     }
+
     const renderProfessors = () => {
         if (Array.isArray(filteredProfessors)) {
             return filteredProfessors.map((prof, index) => {
@@ -123,9 +142,10 @@ const ProfTable = (props: Props) => {
                         </>
                     )}
                 </Modal.Body>
-                <Modal.Footer>
+                <Modal.Footer style={{ justifyContent: 'center', flexDirection: 'column' }}>
+                    <Checkbox label={'Approve Preferences?'} onClick={(value: boolean) => (isChecked.current = value)} />
                     <Button variant='secondary' onClick={handleCloseModal}>
-                        Close
+                        Submit
                     </Button>
                 </Modal.Footer>
             </Modal>
