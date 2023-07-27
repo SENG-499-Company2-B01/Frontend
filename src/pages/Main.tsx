@@ -12,6 +12,7 @@ import { NewPreferences } from './NewPreferences'
 import { ProfTimetable } from './ProfTimetable'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import { Timetable } from './Timetable'
+import { PastSchedulePage } from './PastSchedulePage'
 
 // Routes the web application to different pages
 
@@ -110,6 +111,14 @@ const Main = () => (
             element={
                 <>
                     <Timetable />
+                </>
+            }
+        ></Route>
+        <Route
+            path='/PastSchedulePage'
+            element={
+                <>
+                    <PastSchedulePage />
                 </>
             }
         ></Route>

@@ -6,8 +6,9 @@ import closeIcon from '../assets/icons/closed_default.png'
 import companyLogo from '../assets/icons/company_logo_dark.png'
 import userProfile from '../assets/icons/user_profile_light.png'
 import { NavUnlisted, SimpleLink } from './atoms/navLink'
-import ProfileDropdown, { DropdownContainer } from './atoms/Dropdown_menu'
-import { DropdownButton } from 'react-bootstrap'
+import ProfileDropdown from './atoms/Dropdown_menu'
+import { Link } from 'react-router-dom'
+import { FiChevronDown } from 'react-icons/fi'
 
 const StickyContainer = styled.div`
     display: flex;
@@ -85,9 +86,14 @@ export const NavBarAdmin = () => {
                 </SimpleLink>
 
                 <LinkDiv>
-                    {/* <NavUnlisted to={'/timetable'} onClick={goToTop}>
-                        <H7>VIEW SCHEDULE</H7>
-                    </NavUnlisted> */}
+                    <LinkDiv>
+                        <NavUnlisted to={'/timetable'} onClick={goToTop}>
+                            <H7>VIEW SCHEDULE</H7>
+                        </NavUnlisted>
+                        <NavUnlisted to={'/PastSchedulePage'} onClick={goToTop}>
+                            <H7>VIEW PAST SCHEDULE</H7>
+                        </NavUnlisted>
+                    </LinkDiv>
                     <NavUnlisted to={'/Preferences'} onClick={goToTop}>
                         <H7>VIEW PROFESSORS</H7>
                     </NavUnlisted>
