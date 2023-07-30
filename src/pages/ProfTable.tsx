@@ -143,7 +143,7 @@ const ProfTable = (props: Props) => {
                     )}
                 </Modal.Body>
                 <Modal.Footer style={{ justifyContent: 'center', flexDirection: 'column' }}>
-                    <Checkbox label={'Approve Preferences?'} onClick={(value: boolean) => (isChecked.current = value)} />
+                    <Checkbox label={'Approve Preferences?'} isChecked={selectedProfessor?.prev_approved} onClick={(value: boolean) => (isChecked.current = value)} />
                     <Button variant='secondary' onClick={handleCloseModal}>
                         Submit
                     </Button>

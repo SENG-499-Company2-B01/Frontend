@@ -48,6 +48,7 @@ interface Section {
     start_time: string
     end_time: string
     building: string
+    room: string
     num_seats: string
 }
 
@@ -157,24 +158,29 @@ export const Timetable: React.FC = () => {
     }
     const handleSaveClick = async () => {
         setEditing(false)
-        const editedProfessorData = { ...professorCourses }
+        const editedProfessorData: Record<string, string[]> = {}
+        const editedCoursesData: Record<string, string> = {}
         const editedLocationData = { ...locationCourses }
-        const professorsTable = document.querySelector('.professors-table')
+        const professorsTable = document.getElementById('professor-table')
         if (professorsTable) {
             const rows = Array.from(professorsTable.getElementsByTagName('tr'))
             rows.forEach((row, i) => {
                 if (i === 0) return
                 const cells = Array.from(row.getElementsByTagName('td'))
-                cells.forEach((cell, j) => {
-                    if (j === 0) {
-                        editedProfessorData[cell.innerText] = professorCourses[cell.innerText]
-                    } else if (j === 1) {
-                        editedProfessorData[cells[0].innerText] = cell.innerText.split(', ')
-                    }
+                cells[1].innerText.split(', ').forEach((course) => {
+                    editedCoursesData[course] = cells[0].innerText
                 })
+                editedProfessorData[cells[0].innerText] = cells[1].innerText.split(', ')
+                // cells.forEach((cell, j) => {
+                //     if (j === 0) {
+                //         editedProfessorData[cell.innerText] = professorCourses[cell.innerText]
+                //     } else if (j === 1) {
+                //         editedProfessorData[cells[0].innerText] = cell.innerText.split(', ')
+                //     }
+                // })
             })
         }
-        const locationTable = document.querySelector('.location-table')
+        const locationTable = document.getElementById('location-table')
         if (locationTable) {
             const rows = Array.from(locationTable.getElementsByTagName('tr'))
             rows.forEach((row, i) => {
@@ -204,7 +210,7 @@ export const Timetable: React.FC = () => {
                         ...course,
                         sections: course.sections.map((section) => ({
                             ...section,
-                            professor: editedProfessorData[section.professor],
+                            professor: editedCoursesData[course.course],
                             building: Object.keys(editedLocationData).find((key) => editedLocationData[key].find((c) => c.course === course.course) !== undefined) || '',
                         })),
                     })),
@@ -214,6 +220,7 @@ export const Timetable: React.FC = () => {
         try {
             const term = localStorage.getItem('term')
             const year = Number(localStorage.getItem('year'))
+            localStorage.setItem('dat', JSON.stringify(finalData))
             const response = await axios.put(process.env.REACT_APP_BACKEND_URL + '/schedules/' + year + '/' + term, finalData, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('jwt')}`,
@@ -297,7 +304,7 @@ export const Timetable: React.FC = () => {
             <div className='bottom-content'>
                 {activeLink === 'courses' && (
                     <div>
-                        <table className='table'>
+                        <table className='table' id='courses-table'>
                             <thead>
                                 <tr>
                                     <th>Course</th>
@@ -327,7 +334,7 @@ export const Timetable: React.FC = () => {
                 )}
                 {activeLink === 'professors' && (
                     <div>
-                        <table className='table'>
+                        <table className='table' id='professor-table'>
                             <thead>
                                 <tr>
                                     <th>Professor</th>
@@ -347,10 +354,11 @@ export const Timetable: React.FC = () => {
                 )}
                 {activeLink === 'location' && (
                     <div>
-                        <table className='table'>
+                        <table className='table' id='location-table'>
                             <thead>
                                 <tr>
                                     <th>Building</th>
+                                    <th>Room</th>
                                     <th>Course</th>
                                     <th>Days</th>
                                     <th>Num Seats</th>
@@ -365,6 +373,7 @@ export const Timetable: React.FC = () => {
                                                     {building}
                                                 </td>
                                             )}
+                                            <td contentEditable={editing}>{course.sections[0].room}</td>
                                             <td contentEditable={editing}>{course.course}</td>
                                             <td contentEditable={editing}>{course.sections[0].days.join(', ')}</td>
                                             <td contentEditable={editing}>{course.sections[0].num_seats}</td>
