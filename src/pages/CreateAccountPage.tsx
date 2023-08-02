@@ -48,7 +48,7 @@ export const CreateAccountPage: React.FC = () => {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
-                'Content-Type': 'text/plain',
+                'Content-Type': 'application/json',
                 Authorization: 'Bearer ' + localStorage.getItem('jwt'),
             },
             body: JSON.stringify(body),

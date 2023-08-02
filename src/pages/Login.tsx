@@ -33,7 +33,7 @@ export const Login = () => {
             headers: {
                 // 'Access-Control-Allow-Origin': '*',
                 Accept: 'application/json',
-                'Content-Type': 'text/plain',
+                'Content-Type': 'application/json',
             },
             body: JSON.stringify({
                 username: username,
