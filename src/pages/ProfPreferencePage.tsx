@@ -142,8 +142,8 @@ export const ProfPreferencePage: React.FC = () => {
                             <Radio.Button value='Fall' onChange={(e: any) => setSemester(e.target.value)}>
                                 Fall
                             </Radio.Button>
-                            <Radio.Button value='Winter' onChange={(e: any) => setSemester(e.target.value)}>
-                                Winter
+                            <Radio.Button value='Spring' onChange={(e: any) => setSemester(e.target.value)}>
+                                Spring
                             </Radio.Button>
                             <Radio.Button value='Summer' onChange={(e: any) => setSemester(e.target.value)}>
                                 Summer
@@ -197,7 +197,7 @@ export const ProfPreferencePage: React.FC = () => {
                         </Form.Item>
 
                         <Form.Item name='numberOfClasses' label='Number of Classes' tooltip='Input number of classes.' style={{ marginBottom: 20 }}>
-                            <InputNumber min={0} max={999} defaultValue={0} onChange={onChangeNumberOfClasses} />
+                            <InputNumber min={0} max={3} defaultValue={0} onChange={onChangeNumberOfClasses} />
                         </Form.Item>
 
                         <Form.Item name='Class Format' label='Class Format' tooltip='Select one or more preferred class formats' style={{ marginBottom: 20 }}>
