@@ -3,13 +3,14 @@ import 'bootstrap/dist/css/bootstrap.css'
 import '../components/Homepage/homepage.css'
 import { NavBarProf } from '../components/navbar'
 
-import { Button, Checkbox, Col, Form, Input, InputNumber, Row, Radio, Space, TimePicker } from 'antd'
-import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
+import { Button, Checkbox, Col, Form, Input, InputNumber, Row, Radio, Space, TimePicker, Select } from 'antd'
 import { Navigate } from 'react-router-dom'
-import React, { SyntheticEvent, useState, useEffect } from 'react'
+import React, { SyntheticEvent, useEffect, useState } from 'react'
 import type { Dayjs } from 'dayjs'
 import { RangeValue } from 'rc-picker/lib/interface'
 import type { CheckboxChangeEvent } from 'antd/es/checkbox'
+
+const { Option } = Select
 
 const formItemLayout = {
     labelCol: {
@@ -54,6 +55,43 @@ export const ProfPreferencePage: React.FC = () => {
     const [numberOfClasses, setNumberOfClasses] = useState(0)
     const [classFormat, setClassFormat] = useState(initialValue)
     const [navigate, setNavigate] = useState(false)
+    const [courses, setCourses] = useState([])
+    const [selctedCourses, setSelectedCourses] = useState([] as string[])
+
+    useEffect(() => {
+        const fetchCourses = async () => {
+            const url = process.env.REACT_APP_BACKEND_URL + '/courses'
+            await fetch(url, {
+                method: 'GET',
+                headers: {
+                    Accept: 'application/json',
+                    Authorization: 'Bearer ' + localStorage.getItem('jwt'),
+                },
+            })
+                .then((response) => {
+                    return response.json()
+                })
+                .then((data) => {
+                    setCourses(data)
+                })
+        }
+        fetchCourses()
+    }, [])
+
+    const getCoursePreferencesOptions = () => {
+        return courses.map((course: any) => {
+            return (
+                // TODO: When backend is ready, change shorthand to course
+                <Option key={course.shorthand} value={course.shorthand}>
+                    {course.shorthand}
+                </Option>
+            )
+        })
+    }
+
+    const handleChangePreferences = (value: string[]) => {
+        setSelectedCourses(value)
+    }
 
     const submit = async (e: SyntheticEvent) => {
         e.preventDefault()
@@ -63,8 +101,8 @@ export const ProfPreferencePage: React.FC = () => {
 
         const time = { F: [preferredTime], M: [preferredTime], R: [preferredTime], T: [preferredTime], W: [preferredTime] }
 
-        const body = { max_courses: numberOfClasses, available: time }
-
+        const body = { max_courses: numberOfClasses, available: time, course_pref: selctedCourses }
+        
         await fetch(url, {
             method: 'PUT',
             headers: {
@@ -218,6 +256,11 @@ export const ProfPreferencePage: React.FC = () => {
                                     <Input placeholder='Other' />
                                 </Col>
                             </Row>
+                        </Form.Item>
+                        <Form.Item name='Course Preferences' label='Course Preferences' tooltip='Select the courses you are willing to teach' style={{ marginBottom: 20 }}>
+                            <Select mode='multiple' style={{ width: '100%' }} onChange={handleChangePreferences}>
+                                {getCoursePreferencesOptions()}
+                            </Select>
                         </Form.Item>
                     </Form>
 
