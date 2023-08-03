@@ -233,6 +233,12 @@ export const ProfPreferencePage: React.FC = () => {
                                 )}
                             </Form.List> */}
                         </Form.Item>
+                        
+                        <Form.Item name='Course Preferences' label='Course Preferences' tooltip='Select the courses you are willing to teach' style={{ marginBottom: 20 }}>
+                            <Select mode='multiple' style={{ width: '100%' }} onChange={handleChangePreferences}>
+                                {getCoursePreferencesOptions()}
+                            </Select>
+                        </Form.Item>
 
                         <Form.Item name='numberOfClasses' label='Number of Classes' tooltip='Input number of classes.' style={{ marginBottom: 20 }}>
                             <InputNumber min={0} max={999} defaultValue={0} onChange={onChangeNumberOfClasses} />
@@ -256,11 +262,6 @@ export const ProfPreferencePage: React.FC = () => {
                                     <Input placeholder='Other' />
                                 </Col>
                             </Row>
-                        </Form.Item>
-                        <Form.Item name='Course Preferences' label='Course Preferences' tooltip='Select the courses you are willing to teach' style={{ marginBottom: 20 }}>
-                            <Select mode='multiple' style={{ width: '100%' }} onChange={handleChangePreferences}>
-                                {getCoursePreferencesOptions()}
-                            </Select>
                         </Form.Item>
                     </Form>
 
