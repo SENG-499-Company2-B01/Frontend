@@ -3,7 +3,6 @@ import React, { useState, useEffect, useRef } from 'react'
 import './table.css'
 import { Modal, Button } from 'react-bootstrap'
 import { Checkbox } from '../components/atoms/checkbox'
-import { profileEnd } from 'console'
 
 type Props = {
     list: IProfessor[]
@@ -138,7 +137,7 @@ const ProfTable = (props: Props) => {
                                 )
                             })}
                             <p>Max Courses: {selectedProfessor.max_courses || 'Not assigned yet'}</p>
-                            {/* Add more professor details here */}
+                            <p>Course Preferences: {selectedProfessor.course_pref.join(', ')}</p>
                         </>
                     )}
                 </Modal.Body>
