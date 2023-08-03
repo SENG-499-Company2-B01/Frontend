@@ -4,15 +4,16 @@ import { H1, H2 } from '../components/atoms/typography'
 import { InputField } from '../components/atoms/input_field'
 import { BlackButton } from '../components/atoms/button'
 import { NavUnlisted } from '../components/atoms/navLink'
-import { Navigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { SyntheticEvent, useState } from 'react'
 import PreLoader from '../components/Loading/PreLoader'
 
 export const Login = () => {
+    const navigate = useNavigate()
+
     const [username, setUsername] = useState()
     const [password, setPassword] = useState()
     const [loading, setLoading] = useState(false)
-    const [navigate, setNavigate] = useState(false)
     const [errorMessage, setErrorMessage] = useState('')
 
     const login = async (e: SyntheticEvent) => {
@@ -34,36 +35,38 @@ export const Login = () => {
             }),
         })
             .then((response) => {
-                return response.json()
+                if (response.ok) {
+                    return response.json()
+                } else {
+                    throw new Error('Invalid username or password')
+                }
             })
             .then((data) => {
-                localStorage.setItem('jwt', data.jwt)
+                if (!data.token) {
+                    throw new Error('Invalid username or password')
+                }
+                localStorage.setItem('jwt', data.token)
                 localStorage.setItem('status', 'login')
                 localStorage.setItem('user', 'prof')
-                if (data.usertype && data.usertype == 'admin') {
+                localStorage.setItem('username', String(username))
+                // TODO: remove 'username == 'Rich.Little || ' once backend change is ready
+                if (username == 'Rich.Little' || (data.usertype && data.usertype == 'admin')) {
+                    console.log('admin!')
                     localStorage.setItem('user', 'admin')
                 }
+                navigate('/user')
             })
             .catch((error) => {
                 console.log(error)
-                setErrorMessage(error)
+                if (error.message) {
+                    setErrorMessage(error.message)
+                } else {
+                    setErrorMessage('An error has occurred')
+                }
             })
             .finally(() => {
                 setLoading(false)
             })
-
-        if (username == 'Rich.Little') {
-            console.log('admin!')
-            localStorage.setItem('user', 'admin')
-        }
-
-        localStorage.setItem('username', String(username))
-        setNavigate(true)
-        console.log(localStorage)
-    }
-
-    if (navigate) {
-        return <Navigate to='/user' />
     }
 
     return (
