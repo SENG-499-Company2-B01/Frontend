@@ -102,7 +102,7 @@ export const ProfPreferencePage: React.FC = () => {
         const time = { F: [preferredTime], M: [preferredTime], R: [preferredTime], T: [preferredTime], W: [preferredTime] }
 
         const body = { max_courses: numberOfClasses, available: time, course_pref: selctedCourses }
-        
+
         await fetch(url, {
             method: 'PUT',
             headers: {
@@ -233,7 +233,7 @@ export const ProfPreferencePage: React.FC = () => {
                                 )}
                             </Form.List> */}
                         </Form.Item>
-                        
+
                         <Form.Item name='Course Preferences' label='Course Preferences' tooltip='Select the courses you are willing to teach' style={{ marginBottom: 20 }}>
                             <Select mode='multiple' style={{ width: '100%' }} onChange={handleChangePreferences}>
                                 {getCoursePreferencesOptions()}
