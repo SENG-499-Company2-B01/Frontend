@@ -53,7 +53,12 @@ export const goToTop = () => {
     })
 }
 
-export const NavBarProf = () => {
+interface NavBarProfProps {
+    onPreferencesPage?: boolean
+    onPreferencePageCallback?: (callback: () => void) => Promise<void>
+}
+
+export const NavBarProf = (props: NavBarProfProps) => {
     const username = localStorage.getItem('username')
     return (
         <StickyContainer>
@@ -66,7 +71,7 @@ export const NavBarProf = () => {
                         <H7>SCHEDULING PREFERENCES</H7>
                     </NavUnlisted>
                     <UserWrapper>
-                        <ProfileDropdown name={String(username).toUpperCase()} />
+                        <ProfileDropdown name={String(username).toUpperCase()} onPreferencesPage={props.onPreferencesPage} onPreferencesPageCallback={props.onPreferencePageCallback} />
                         <ProfileWrapper src={userProfile} />
                     </UserWrapper>
                 </LinkDiv>

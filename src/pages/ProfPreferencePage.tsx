@@ -57,6 +57,10 @@ export const ProfPreferencePage: React.FC = () => {
 
     const submit = async (e: SyntheticEvent) => {
         e.preventDefault()
+        submitForm()
+    }
+
+    const submitForm = async (fromCallback?: boolean) => {
         const username = localStorage.getItem('username')
 
         const url = process.env.REACT_APP_BACKEND_URL + '/users/' + username
@@ -84,7 +88,7 @@ export const ProfPreferencePage: React.FC = () => {
         console.log(body)
         console.log(numberOfClasses)
         console.log(localStorage)
-        setNavigate(true)
+        if (!fromCallback) setNavigate(true)
     }
 
     if (navigate) {
@@ -131,9 +135,14 @@ export const ProfPreferencePage: React.FC = () => {
         setNumberOfClasses(value!)
     }
 
+    const onLogoutButWantsToSave = async (callback: () => void) => {
+        await submitForm(true)
+        callback()
+    }
+
     return (
         <div>
-            <NavBarProf />
+            <NavBarProf onPreferencesPage onPreferencePageCallback={onLogoutButWantsToSave} />
             <div className='cen'>
                 <H2>Preference</H2>
                 <Form {...formItemLayout} form={form} name='ableToTeachPreference' onFinish={onFinish} style={{ maxWidth: 600 }} scrollToFirstError>
