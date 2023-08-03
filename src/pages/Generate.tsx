@@ -4,13 +4,10 @@ import { ApprovedCard, CardsWrapper, GenerateBackground, LogoWrapper, Unapproved
 import { NavBarAdmin } from '../components/navbar'
 import Check from '../assets/icons/Check_ring.png'
 import XMark from '../assets/icons/Dell.png'
-import { Form, Radio } from 'antd'
+import { Form } from 'antd'
 import { SyntheticEvent, useRef, useState } from 'react'
-import generateCalendar from 'antd/es/calendar/generateCalendar'
 import PreLoader from '../components/Loading/PreLoader'
 import DropdownMenu from '../components/atoms/term_dropdown'
-import ProfTable from './ProfTable'
-import BasicCalendar from '../components/calendar/BasicCalendar'
 import { Timetable } from './Timetable'
 
 export const Generate = () => {
