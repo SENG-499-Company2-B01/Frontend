@@ -47,12 +47,13 @@ export const Login = () => {
                 }
                 localStorage.setItem('jwt', data.token)
                 localStorage.setItem('status', 'login')
-                localStorage.setItem('user', 'prof')
                 localStorage.setItem('username', String(username))
-                // TODO: remove 'username == 'Rich.Little || ' once backend change is ready
-                if (username == 'Rich.Little' || (data.usertype && data.usertype == 'admin')) {
+                if (data.usertype && data.usertype == 'admin') {
                     console.log('admin!')
                     localStorage.setItem('user', 'admin')
+                } else {
+                    console.log('prof!')
+                    localStorage.setItem('user', 'prof')
                 }
                 navigate('/user')
             })
