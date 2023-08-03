@@ -48,7 +48,7 @@ export const Login = () => {
                 localStorage.setItem('jwt', data.token)
                 localStorage.setItem('status', 'login')
                 localStorage.setItem('username', String(username))
-                if (data.usertype && data.usertype == 'admin') {
+                if (data.usertype == 'admin') {
                     console.log('admin!')
                     localStorage.setItem('user', 'admin')
                 } else {
