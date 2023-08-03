@@ -26,7 +26,7 @@ export const Login = () => {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
-                'Content-Type': 'text/plain',
+                'Content-Type': 'application/json',
             },
             body: JSON.stringify({
                 username: username,
@@ -39,6 +39,10 @@ export const Login = () => {
             .then((data) => {
                 localStorage.setItem('jwt', data.jwt)
                 localStorage.setItem('status', 'login')
+                localStorage.setItem('user', 'prof')
+                if (data.usertype && data.usertype == 'admin') {
+                    localStorage.setItem('user', 'admin')
+                }
             })
             .catch((error) => {
                 console.log(error)
@@ -50,15 +54,11 @@ export const Login = () => {
 
         if (username == 'Rich.Little') {
             console.log('admin!')
-            localStorage.setItem('username', String(username))
             localStorage.setItem('user', 'admin')
-            setNavigate(true)
-        } else {
-            console.log('prof!')
-            localStorage.setItem('username', String(username))
-            localStorage.setItem('user', 'prof')
-            setNavigate(true)
         }
+
+        localStorage.setItem('username', String(username))
+        setNavigate(true)
         console.log(localStorage)
     }
 

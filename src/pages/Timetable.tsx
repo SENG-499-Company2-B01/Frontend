@@ -86,64 +86,43 @@ export const Timetable: React.FC = () => {
             setLoading(true)
             const term = localStorage.getItem('term')
             const year = Number(localStorage.getItem('year'))
-            console.log()
             try {
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                const response = await axios
-                    .post(
-                        `${process.env.REACT_APP_BACKEND_URL}/login`,
-                        {
-                            username: 'Rich.Little',
-                            password: 'Rich.Little12345',
+                const response = await axios.post(
+                    process.env.REACT_APP_BACKEND_URL + '/schedules/' + year + '/' + term + '/generate',
+                    {},
+                    {
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem('jwt')}`,
+                            'Content-Type': 'application/json',
                         },
-                        {
-                            headers: {
-                                Accept: 'application/json',
-                                'Content-Type': 'text/plain',
-                            },
+                    }
+                )
+                const data = response.data
+                localStorage.setItem('dat', JSON.stringify(data))
+                const parsedData = JSON.parse(localStorage.getItem('dat') || '[]')
+                const locationCoursesData: Record<string, Course[]> = {}
+                setTimetableData(parsedData.terms[0].courses)
+                setTerm(parsedData.terms[0].term)
+                setYear(parsedData.year)
+                const professorCoursesData: Record<string, string[]> = {}
+                parsedData.terms[0].courses.forEach((course: Course) => {
+                    course.sections.forEach((section: Section) => {
+                        if (professorCoursesData[section.professor]) {
+                            professorCoursesData[section.professor].push(course.course)
+                        } else {
+                            professorCoursesData[section.professor] = [course.course]
                         }
-                    )
-                    .then(async (response) => {
-                        const token = response.data.jwt
-                        localStorage.setItem('jwt', token)
-                        console.log(localStorage.getItem('jwt'))
-                        const response2 = await axios.post(
-                            process.env.REACT_APP_BACKEND_URL + '/schedules/' + year + '/' + term + '/generate',
-                            {},
-                            {
-                                headers: {
-                                    Authorization: `Bearer ${localStorage.getItem('jwt')}`,
-                                    'Content-Type': 'text/plain',
-                                },
-                            }
-                        )
-                        const data = response2.data
-                        localStorage.setItem('dat', JSON.stringify(data))
-                        const parsedData = JSON.parse(localStorage.getItem('dat') || '[]')
-                        const locationCoursesData: Record<string, Course[]> = {}
-                        setTimetableData(parsedData.terms[0].courses)
-                        setTerm(parsedData.terms[0].term)
-                        setYear(parsedData.year)
-                        const professorCoursesData: Record<string, string[]> = {}
-                        parsedData.terms[0].courses.forEach((course: Course) => {
-                            course.sections.forEach((section: Section) => {
-                                if (professorCoursesData[section.professor]) {
-                                    professorCoursesData[section.professor].push(course.course)
-                                } else {
-                                    professorCoursesData[section.professor] = [course.course]
-                                }
 
-                                if (locationCoursesData[section.building]) {
-                                    locationCoursesData[section.building].push(course)
-                                } else {
-                                    locationCoursesData[section.building] = [course]
-                                }
-                            })
-                        })
-                        setProfessorCourses(professorCoursesData)
-                        setLocationCourses(locationCoursesData)
-                        setLoading(false)
+                        if (locationCoursesData[section.building]) {
+                            locationCoursesData[section.building].push(course)
+                        } else {
+                            locationCoursesData[section.building] = [course]
+                        }
                     })
+                })
+                setProfessorCourses(professorCoursesData)
+                setLocationCourses(locationCoursesData)
+                setLoading(false)
             } catch (error) {
                 console.error('Error:', error)
             }
@@ -224,7 +203,7 @@ export const Timetable: React.FC = () => {
             const response = await axios.put(process.env.REACT_APP_BACKEND_URL + '/schedules/' + year + '/' + term, finalData, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('jwt')}`,
-                    'Content-Type': 'text/plain',
+                    'Content-Type': 'application/json',
                 },
             })
 
