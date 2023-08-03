@@ -35,14 +35,14 @@ export const Generate = () => {
                 Authorization: `Bearer ${localStorage.getItem('jwt')}`,
             },
         })
-        .then((response) => {
-            setLoading(false)
-            return response.json()
-            // return response.formData()
-        })
-        .then((data) => {
-            console.log(data)
-        })
+            .then((response) => {
+                setLoading(false)
+                return response.json()
+                // return response.formData()
+            })
+            .then((data) => {
+                console.log(data)
+            })
         setIsGenerated(true)
         scrollRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
         localStorage.setItem('generated', 'true')
