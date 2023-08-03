@@ -1,13 +1,8 @@
-import { BlackButton } from '../components/atoms/button'
-import { H1, H2 } from '../components/atoms/typography'
+import { H1 } from '../components/atoms/typography'
 import 'bootstrap/dist/css/bootstrap.css'
 import '../components/Homepage/homepage.css'
-import { goToTop, NavBarProf } from '../components/navbar'
 import { useEffect, useState } from 'react'
-import { SimpleLink } from '../components/atoms/navLink'
-import { ProfessorHowTo } from './HowTo'
 import axios from 'axios'
-import PreLoader from '../components/Loading/PreLoader'
 import './proftimetable.css'
 import './profst.css'
 
@@ -72,65 +67,69 @@ interface Course {
 }
 export const Profsched = () => {
     const [loading, setLoading] = useState<boolean>(false)
-    // const [professor, setProfessor] = useState('Issa Traore')
-    const [courses, setCourses] = useState<Course[]>([])
     const [schedule, setSchedule] = useState(emptySchedule)
+    const [data, setData] = useState([] as any[])
+    const [year, setYear] = useState(2023)
+    const [semester, setSemester] = useState('fall')
 
     useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true)
-            try {
-                const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/schedules/prev`, {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('jwt')}`,
-                        'Content-Type': 'application/json',
-                    },
-                })
-                const data = response.data
-                localStorage.setItem('dat', JSON.stringify(data))
-                const parsedData_old = JSON.parse(localStorage.getItem('dat') || '[]')
-                const professorSchedule: Schedule = { ...emptySchedule }
-                const parsedData = parsedData_old[parsedData_old.length - 1]
-                console.log(parsedData)
-                parsedData.terms[0].courses.forEach((course: Course) => {
-                    course.sections.forEach((section: Section) => {
-                        if (section.professor === localStorage.getItem('username')?.replace('.', ' ')) {
-                            console.log('HERE')
-                            const startHour = parseInt(convertTime12to24(section.start_time).split(':')[0])
-                            const endHour = parseInt(convertTime12to24(section.end_time).split(':')[0])
-
-                            section.days.forEach((day) => {
-                                const dayMap: { [key: string]: string } = {
-                                    M: 'Monday',
-                                    T: 'Tuesday',
-                                    W: 'Wednesday',
-                                    R: 'Thursday',
-                                    F: 'Friday',
-                                }
-                                const dayCapitalized = dayMap[day]
-                                for (let hour = startHour; hour < endHour; hour++) {
-                                    if (!professorSchedule[dayCapitalized]) {
-                                        professorSchedule[dayCapitalized] = {}
-                                    }
-
-                                    professorSchedule[dayCapitalized][hour.toString()] = course.course
-                                }
-                            })
-                        }
-                    })
-                })
-
-                setCourses(parsedData.terms[0].courses)
-                setSchedule(professorSchedule)
-                console.log(professorSchedule)
-                setLoading(false)
-            } catch (error) {
-                console.error('Error:', error)
-            }
-        }
-
         fetchData()
     }, [])
+
+    const fetchData = async () => {
+        setLoading(true)
+
+        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/schedules/prev`, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('jwt')}`,
+                'Content-Type': 'application/json',
+            },
+        })
+        const responseData = response.data
+        console.log(responseData)
+        setData(responseData)
+        setLoading(false)
+    }
+
+    useEffect(() => {
+        parseSchedule()
+    }, [data, year, semester])
+
+    const parseSchedule = () => {
+        const scheduleYear = data.find((sched: any) => sched.year === year)
+        const scheduleTerm = scheduleYear.terms.find((term: any) => term.term === semester)
+
+        const professorSchedule: Schedule = { ...emptySchedule }
+        scheduleTerm.courses.forEach((course: Course) => {
+            course.sections.forEach((section: Section) => {
+                if (section.professor === localStorage.getItem('username')?.replace('.', ' ')) {
+                    const startHour = parseInt(convertTime12to24(section.start_time).split(':')[0])
+                    const endHour = parseInt(convertTime12to24(section.end_time).split(':')[0])
+
+                    section.days.forEach((day) => {
+                        const dayMap: { [key: string]: string } = {
+                            M: 'Monday',
+                            T: 'Tuesday',
+                            W: 'Wednesday',
+                            R: 'Thursday',
+                            F: 'Friday',
+                        }
+                        const dayCapitalized = dayMap[day]
+                        for (let hour = startHour; hour < endHour; hour++) {
+                            if (!professorSchedule[dayCapitalized]) {
+                                professorSchedule[dayCapitalized] = {}
+                            }
+
+                            professorSchedule[dayCapitalized][hour.toString()] = course.course
+                        }
+                    })
+                }
+            })
+        })
+
+        setSchedule(professorSchedule)
+        console.log(professorSchedule)
+    }
 
     return (
         <div>
