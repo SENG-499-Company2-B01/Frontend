@@ -59,15 +59,15 @@ export const ProfProfilePage: React.FC = () => {
                     <div className='item'>
                         <H3>Availability: </H3>
                         <H4>
-                            M: {user.available.M && user.available.M.join(' - ')}
+                            M: {user.available.M && user.available.M.map((strlist) => strlist.join(' - ')).join(', ')}
                             <br />
-                            T: {user.available.T && user.available.T.join(' - ')}
+                            T: {user.available.T && user.available.T.map((strlist) => strlist.join(' - ')).join(', ')}
                             <br />
-                            W: {user.available.W && user.available.W.join(' - ')}
+                            W: {user.available.W && user.available.W.map((strlist) => strlist.join(' - ')).join(', ')}
                             <br />
-                            R: {user.available.R && user.available.R.join(' - ')}
+                            R: {user.available.R && user.available.R.map((strlist) => strlist.join(' - ')).join(', ')}
                             <br />
-                            F: {user.available.F && user.available.F.join(' - ')}
+                            F: {user.available.F && user.available.F.map((strlist) => strlist.join(' - ')).join(', ')}
                         </H4>
                     </div>
                 )}

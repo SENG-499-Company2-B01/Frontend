@@ -9,11 +9,11 @@ export interface IProfessor {
 }
 
 export interface available {
-    M: string[]
-    T: string[]
-    W: string[]
-    R: string[]
-    F: string[]
+    M: string[][]
+    T: string[][]
+    W: string[][]
+    R: string[][]
+    F: string[][]
 }
 
 export const dummyList: IProfessor[] = [
@@ -21,7 +21,7 @@ export const dummyList: IProfessor[] = [
         username: 'Bill Bird',
         email: 'bill@bord.com',
         peng: true,
-        available: { F: ['', ''], M: ['', ''], R: ['', ''], T: ['', ''], W: ['', ''] },
+        available: { F: [['', '']], M: [['', '']], R: [['', '']], T: [['', '']], W: [['', '']] },
         max_courses: 0,
         course_pref: ['CSC111'],
         prev_approved: false,
