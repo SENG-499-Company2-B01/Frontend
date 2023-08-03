@@ -80,33 +80,13 @@ export const Profsched = () => {
         const fetchData = async () => {
             setLoading(true)
             try {
-                const response = await axios.post(
-                    `${process.env.REACT_APP_BACKEND_URL}/login`,
-                    {
-                        username: 'Rich.Little',
-                        password: 'Rich.Little12345',
-                    },
-                    {
-                        headers: {
-                            Accept: 'application/json',
-                            'Content-Type': 'text/plain',
-                        },
-                    }
-                )
-
-                const token = response.data.jwt
-                localStorage.setItem('jwt', token)
-                const term = localStorage.getItem('term')
-                const year = Number(localStorage.getItem('year'))
-                console.log(year)
-                console.log(term)
-                const response2 = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/schedules/prev`, {
+                const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/schedules/prev`, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('jwt')}`,
-                        'Content-Type': 'text/plain',
+                        'Content-Type': 'application/json',
                     },
                 })
-                const data = response2.data
+                const data = response.data
                 localStorage.setItem('dat', JSON.stringify(data))
                 const parsedData_old = JSON.parse(localStorage.getItem('dat') || '[]')
                 const professorSchedule: Schedule = { ...emptySchedule }

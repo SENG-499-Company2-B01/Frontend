@@ -69,7 +69,7 @@ export const ProfPreferencePage: React.FC = () => {
             method: 'PUT',
             headers: {
                 Accept: 'application/json',
-                'Content-Type': 'text/plain',
+                'Content-Type': 'application/json',
                 Authorization: 'Bearer ' + localStorage.getItem('jwt'),
             },
             body: JSON.stringify(body),

@@ -46,9 +46,6 @@ export const Generate = () => {
         setIsGenerated(true)
         scrollRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
         localStorage.setItem('generated', 'true')
-        // .then((data) => {
-        //     console.log(data)
-        // })
     }
 
     const approveSchedule = async (e: SyntheticEvent) => {

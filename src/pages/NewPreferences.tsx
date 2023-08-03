@@ -15,35 +15,16 @@ export const NewPreferences: React.FC = () => {
             setLoading(true)
             try {
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                const response = await axios
-                    .post(
-                        process.env.REACT_APP_BACKEND_URL + '/login',
-                        {
-                            username: 'Rich.Little',
-                            password: 'Rich.Little12345',
-                        },
-                        {
-                            headers: {
-                                Accept: 'application/json',
-                                'Content-Type': 'text/plain',
-                            },
-                        }
-                    )
-                    .then(async (response) => {
-                        const token = response.data.jwt
-                        localStorage.setItem('jwt', token)
-                        console.log(localStorage.getItem('jwt'))
-                        const response_1 = await axios.get(process.env.REACT_APP_BACKEND_URL + '/users', {
-                            headers: {
-                                // Accept: 'application/json',
-                                'Content-Type': 'text/plain',
-                                Authorization: `Bearer ${token}`,
-                            },
-                        })
-                        const data = response_1.data
-                        localStorage.setItem('dat', JSON.stringify(data))
-                        setLoading(false)
-                    })
+                const response_1 = await axios.get(process.env.REACT_APP_BACKEND_URL + '/users', {
+                    headers: {
+                        // Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${localStorage.getItem('jwt')}`,
+                    },
+                })
+                const data = response_1.data
+                localStorage.setItem('dat', JSON.stringify(data))
+                setLoading(false)
             } catch (error) {
                 console.error('Error:', error)
             }
