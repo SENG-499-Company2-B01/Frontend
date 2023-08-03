@@ -4,12 +4,12 @@ import '../components/Homepage/homepage.css'
 import { NavBarProf } from '../components/navbar'
 
 import { Button, Checkbox, Col, Form, Input, InputNumber, Row, Radio, Space, TimePicker } from 'antd'
-import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
-import { Navigate } from 'react-router-dom'
-import React, { SyntheticEvent, useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import React, { SyntheticEvent, useEffect, useState } from 'react'
 import type { Dayjs } from 'dayjs'
 import { RangeValue } from 'rc-picker/lib/interface'
 import type { CheckboxChangeEvent } from 'antd/es/checkbox'
+import { IProfessor } from './Professor.type'
 
 const formItemLayout = {
     labelCol: {
@@ -38,6 +38,8 @@ const tailFormItemLayout = {
 export const ProfPreferencePage: React.FC = () => {
     const { RangePicker } = TimePicker
 
+    const navigate = useNavigate()
+
     const [form] = Form.useForm()
 
     const onFinish = (values: any) => {
@@ -53,7 +55,43 @@ export const ProfPreferencePage: React.FC = () => {
     const [preferredTime, setPreferredTime] = useState(['', ''])
     const [numberOfClasses, setNumberOfClasses] = useState(0)
     const [classFormat, setClassFormat] = useState(initialValue)
-    const [navigate, setNavigate] = useState(false)
+    const [user, setUser] = useState({} as IProfessor)
+
+    useEffect(() => {
+        fetchPreferences()
+    }, [])
+
+    const fetchPreferences = async () => {
+        const url = process.env.REACT_APP_BACKEND_URL + '/users/' + localStorage.getItem('username')
+        await fetch(url, {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                Authorization: 'Bearer ' + localStorage.getItem('jwt'),
+            },
+        })
+            .then((response) => {
+                return response.json()
+            })
+            .then((data) => {
+                console.log(data)
+                setUser(data)
+            })
+    }
+
+    useEffect(() => {
+        console.log(user)
+        if (user) {
+            setNumberOfClasses(user.max_courses)
+            setPreferredTime(user.available.F[0])
+            /*
+            setAbleToTeach(user.able_to_teach)
+            setReason(user.reason)
+            setPreferredTime(user.preferred_time)
+            setNumberOfClasses(user.number_of_classes)
+            */
+        }
+    }, [user])
 
     const submit = async (e: SyntheticEvent) => {
         e.preventDefault()
@@ -88,11 +126,7 @@ export const ProfPreferencePage: React.FC = () => {
         console.log(body)
         console.log(numberOfClasses)
         console.log(localStorage)
-        if (!fromCallback) setNavigate(true)
-    }
-
-    if (navigate) {
-        return <Navigate to='/user' />
+        if (!fromCallback) navigate('/user')
     }
 
     const onAbleToTeach = (checked: boolean, value: string) => {
@@ -138,6 +172,10 @@ export const ProfPreferencePage: React.FC = () => {
     const onLogoutButWantsToSave = async (callback: () => void) => {
         await submitForm(true)
         callback()
+    }
+
+    const onCancelButton = () => {
+        navigate('/user')
     }
 
     return (
@@ -206,7 +244,7 @@ export const ProfPreferencePage: React.FC = () => {
                         </Form.Item>
 
                         <Form.Item name='numberOfClasses' label='Number of Classes' tooltip='Input number of classes.' style={{ marginBottom: 20 }}>
-                            <InputNumber min={0} max={3} defaultValue={0} onChange={onChangeNumberOfClasses} />
+                            <InputNumber min={0} max={6} defaultValue={0} onChange={onChangeNumberOfClasses} />
                         </Form.Item>
 
                         <Form.Item name='Class Format' label='Class Format' tooltip='Select one or more preferred class formats' style={{ marginBottom: 20 }}>
@@ -237,7 +275,7 @@ export const ProfPreferencePage: React.FC = () => {
                             </Button>
                         </div>
                         <div style={{ width: '200px', display: 'flex', flexDirection: 'row', justifyContent: 'center', marginBottom: 20 }}>
-                            <Button type='primary' htmlType='button' style={{ marginRight: 200, backgroundColor: '#2c2a2a', color: '#ffffff', borderRadius: 32 }}>
+                            <Button type='primary' htmlType='button' style={{ marginRight: 200, backgroundColor: '#2c2a2a', color: '#ffffff', borderRadius: 32 }} onClick={() => onCancelButton()}>
                                 CANCEL
                             </Button>
                             <Button type='primary' htmlType='submit' style={{ backgroundColor: '#2c2a2a', color: '#ffffff', borderRadius: 32 }} onClick={submit}>
