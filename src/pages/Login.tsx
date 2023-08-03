@@ -40,18 +40,18 @@ export const Login = () => {
                 password: password,
             }),
         })
-            .then((response) => {
-                setLoading(false)
-                return response.json()
-            })
-            .then((data) => {
-                localStorage.setItem('jwt', data.jwt)
-                localStorage.setItem('status', 'login')
-                localStorage.setItem('user', 'prof')
-                if (data.usertype && data.usertype == 'admin') {
-                    localStorage.setItem('user', 'admin')
-                }
-            })
+        .then((response) => {
+            setLoading(false)
+            return response.json()
+        })
+        .then((data) => {
+            localStorage.setItem('jwt', data.jwt)
+            localStorage.setItem('status', 'login')
+            localStorage.setItem('user', 'prof')
+            if (data.usertype && data.usertype == 'admin') {
+                localStorage.setItem('user', 'admin')
+            }
+        })
 
         if (username == 'Rich.Little') {
             console.log('admin!')
