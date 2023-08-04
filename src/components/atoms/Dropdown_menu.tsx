@@ -125,7 +125,7 @@ export const ProfileDropdown = (props: ProfileDropdownProps) => {
             <Modal title='Confirm Logout' open={confirmLogoutOpen} onOk={handleConfirmLogout} onCancel={() => setConfirmLogoutOpen(false)} okText='Logout'>
                 <p>Are you sure you want to logout?</p>
             </Modal>
-            <Modal title='Save Preferences' open={secondConfirmationOpen} onOk={handleSecondConfirmation} onCancel={() => setSecondConfirmationOpen(false)} cancelText='Logout' okText='Save and Logout'>
+            <Modal title='Save Preferences' open={secondConfirmationOpen} onOk={handleSecondConfirmation} onCancel={() => logout()} cancelText='Logout' okText='Save and Logout'>
                 <p>Would you like to save your in progress preferences?</p>
             </Modal>
             <ProfileButton onClick={toggleDropdown}>{name}</ProfileButton>

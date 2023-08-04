@@ -3,13 +3,14 @@ import 'bootstrap/dist/css/bootstrap.css'
 import '../components/Homepage/homepage.css'
 import { NavBarProf } from '../components/navbar'
 
+import { useNavigate } from 'react-router-dom'
 import { Button, Checkbox, Col, Form, Input, InputNumber, Row, Radio, Space, TimePicker, Select } from 'antd'
-import { Navigate } from 'react-router-dom'
 import React, { SyntheticEvent, useEffect, useState } from 'react'
 import type { Dayjs } from 'dayjs'
+import dayjs from 'dayjs'
 import { RangeValue } from 'rc-picker/lib/interface'
 import type { CheckboxChangeEvent } from 'antd/es/checkbox'
-import { available } from './Professor.type'
+import { IProfessor, available } from './Professor.type'
 
 const { Option } = Select
 
@@ -40,6 +41,8 @@ const tailFormItemLayout = {
 export const ProfPreferencePage: React.FC = () => {
     const { RangePicker } = TimePicker
 
+    const navigate = useNavigate()
+
     const [form] = Form.useForm()
 
     const onFinish = (values: any) => {
@@ -52,32 +55,60 @@ export const ProfPreferencePage: React.FC = () => {
     const [semester, setSemester] = useState('Fall')
     const [ableToTeach, setAbleToTeach] = useState((!formDisabled).toString())
     const [reason, setReason] = useState('')
-    const [preferredTime, setPreferredTime] = useState(['', ''])
+    const [timeRange, setTimeRange] = useState<[Dayjs, Dayjs]>([dayjs('', 'HH:mm'), dayjs('', 'HH:mm')])
     const [numberOfClasses, setNumberOfClasses] = useState(0)
     const [classFormat, setClassFormat] = useState(initialValue)
-    const [navigate, setNavigate] = useState(false)
     const [courses, setCourses] = useState([])
     const [selctedCourses, setSelectedCourses] = useState([] as string[])
+    const [user, setUser] = useState({} as IProfessor)
 
     useEffect(() => {
-        const fetchCourses = async () => {
-            const url = process.env.REACT_APP_BACKEND_URL + '/courses'
-            await fetch(url, {
-                method: 'GET',
-                headers: {
-                    Accept: 'application/json',
-                    Authorization: 'Bearer ' + localStorage.getItem('jwt'),
-                },
-            })
-                .then((response) => {
-                    return response.json()
-                })
-                .then((data) => {
-                    setCourses(data)
-                })
-        }
+        fetchPreferences()
         fetchCourses()
     }, [])
+
+    const fetchPreferences = async () => {
+        const url = process.env.REACT_APP_BACKEND_URL + '/users/' + localStorage.getItem('username')
+        await fetch(url, {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                Authorization: 'Bearer ' + localStorage.getItem('jwt'),
+            },
+        })
+            .then((response) => {
+                return response.json()
+            })
+            .then((data) => {
+                setUser(data)
+            })
+    }
+
+    const fetchCourses = async () => {
+        const url = process.env.REACT_APP_BACKEND_URL + '/courses'
+        await fetch(url, {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                Authorization: 'Bearer ' + localStorage.getItem('jwt'),
+            },
+        })
+            .then((response) => {
+                return response.json()
+            })
+            .then((data) => {
+                setCourses(data)
+            })
+    }
+
+    useEffect(() => {
+        if (user) {
+            console.log(user)
+            setNumberOfClasses(user.max_courses)
+            if (user.available) setTimeRange([dayjs(user.available.F[0][0], 'HH:mm'), dayjs(user.available.F[0][1], 'HH:mm')])
+            setSelectedCourses(user.course_pref)
+        }
+    }, [user])
 
     const getCoursePreferencesOptions = () => {
         return courses.map((course: any) => {
@@ -103,6 +134,7 @@ export const ProfPreferencePage: React.FC = () => {
 
         const url = process.env.REACT_APP_BACKEND_URL + '/users/' + username
 
+        const preferredTime = [timeRange[0].format('HH:mm'), timeRange[1].format('HH:mm')]
         const time = { F: [preferredTime], M: [preferredTime], R: [preferredTime], T: [preferredTime], W: [preferredTime] } as available
 
         const body = { max_courses: numberOfClasses, available: time, course_pref: selctedCourses }
@@ -126,11 +158,7 @@ export const ProfPreferencePage: React.FC = () => {
         console.log(body)
         console.log(numberOfClasses)
         console.log(localStorage)
-        if (!fromCallback) setNavigate(true)
-    }
-
-    if (navigate) {
-        return <Navigate to='/user' />
+        if (!fromCallback) navigate('/user') // Don't navigate if called from logout callback
     }
 
     const onAbleToTeach = (checked: boolean, value: string) => {
@@ -144,13 +172,12 @@ export const ProfPreferencePage: React.FC = () => {
         setAbleToTeach(value)
     }
 
-    const onSelectTime = (values: RangeValue<Dayjs>, formatString: [string, string]) => {
-        setPreferredTime(formatString)
-    }
-
-    const onSelectNewTime = (values: RangeValue<Dayjs>, formatString: [string, string]) => {
-        console.log(formatString)
-        // preferredTime.push({ id: 0, value: formatString })
+    const onChangeRangePicker = (values: RangeValue<Dayjs>, formatString: [string, string]) => {
+        if (values) {
+            setTimeRange([values[0] ?? dayjs(), values[1] ?? dayjs()])
+        } else {
+            setTimeRange([dayjs(), dayjs()])
+        }
     }
 
     const onDeleteTime = (values: RangeValue<Dayjs>, formatString: [string, string]) => {
@@ -178,6 +205,10 @@ export const ProfPreferencePage: React.FC = () => {
         callback()
     }
 
+    const onCancelButton = () => {
+        navigate('/user')
+    }
+
     return (
         <div>
             <NavBarProf onPreferencesPage onPreferencePageCallback={onLogoutButWantsToSave} />
@@ -189,8 +220,8 @@ export const ProfPreferencePage: React.FC = () => {
                             <Radio.Button value='Fall' onChange={(e: any) => setSemester(e.target.value)}>
                                 Fall
                             </Radio.Button>
-                            <Radio.Button value='Winter' onChange={(e: any) => setSemester(e.target.value)}>
-                                Winter
+                            <Radio.Button value='Spring' onChange={(e: any) => setSemester(e.target.value)}>
+                                Spring
                             </Radio.Button>
                             <Radio.Button value='Summer' onChange={(e: any) => setSemester(e.target.value)}>
                                 Summer
@@ -215,7 +246,7 @@ export const ProfPreferencePage: React.FC = () => {
                     <Form {...formItemLayout} form={form} name='preference' onFinish={onFinish} style={{ maxWidth: 600 }} scrollToFirstError disabled={formDisabled}>
                         <Form.Item name='Preferred Time' label='Preferred Time' tooltip='Input preferred time.' style={{ marginBottom: 20 }}>
                             <Space align='baseline' direction='vertical' size={12} style={{ marginBottom: 10 }}>
-                                <RangePicker format='HH:mm' onChange={onSelectTime} />
+                                <RangePicker format='HH:mm' onChange={onChangeRangePicker} value={timeRange} />
                             </Space>
                             {/* <Form.List name='Added Preferred Time'>
                                 {(fields, { add, remove }) => (
@@ -243,14 +274,14 @@ export const ProfPreferencePage: React.FC = () => {
                             </Form.List> */}
                         </Form.Item>
 
-                        <Form.Item name='Course Preferences' label='Course Preferences' tooltip='Select the courses you are willing to teach' style={{ marginBottom: 20 }}>
-                            <Select mode='multiple' style={{ width: '100%' }} onChange={handleChangePreferences}>
+                        <Form.Item label='Course Preferences' tooltip='Select the courses you are willing to teach' style={{ marginBottom: 20 }}>
+                            <Select mode='multiple' style={{ width: '100%' }} onChange={handleChangePreferences} value={selctedCourses}>
                                 {getCoursePreferencesOptions()}
                             </Select>
                         </Form.Item>
 
-                        <Form.Item name='numberOfClasses' label='Number of Classes' tooltip='Input number of classes.' style={{ marginBottom: 20 }}>
-                            <InputNumber min={0} max={999} defaultValue={0} onChange={onChangeNumberOfClasses} />
+                        <Form.Item label='Number of Classes' tooltip='Input number of classes.' style={{ marginBottom: 20 }}>
+                            <InputNumber min={0} max={6} value={numberOfClasses} onChange={onChangeNumberOfClasses} />
                         </Form.Item>
 
                         <Form.Item name='Class Format' label='Class Format' tooltip='Select one or more preferred class formats' style={{ marginBottom: 20 }}>
@@ -281,7 +312,7 @@ export const ProfPreferencePage: React.FC = () => {
                             </Button>
                         </div>
                         <div style={{ width: '200px', display: 'flex', flexDirection: 'row', justifyContent: 'center', marginBottom: 20 }}>
-                            <Button type='primary' htmlType='button' style={{ marginRight: 200, backgroundColor: '#2c2a2a', color: '#ffffff', borderRadius: 32 }}>
+                            <Button type='primary' htmlType='button' style={{ marginRight: 200, backgroundColor: '#2c2a2a', color: '#ffffff', borderRadius: 32 }} onClick={() => onCancelButton()}>
                                 CANCEL
                             </Button>
                             <Button type='primary' htmlType='submit' style={{ backgroundColor: '#2c2a2a', color: '#ffffff', borderRadius: 32 }} onClick={submit}>
