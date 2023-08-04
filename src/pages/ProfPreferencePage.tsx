@@ -10,6 +10,7 @@ import React, { SyntheticEvent, useState, useEffect } from 'react'
 import type { Dayjs } from 'dayjs'
 import { RangeValue } from 'rc-picker/lib/interface'
 import type { CheckboxChangeEvent } from 'antd/es/checkbox'
+import { available } from './Professor.type'
 
 const formItemLayout = {
     labelCol: {
@@ -65,7 +66,7 @@ export const ProfPreferencePage: React.FC = () => {
 
         const url = process.env.REACT_APP_BACKEND_URL + '/users/' + username
 
-        const time = { F: [preferredTime], M: [preferredTime], R: [preferredTime], T: [preferredTime], W: [preferredTime] }
+        const time = { F: [preferredTime], M: [preferredTime], R: [preferredTime], T: [preferredTime], W: [preferredTime] } as available
 
         const body = { max_courses: numberOfClasses, available: time }
 
