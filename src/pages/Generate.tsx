@@ -4,21 +4,50 @@ import { ApprovedCard, CardsWrapper, GenerateBackground, LogoWrapper, Unapproved
 import { NavBarAdmin } from '../components/navbar'
 import Check from '../assets/icons/Check_ring.png'
 import XMark from '../assets/icons/Dell.png'
-import { Form, Radio } from 'antd'
-import { SyntheticEvent, useRef, useState } from 'react'
-import generateCalendar from 'antd/es/calendar/generateCalendar'
+import { Form } from 'antd'
+import { SyntheticEvent, useEffect, useRef, useState } from 'react'
 import PreLoader from '../components/Loading/PreLoader'
 import DropdownMenu from '../components/atoms/term_dropdown'
-import ProfTable from './ProfTable'
-import BasicCalendar from '../components/calendar/BasicCalendar'
 import { Timetable } from './Timetable'
+import { IProfessor } from './Professor.type'
 
 export const Generate = () => {
     const [form] = Form.useForm()
     const [loading, setLoading] = useState(false)
     const [isGenerated, setIsGenerated] = useState(false)
+    const [users, setUsers] = useState([] as IProfessor[])
+    const [approvedSchedules, setApprovedSchedules] = useState(0)
+    const [unapprovedSchedules, setUnapprovedSchedules] = useState(0)
     const scrollRef = useRef<any>()
-    // console.log(localStorage.getItem('jwt'))
+
+    useEffect(() => {
+        getUsers()
+    }, [])
+
+    const getUsers = async () => {
+        const url = process.env.REACT_APP_BACKEND_URL + '/users'
+        await fetch(url, {
+            method: 'GET',
+            headers: {
+                // Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${localStorage.getItem('jwt')}`,
+            },
+        })
+            .then((response) => {
+                return response.json()
+            })
+            .then((data) => {
+                setUsers(data)
+            })
+    }
+
+    useEffect(() => {
+        const approved = users.filter((user) => user.pref_approved === true)
+        const unapproved = users.filter((user) => user.pref_approved === false)
+        setApprovedSchedules(approved.length)
+        setUnapprovedSchedules(unapproved.length)
+    }, [users])
 
     const createSchedule = async (e: SyntheticEvent) => {
         e.preventDefault()
@@ -61,12 +90,12 @@ export const Generate = () => {
                 <CardsWrapper>
                     <ApprovedCard>
                         <LogoWrapper src={Check} />
-                        <H2>17</H2>
+                        <H2>{approvedSchedules}</H2>
                         <H3>Approved preferences</H3>
                     </ApprovedCard>
                     <UnapprovedCard>
                         <LogoWrapper src={XMark} />
-                        <H2>2</H2>
+                        <H2>{unapprovedSchedules}</H2>
                         <H3>Unapproved preferences</H3>
                     </UnapprovedCard>
                 </CardsWrapper>
