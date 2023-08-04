@@ -82,9 +82,8 @@ export const ProfPreferencePage: React.FC = () => {
     const getCoursePreferencesOptions = () => {
         return courses.map((course: any) => {
             return (
-                // TODO: When backend is ready, change shorthand to course
-                <Option key={course.shorthand} value={course.shorthand}>
-                    {course.shorthand}
+                <Option key={course.course} value={course.course}>
+                    {course.course}
                 </Option>
             )
         })
