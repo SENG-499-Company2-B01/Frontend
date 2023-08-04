@@ -1,10 +1,12 @@
-import { H1 } from '../components/atoms/typography'
+import { H1, H3 } from '../components/atoms/typography'
 import 'bootstrap/dist/css/bootstrap.css'
 import '../components/Homepage/homepage.css'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import './proftimetable.css'
 import './profst.css'
+import { Select } from 'antd'
+const { Option } = Select
 
 const convertTime12to24 = (time12h: string): string => {
     const [time, modifier] = time12h.split(' ')
@@ -39,6 +41,7 @@ const emptySchedule: Schedule = {
     Saturday: {},
     Sunday: {},
 }
+const emptyScheduleJSON = JSON.stringify(emptySchedule)
 
 for (let hour = 7; hour <= 15; hour++) {
     emptySchedule.Monday[hour.toString()] = ''
@@ -51,6 +54,9 @@ for (let hour = 7; hour <= 15; hour++) {
 }
 
 const days = ['M', 'T', 'W', 'R', 'F']
+const years = ['2023', '2024', '2025', '2026']
+const terms = ['fall', 'spring', 'summer']
+
 interface Section {
     num: string
     professor: string
@@ -86,8 +92,7 @@ export const Profsched = () => {
             },
         })
         const responseData = response.data
-        console.log(responseData)
-        setData(responseData)
+        if (responseData) setData(responseData)
         setLoading(false)
     }
 
@@ -96,13 +101,28 @@ export const Profsched = () => {
     }, [data, year, semester])
 
     const parseSchedule = () => {
-        const scheduleYear = data.find((sched: any) => sched.year === year)
-        const scheduleTerm = scheduleYear.terms.find((term: any) => term.term === semester)
+        // Start by setting schedule to empty. If there are courses for this professor in the selected semester, the schedule will be updated
+        const professorSchedule: Schedule = JSON.parse(emptyScheduleJSON)
+        setSchedule(professorSchedule)
 
-        const professorSchedule: Schedule = { ...emptySchedule }
+        // The correct code is below but since the backend is broken the code below comment is required
+        /*
+        const scheduleYear = data.find((sched: any) => sched.year === year)
+        if (!scheduleYear) return
+        const scheduleTerm = scheduleYear.terms.find((term: any) => term.term === semester)
+        if (!scheduleTerm) return
+        */
+        const scheduleYears = data.filter((sched: any) => sched.year === year)
+        if (scheduleYears.length === 0) return
+        const filteredYears = scheduleYears.filter((year: any) => year.terms.find((term: any) => term.term === semester))
+        if (filteredYears.length === 0) return
+        const scheduleTerm = filteredYears[filteredYears.length - 1].terms.find((term: any) => term.term === semester)
+
+        const profName = localStorage.getItem('username')?.replace('.', ' ')
         scheduleTerm.courses.forEach((course: Course) => {
-            course.sections.forEach((section: Section) => {
-                if (section.professor === localStorage.getItem('username')?.replace('.', ' ')) {
+            course.sections
+                .filter((section) => section.professor === profName)
+                .forEach((section: Section) => {
                     const startHour = parseInt(convertTime12to24(section.start_time).split(':')[0])
                     const endHour = parseInt(convertTime12to24(section.end_time).split(':')[0])
 
@@ -116,15 +136,10 @@ export const Profsched = () => {
                         }
                         const dayCapitalized = dayMap[day]
                         for (let hour = startHour; hour < endHour; hour++) {
-                            if (!professorSchedule[dayCapitalized]) {
-                                professorSchedule[dayCapitalized] = {}
-                            }
-
                             professorSchedule[dayCapitalized][hour.toString()] = course.course
                         }
                     })
-                }
-            })
+                })
         })
 
         setSchedule(professorSchedule)
@@ -139,13 +154,24 @@ export const Profsched = () => {
                 </div>
             ) : (
                 <div>
-                    <div className='Headi'>
-                        <div>
-                            <h2>
-                                {`Term: ${localStorage.getItem('term') ?? ''}`}
-                                <br />
-                                {`Year: ${localStorage.getItem('year') || '2023'}`}
-                            </h2>
+                    <div className='Headi' style={{ paddingTop: '15px', paddingBottom: '20px' }}>
+                        <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                            <H3>Term:</H3>
+                            <Select defaultValue={semester} style={{ width: 120, marginLeft: '8px', marginRight: '20px' }} onChange={(value) => setSemester(value)}>
+                                {terms.map((term) => (
+                                    <Option key={term} value={term}>
+                                        {term}
+                                    </Option>
+                                ))}
+                            </Select>
+                            <H3>Year:</H3>
+                            <Select defaultValue={year.toString()} style={{ width: 120, marginLeft: '8px' }} onChange={(value) => setYear(parseInt(value))}>
+                                {years.map((year) => (
+                                    <Option key={year} value={year}>
+                                        {year}
+                                    </Option>
+                                ))}
+                            </Select>
                         </div>
                     </div>
                     <div className='tab'>
