@@ -3,6 +3,7 @@ export interface IProfessor {
     email: string
     peng: boolean
     available: available
+    pref_approved: boolean
     max_courses: number
     course_pref: string[]
     prev_approved: boolean
@@ -22,6 +23,7 @@ export const dummyList: IProfessor[] = [
         email: 'bill@bord.com',
         peng: true,
         available: { F: [['', '']], M: [['', '']], R: [['', '']], T: [['', '']], W: [['', '']] },
+        pref_approved: false,
         max_courses: 0,
         course_pref: ['CSC111'],
         prev_approved: false,
