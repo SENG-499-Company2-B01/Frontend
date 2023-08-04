@@ -1,15 +1,12 @@
-import { BlackButton } from '../components/atoms/button'
-import { H1, H2 } from '../components/atoms/typography'
+import { H1, H3 } from '../components/atoms/typography'
 import 'bootstrap/dist/css/bootstrap.css'
 import '../components/Homepage/homepage.css'
-import { goToTop, NavBarProf } from '../components/navbar'
 import { useEffect, useState } from 'react'
-import { SimpleLink } from '../components/atoms/navLink'
-import { ProfessorHowTo } from './HowTo'
 import axios from 'axios'
-import PreLoader from '../components/Loading/PreLoader'
 import './proftimetable.css'
 import './profst.css'
+import { Select } from 'antd'
+const { Option } = Select
 
 const convertTime12to24 = (time12h: string): string => {
     const [time, modifier] = time12h.split(' ')
@@ -44,6 +41,7 @@ const emptySchedule: Schedule = {
     Saturday: {},
     Sunday: {},
 }
+const emptyScheduleJSON = JSON.stringify(emptySchedule)
 
 for (let hour = 7; hour <= 15; hour++) {
     emptySchedule.Monday[hour.toString()] = ''
@@ -56,6 +54,9 @@ for (let hour = 7; hour <= 15; hour++) {
 }
 
 const days = ['M', 'T', 'W', 'R', 'F']
+const years = ['2023', '2024', '2025', '2026']
+const terms = ['fall', 'spring', 'summer']
+
 interface Section {
     num: string
     professor: string
@@ -72,65 +73,78 @@ interface Course {
 }
 export const Profsched = () => {
     const [loading, setLoading] = useState<boolean>(false)
-    // const [professor, setProfessor] = useState('Issa Traore')
-    const [courses, setCourses] = useState<Course[]>([])
     const [schedule, setSchedule] = useState(emptySchedule)
+    const [data, setData] = useState([] as any[])
+    const [year, setYear] = useState(2023)
+    const [semester, setSemester] = useState('fall')
 
     useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true)
-            try {
-                const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/schedules/prev`, {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('jwt')}`,
-                        'Content-Type': 'application/json',
-                    },
-                })
-                const data = response.data
-                localStorage.setItem('dat', JSON.stringify(data))
-                const parsedData_old = JSON.parse(localStorage.getItem('dat') || '[]')
-                const professorSchedule: Schedule = { ...emptySchedule }
-                const parsedData = parsedData_old[parsedData_old.length - 1]
-                console.log(parsedData)
-                parsedData.terms[0].courses.forEach((course: Course) => {
-                    course.sections.forEach((section: Section) => {
-                        if (section.professor === localStorage.getItem('username')?.replace('.', ' ')) {
-                            console.log('HERE')
-                            const startHour = parseInt(convertTime12to24(section.start_time).split(':')[0])
-                            const endHour = parseInt(convertTime12to24(section.end_time).split(':')[0])
+        fetchData()
+    }, [])
 
-                            section.days.forEach((day) => {
-                                const dayMap: { [key: string]: string } = {
-                                    M: 'Monday',
-                                    T: 'Tuesday',
-                                    W: 'Wednesday',
-                                    R: 'Thursday',
-                                    F: 'Friday',
-                                }
-                                const dayCapitalized = dayMap[day]
-                                for (let hour = startHour; hour < endHour; hour++) {
-                                    if (!professorSchedule[dayCapitalized]) {
-                                        professorSchedule[dayCapitalized] = {}
-                                    }
+    const fetchData = async () => {
+        setLoading(true)
 
-                                    professorSchedule[dayCapitalized][hour.toString()] = course.course
-                                }
-                            })
+        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/schedules/prev`, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('jwt')}`,
+                'Content-Type': 'application/json',
+            },
+        })
+        const responseData = response.data
+        if (responseData) setData(responseData)
+        setLoading(false)
+    }
+
+    useEffect(() => {
+        parseSchedule()
+    }, [data, year, semester])
+
+    const parseSchedule = () => {
+        // Start by setting schedule to empty. If there are courses for this professor in the selected semester, the schedule will be updated
+        const professorSchedule: Schedule = JSON.parse(emptyScheduleJSON)
+        setSchedule(professorSchedule)
+
+        // The correct code is below but since the backend is broken the code below comment is required
+        /*
+        const scheduleYear = data.find((sched: any) => sched.year === year)
+        if (!scheduleYear) return
+        const scheduleTerm = scheduleYear.terms.find((term: any) => term.term === semester)
+        if (!scheduleTerm) return
+        */
+        const scheduleYears = data.filter((sched: any) => sched.year === year)
+        if (scheduleYears.length === 0) return
+        const filteredYears = scheduleYears.filter((year: any) => year.terms.find((term: any) => term.term === semester))
+        if (filteredYears.length === 0) return
+        const scheduleTerm = filteredYears[filteredYears.length - 1].terms.find((term: any) => term.term === semester)
+
+        const profName = localStorage.getItem('username')?.replace('.', ' ')
+        scheduleTerm.courses.forEach((course: Course) => {
+            course.sections
+                .filter((section) => section.professor === profName)
+                .forEach((section: Section) => {
+                    const startHour = parseInt(convertTime12to24(section.start_time).split(':')[0])
+                    const endHour = parseInt(convertTime12to24(section.end_time).split(':')[0])
+
+                    section.days.forEach((day) => {
+                        const dayMap: { [key: string]: string } = {
+                            M: 'Monday',
+                            T: 'Tuesday',
+                            W: 'Wednesday',
+                            R: 'Thursday',
+                            F: 'Friday',
+                        }
+                        const dayCapitalized = dayMap[day]
+                        for (let hour = startHour; hour < endHour; hour++) {
+                            professorSchedule[dayCapitalized][hour.toString()] = course.course
                         }
                     })
                 })
+        })
 
-                setCourses(parsedData.terms[0].courses)
-                setSchedule(professorSchedule)
-                console.log(professorSchedule)
-                setLoading(false)
-            } catch (error) {
-                console.error('Error:', error)
-            }
-        }
-
-        fetchData()
-    }, [])
+        setSchedule(professorSchedule)
+        console.log(professorSchedule)
+    }
 
     return (
         <div>
@@ -140,13 +154,24 @@ export const Profsched = () => {
                 </div>
             ) : (
                 <div>
-                    <div className='Headi'>
-                        <div>
-                            <h2>
-                                {`Term: ${localStorage.getItem('term') ?? ''}`}
-                                <br />
-                                {`Year: ${localStorage.getItem('year') || '2023'}`}
-                            </h2>
+                    <div className='Headi' style={{ paddingTop: '15px', paddingBottom: '20px' }}>
+                        <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                            <H3>Term:</H3>
+                            <Select defaultValue={semester} style={{ width: 120, marginLeft: '8px', marginRight: '20px' }} onChange={(value) => setSemester(value)}>
+                                {terms.map((term) => (
+                                    <Option key={term} value={term}>
+                                        {term}
+                                    </Option>
+                                ))}
+                            </Select>
+                            <H3>Year:</H3>
+                            <Select defaultValue={year.toString()} style={{ width: 120, marginLeft: '8px' }} onChange={(value) => setYear(parseInt(value))}>
+                                {years.map((year) => (
+                                    <Option key={year} value={year}>
+                                        {year}
+                                    </Option>
+                                ))}
+                            </Select>
                         </div>
                     </div>
                     <div className='tab'>
