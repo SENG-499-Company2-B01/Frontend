@@ -9,6 +9,7 @@ import React, { SyntheticEvent, useEffect, useState } from 'react'
 import type { Dayjs } from 'dayjs'
 import { RangeValue } from 'rc-picker/lib/interface'
 import type { CheckboxChangeEvent } from 'antd/es/checkbox'
+import { available } from './Professor.type'
 
 const { Option } = Select
 
@@ -95,11 +96,15 @@ export const ProfPreferencePage: React.FC = () => {
 
     const submit = async (e: SyntheticEvent) => {
         e.preventDefault()
+        submitForm()
+    }
+
+    const submitForm = async (fromCallback?: boolean) => {
         const username = localStorage.getItem('username')
 
         const url = process.env.REACT_APP_BACKEND_URL + '/users/' + username
 
-        const time = { F: [preferredTime], M: [preferredTime], R: [preferredTime], T: [preferredTime], W: [preferredTime] }
+        const time = { F: [preferredTime], M: [preferredTime], R: [preferredTime], T: [preferredTime], W: [preferredTime] } as available
 
         const body = { max_courses: numberOfClasses, available: time, course_pref: selctedCourses }
 
@@ -122,7 +127,7 @@ export const ProfPreferencePage: React.FC = () => {
         console.log(body)
         console.log(numberOfClasses)
         console.log(localStorage)
-        setNavigate(true)
+        if (!fromCallback) setNavigate(true)
     }
 
     if (navigate) {
@@ -169,9 +174,14 @@ export const ProfPreferencePage: React.FC = () => {
         setNumberOfClasses(value!)
     }
 
+    const onLogoutButWantsToSave = async (callback: () => void) => {
+        await submitForm(true)
+        callback()
+    }
+
     return (
         <div>
-            <NavBarProf />
+            <NavBarProf onPreferencesPage onPreferencePageCallback={onLogoutButWantsToSave} />
             <div className='cen'>
                 <H2>Preference</H2>
                 <Form {...formItemLayout} form={form} name='ableToTeachPreference' onFinish={onFinish} style={{ maxWidth: 600 }} scrollToFirstError>

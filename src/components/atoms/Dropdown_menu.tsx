@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { css } from '@emotion/react'
 import styled from '@emotion/styled'
-import { H7 } from './typography'
-import { SimpleLink } from './navLink'
+import { Modal } from 'antd'
+import { useNavigate } from 'react-router-dom'
 
 export const DropdownContainer = styled.div`
     display: inline-block;
@@ -56,8 +55,18 @@ export const DropdownMenuItem = styled.button`
     }
 `
 
-export const ProfileDropdown = (props: { name: string | null }) => {
+interface ProfileDropdownProps {
+    name: string | null
+    onPreferencesPage?: boolean
+    onPreferencesPageCallback?: (callback: () => void) => Promise<void>
+}
+
+export const ProfileDropdown = (props: ProfileDropdownProps) => {
+    const navigate = useNavigate()
+
     const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+    const [confirmLogoutOpen, setConfirmLogoutOpen] = useState(false)
+    const [secondConfirmationOpen, setSecondConfirmationOpen] = useState(false)
     const dropdownRef = useRef<HTMLInputElement>(null)
     const { name } = props
 
@@ -81,17 +90,51 @@ export const ProfileDropdown = (props: { name: string | null }) => {
         setIsDropdownOpen(!isDropdownOpen)
     }
 
+    const handleConfirmLogout = () => {
+        setConfirmLogoutOpen(false)
+        if (props.onPreferencesPage) {
+            setSecondConfirmationOpen(true)
+        } else {
+            logout()
+        }
+    }
+
+    const handleSecondConfirmation = () => {
+        setSecondConfirmationOpen(false)
+        if (props.onPreferencesPageCallback) props.onPreferencesPageCallback(logout)
+    }
+
+    const logout = () => {
+        localStorage.removeItem('jwt')
+        localStorage.removeItem('username')
+        localStorage.removeItem('user')
+        localStorage.removeItem('status')
+        navigate('/logout')
+    }
+
+    const onSelectProfile = () => {
+        // If on prof account navigate to prof profile page
+        const userType = localStorage.getItem('user')
+        if (userType === 'prof') {
+            navigate('/ProfProfile')
+        }
+    }
+
     return (
         <DropdownContainer>
+            <Modal title='Confirm Logout' open={confirmLogoutOpen} onOk={handleConfirmLogout} onCancel={() => setConfirmLogoutOpen(false)} okText='Logout'>
+                <p>Are you sure you want to logout?</p>
+            </Modal>
+            <Modal title='Save Preferences' open={secondConfirmationOpen} onOk={handleSecondConfirmation} onCancel={() => setSecondConfirmationOpen(false)} cancelText='Logout' okText='Save and Logout'>
+                <p>Would you like to save your in progress preferences?</p>
+            </Modal>
             <ProfileButton onClick={toggleDropdown}>{name}</ProfileButton>
             {isDropdownOpen && (
                 <DropdownMenu ref={dropdownRef}>
-                    <DropdownMenuItem>Profile</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => onSelectProfile()}>Profile</DropdownMenuItem>
                     <DropdownMenuItem>Notifications</DropdownMenuItem>
                     <DropdownMenuItem>Account settings</DropdownMenuItem>
-                    <SimpleLink to='/logout'>
-                        <DropdownMenuItem>Sign out</DropdownMenuItem>
-                    </SimpleLink>
+                    <DropdownMenuItem onClick={() => setConfirmLogoutOpen(true)}>Sign out</DropdownMenuItem>
                 </DropdownMenu>
             )}
         </DropdownContainer>
